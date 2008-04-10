@@ -1,3 +1,5 @@
+package xmppclient;
+
 import org.jivesoftware.smack.*;
 
 /**
