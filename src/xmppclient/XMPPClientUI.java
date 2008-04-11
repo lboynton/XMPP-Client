@@ -17,6 +17,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.OceanTheme;
 import org.jivesoftware.smack.*;
 
 /**
@@ -28,9 +36,20 @@ public class XMPPClientUI extends javax.swing.JFrame {
     private XMPPConnection connection;
     private Roster roster;
     private TrayIcon trayIcon;
+    private Image appIcon = new ImageIcon(this.getClass().getResource(
+                "/xmppclient/images/user.png")).getImage();
     
     /** Creates new form XMPPClientUI */
     public XMPPClientUI() {
+        try
+        {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Unable to use system look and feel");
+        }
+        
         initComponents();
         initSystemTray();
         this.setLocationRelativeTo(null);
@@ -98,7 +117,7 @@ public class XMPPClientUI extends javax.swing.JFrame {
     private void initComponents() {
 
         contentPanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        contactListScrollPane = new javax.swing.JScrollPane();
         contactList = new javax.swing.JList();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -109,10 +128,22 @@ public class XMPPClientUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("XMPPClient");
+        setIconImage(appIcon);
         setMinimumSize(new java.awt.Dimension(200, 300));
         setName("XMPPClient"); // NOI18N
 
-        jScrollPane1.setViewportView(contactList);
+        contactList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        contactList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                contactListMouseClicked(evt);
+            }
+        });
+        contactList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                contactListValueChanged(evt);
+            }
+        });
+        contactListScrollPane.setViewportView(contactList);
 
         javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
@@ -120,20 +151,21 @@ public class XMPPClientUI extends javax.swing.JFrame {
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
                 .addContainerGap())
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
+                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         fileMenu.setText("File");
 
         signInMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        signInMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/connect.png"))); // NOI18N
         signInMenuItem.setText("Sign in...");
         signInMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -142,6 +174,7 @@ public class XMPPClientUI extends javax.swing.JFrame {
         });
         fileMenu.add(signInMenuItem);
 
+        signOutMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/disconnect.png"))); // NOI18N
         signOutMenuItem.setText("Sign out");
         signOutMenuItem.setEnabled(false);
         signOutMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -153,6 +186,7 @@ public class XMPPClientUI extends javax.swing.JFrame {
         fileMenu.add(fileMenuSeparator);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
+        exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/cross.png"))); // NOI18N
         exitMenuItem.setText("Exit");
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -190,6 +224,18 @@ public class XMPPClientUI extends javax.swing.JFrame {
     private void signOutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signOutMenuItemActionPerformed
         signOut();
 }//GEN-LAST:event_signOutMenuItemActionPerformed
+
+    private void contactListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_contactListValueChanged
+    }//GEN-LAST:event_contactListValueChanged
+
+    private void contactListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactListMouseClicked
+        if(evt.getClickCount() == 2)
+        {
+            System.out.println("Double click");
+            
+            System.out.println(contactList.getSelectedValue().toString());
+        }
+    }//GEN-LAST:event_contactListMouseClicked
  
     private void exit()
     {
@@ -237,11 +283,11 @@ public class XMPPClientUI extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList contactList;
+    private javax.swing.JScrollPane contactListScrollPane;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JSeparator fileMenuSeparator;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem signInMenuItem;
     private javax.swing.JMenuItem signOutMenuItem;
