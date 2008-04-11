@@ -6,7 +6,17 @@
 
 package xmppclient;
 
-import javax.swing.JOptionPane;
+import java.awt.AWTException;
+import java.awt.Image;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import org.jivesoftware.smack.*;
 
 /**
@@ -17,12 +27,61 @@ public class XMPPClientUI extends javax.swing.JFrame {
     
     private XMPPConnection connection;
     private Roster roster;
+    private TrayIcon trayIcon;
     
     /** Creates new form XMPPClientUI */
     public XMPPClientUI() {
         initComponents();
+        initSystemTray();
         this.setLocationRelativeTo(null);
         contentPanel.setVisible(false);
+    }
+    
+    private void initSystemTray()
+    {
+        if (SystemTray.isSupported()) 
+        {
+            SystemTray tray = SystemTray.getSystemTray();
+            Image image = Toolkit.getDefaultToolkit().getImage("tray.gif");
+            
+            PopupMenu popup = new PopupMenu();
+            
+            trayIcon = new TrayIcon(image, "XMPPClient", popup);
+            trayIcon.setImageAutoSize(true);
+            MenuItem defaultItem = new MenuItem("Exit");
+            defaultItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent evt)
+                {
+                    exit();
+                }
+            });
+            popup.add(defaultItem);
+            
+            trayIcon.addMouseListener(new MouseAdapter () 
+            {
+                @Override
+                public void mouseClicked(MouseEvent e)
+                {
+                    if(XMPPClientUI.this.isVisible())
+                    {
+                        XMPPClientUI.this.setVisible(false);
+                    }
+                    else
+                    {
+                        XMPPClientUI.this.setVisible(true);
+                    }
+                }
+            });
+            
+            try 
+            {
+                tray.add(trayIcon);
+            } 
+            catch (AWTException e) 
+            {
+                System.err.println("TrayIcon could not be added.");
+            }
+        }
     }
     
     public void setConnection(XMPPConnection connection)
@@ -125,13 +184,18 @@ public class XMPPClientUI extends javax.swing.JFrame {
     }//GEN-LAST:event_signInMenuItemActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
-        System.exit(0);
+        exit();
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void signOutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signOutMenuItemActionPerformed
         signOut();
 }//GEN-LAST:event_signOutMenuItemActionPerformed
  
+    private void exit()
+    {
+        System.exit(0);
+    }
+    
     private void signIn()
     {
         new XMPPClientSignInUI(this).setVisible(true);
