@@ -17,14 +17,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.OceanTheme;
 import org.jivesoftware.smack.*;
 
 /**
@@ -67,28 +61,37 @@ public class XMPPClientUI extends javax.swing.JFrame {
             
             trayIcon = new TrayIcon(image, "XMPPClient", popup);
             trayIcon.setImageAutoSize(true);
-            MenuItem defaultItem = new MenuItem("Exit");
-            defaultItem.addActionListener(new ActionListener() {
+            MenuItem exitMenuItem = new MenuItem("Exit");
+            MenuItem showMenuItem = new MenuItem("Show/Hide");
+            exitMenuItem.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt)
                 {
                     exit();
                 }
             });
-            popup.add(defaultItem);
+            showMenuItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent evt)
+                {
+                    toggleWindowVisibility();
+                }
+            });
+            
+            popup.add(showMenuItem);
+            popup.addSeparator();
+            popup.add(exitMenuItem);
             
             trayIcon.addMouseListener(new MouseAdapter () 
             {
                 @Override
                 public void mouseClicked(MouseEvent e)
                 {
-                    if(XMPPClientUI.this.isVisible())
-                    {
-                        XMPPClientUI.this.setVisible(false);
-                    }
-                    else
-                    {
-                        XMPPClientUI.this.setVisible(true);
-                    }
+                    // check the correct button was pressed
+                    if(e.getButton() != MouseEvent.BUTTON1) return;
+                    
+                    // toggle only once on double click
+                    if(e.getClickCount() == 2) return;
+
+                    toggleWindowVisibility();
                 }
             });
             
@@ -100,6 +103,18 @@ public class XMPPClientUI extends javax.swing.JFrame {
             {
                 System.err.println("TrayIcon could not be added.");
             }
+        }
+    }
+    
+    public void toggleWindowVisibility()
+    {
+        if(XMPPClientUI.this.isVisible())
+        {
+            XMPPClientUI.this.setVisible(false);
+        }
+        else
+        {
+            XMPPClientUI.this.setVisible(true);
         }
     }
     
@@ -119,6 +134,7 @@ public class XMPPClientUI extends javax.swing.JFrame {
         contentPanel = new javax.swing.JPanel();
         contactListScrollPane = new javax.swing.JScrollPane();
         contactList = new javax.swing.JList();
+        nicknameTextField = new javax.swing.JTextField();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         signInMenuItem = new javax.swing.JMenuItem();
@@ -145,20 +161,31 @@ public class XMPPClientUI extends javax.swing.JFrame {
         });
         contactListScrollPane.setViewportView(contactList);
 
+        nicknameTextField.setToolTipText("Press enter to set the nickname");
+        nicknameTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nicknameTextFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
         contentPanelLayout.setHorizontalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contentPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(nicknameTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
                 .addContainerGap())
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
+                .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -236,6 +263,10 @@ public class XMPPClientUI extends javax.swing.JFrame {
             System.out.println(contactList.getSelectedValue().toString());
         }
     }//GEN-LAST:event_contactListMouseClicked
+
+    private void nicknameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nicknameTextFieldActionPerformed
+        // send the new nickname
+    }//GEN-LAST:event_nicknameTextFieldActionPerformed
  
     private void exit()
     {
@@ -289,6 +320,7 @@ public class XMPPClientUI extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JSeparator fileMenuSeparator;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JTextField nicknameTextField;
     private javax.swing.JMenuItem signInMenuItem;
     private javax.swing.JMenuItem signOutMenuItem;
     // End of variables declaration//GEN-END:variables
