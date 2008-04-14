@@ -17,6 +17,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Vector;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import org.jivesoftware.smack.*;
@@ -296,10 +298,12 @@ public class XMPPClientUI extends javax.swing.JFrame {
     
     private void signOut()
     {
+        contactList.setModel(new DefaultListModel());
         connection.disconnect();
         connection = null;
         signInMenuItem.setEnabled(true);
         signOutMenuItem.setEnabled(false);
+        contentPanel.setVisible(false);
     }
     /**
      * @param args the command line arguments
