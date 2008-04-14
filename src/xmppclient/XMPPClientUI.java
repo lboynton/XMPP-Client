@@ -17,9 +17,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Vector;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.jivesoftware.smack.*;
 
@@ -36,7 +36,8 @@ public class XMPPClientUI extends javax.swing.JFrame {
                 "/xmppclient/images/user.png")).getImage();
     
     /** Creates new form XMPPClientUI */
-    public XMPPClientUI() {
+    public XMPPClientUI() 
+    {
         try
         {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -144,11 +145,16 @@ public class XMPPClientUI extends javax.swing.JFrame {
         fileMenuSeparator = new javax.swing.JSeparator();
         exitMenuItem = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("XMPPClient");
         setIconImage(appIcon);
         setMinimumSize(new java.awt.Dimension(200, 300));
         setName("XMPPClient"); // NOI18N
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         contactList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         contactList.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -269,9 +275,25 @@ public class XMPPClientUI extends javax.swing.JFrame {
     private void nicknameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nicknameTextFieldActionPerformed
         // send the new nickname
     }//GEN-LAST:event_nicknameTextFieldActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        exit();
+    }//GEN-LAST:event_formWindowClosing
  
     private void exit()
     {
+        // if the user is signed in then sign them out before exiting
+        if(connection != null) 
+        {
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Do you wish to sign out and close XMPPClient?",
+                    "Close XMPPClient",
+                    JOptionPane.OK_CANCEL_OPTION);
+            
+            if(confirm == JOptionPane.OK_OPTION) signOut();
+            else return;
+        }
+        
         System.exit(0);
     }
     
