@@ -40,10 +40,10 @@ public class XMPPClientUI extends javax.swing.JFrame
     /** Creates new form XMPPClientUI */
     public XMPPClientUI() 
     {
-        XMPPConnection.DEBUG_ENABLED = true;
+        XMPPConnection.DEBUG_ENABLED = false;
         try
         {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch (Exception ex)
         {
@@ -171,6 +171,7 @@ public class XMPPClientUI extends javax.swing.JFrame
         });
 
         contactList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        contactList.setCellRenderer(new ContactListRenderer());
         contactList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 contactListMouseClicked(evt);
@@ -361,12 +362,23 @@ public class XMPPClientUI extends javax.swing.JFrame
         
         // get the roster
         roster = connection.getRoster();
+        roster.addRosterListener(new ContactListListener(this));
         
         // set the contact list
         contactList.setListData(roster.getEntries().toArray());
         
         // show the content panel
         contentPanel.setVisible(true);
+    }
+    
+    public XMPPConnection getConnection()
+    {
+        return connection;
+    }
+    
+    public void updateContactList()
+    {
+        contactList.setListData(roster.getEntries().toArray());
     }
     
     private void signOut()
