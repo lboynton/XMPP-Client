@@ -23,13 +23,14 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smackx.packet.VCard;
 
 /**
  *
  * @author  lee
  */
-public class XMPPClientUI extends javax.swing.JFrame {
-    
+public class XMPPClientUI extends javax.swing.JFrame
+{
     private XMPPConnection connection;
     private Roster roster;
     private TrayIcon trayIcon;
@@ -39,6 +40,7 @@ public class XMPPClientUI extends javax.swing.JFrame {
     /** Creates new form XMPPClientUI */
     public XMPPClientUI() 
     {
+        XMPPConnection.DEBUG_ENABLED = true;
         try
         {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -296,7 +298,27 @@ public class XMPPClientUI extends javax.swing.JFrame {
     }//GEN-LAST:event_contactListMouseClicked
 
     private void nicknameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nicknameTextFieldActionPerformed
-        // send the new nickname
+        VCard vCard = new VCard();
+
+        try
+        {
+            // first try to get stored VCard
+            vCard.load(connection);
+            
+        }
+        catch(XMPPException e) { } // no vcard
+        
+        vCard.setNickName(nicknameTextField.getText());
+        
+        try
+        {
+            // send the new nickname
+            vCard.save(connection);
+        }
+        catch(XMPPException e)
+        {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_nicknameTextFieldActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
