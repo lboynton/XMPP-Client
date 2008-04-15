@@ -22,6 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.jivesoftware.smack.*;
+import org.jivesoftware.smack.packet.Presence;
 
 /**
  *
@@ -49,8 +50,18 @@ public class XMPPClientUI extends javax.swing.JFrame {
         
         initComponents();
         initSystemTray();
+        initStatusComboBox();
         this.setLocationRelativeTo(null);
         contentPanel.setVisible(false);
+        
+    }
+    
+    private void initStatusComboBox()
+    {
+        statusComboBox.removeAllItems();
+        statusComboBox.addItem(new OnlinePresence());
+        statusComboBox.addItem(new AwayPresence());
+        statusComboBox.setSelectedIndex(0);
     }
     
     private void initSystemTray()
@@ -138,6 +149,7 @@ public class XMPPClientUI extends javax.swing.JFrame {
         contactListScrollPane = new javax.swing.JScrollPane();
         contactList = new javax.swing.JList();
         nicknameTextField = new javax.swing.JTextField();
+        statusComboBox = new javax.swing.JComboBox();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         signInMenuItem = new javax.swing.JMenuItem();
@@ -176,6 +188,12 @@ public class XMPPClientUI extends javax.swing.JFrame {
             }
         });
 
+        statusComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statusComboBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
         contentPanelLayout.setHorizontalGroup(
@@ -183,7 +201,10 @@ public class XMPPClientUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(nicknameTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contentPanelLayout.createSequentialGroup()
+                        .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -191,7 +212,9 @@ public class XMPPClientUI extends javax.swing.JFrame {
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                 .addContainerGap())
@@ -279,6 +302,12 @@ public class XMPPClientUI extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         exit();
     }//GEN-LAST:event_formWindowClosing
+
+    private void statusComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusComboBoxActionPerformed
+        // check the connection has been made
+        if(connection != null && connection.isConnected())
+            connection.sendPacket((Presence)statusComboBox.getSelectedItem());
+    }//GEN-LAST:event_statusComboBoxActionPerformed
  
     private void exit()
     {
@@ -349,6 +378,7 @@ public class XMPPClientUI extends javax.swing.JFrame {
     private javax.swing.JTextField nicknameTextField;
     private javax.swing.JMenuItem signInMenuItem;
     private javax.swing.JMenuItem signOutMenuItem;
+    private javax.swing.JComboBox statusComboBox;
     // End of variables declaration//GEN-END:variables
     
 }
