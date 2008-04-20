@@ -125,8 +125,7 @@ public class ContactListRenderer extends javax.swing.JPanel implements ListCellR
             setBackground( new Color(220,220,220));
             setOpaque(true);
         }
-        
-        
+
         return this;
     }
     

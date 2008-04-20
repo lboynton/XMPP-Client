@@ -20,6 +20,6 @@ public class TabbedPane extends JTabbedPane
     
     public void add(RosterEntry user)
     {
-        //tabs.add(user);
+        //add
     }
 }

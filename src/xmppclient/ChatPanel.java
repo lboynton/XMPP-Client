@@ -6,7 +6,14 @@
 
 package xmppclient;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.RosterEntry;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smackx.packet.VCard;
 
 /**
  *
@@ -15,6 +22,7 @@ import org.jivesoftware.smack.RosterEntry;
 public class ChatPanel extends javax.swing.JPanel 
 {
     private RosterEntry user;
+    private Chat newChat;
     
     /** Creates new form ChatPanel */
     public ChatPanel() 
@@ -25,8 +33,32 @@ public class ChatPanel extends javax.swing.JPanel
     public ChatPanel(RosterEntry user)
     {
         this.user = user;
+
         initComponents();
-        contact.setText(user.getName());
+        contact.setText(user.getUser());
+        newChat = XMPPClientUI.connection.getChatManager().createChat(user.getUser(), new MessageListener() {
+            public void processMessage(Chat chat, Message message)
+            {
+               messageTextArea.append(getName() + ": " + message.getBody() + "\n");
+            }
+        });
+    }
+    
+    @Override
+    public String getName()
+    {
+        VCard vCard = new VCard();
+        
+        if(user.getName() != null) return user.getName();
+        
+        try
+        {
+            vCard.load(XMPPClientUI.connection, user.getUser());
+            if(vCard.getNickName() != null) return vCard.getNickName();
+        }
+        catch (XMPPException ex) {}
+        
+        return user.getUser();
     }
     
     /** This method is called from within the constructor to
@@ -38,8 +70,44 @@ public class ChatPanel extends javax.swing.JPanel
     private void initComponents() {
 
         contact = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        sendTextArea = new javax.swing.JTextArea();
+        sendButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        messageTextArea = new javax.swing.JTextArea();
 
-        contact.setText("jLabel1");
+        contact.setText("Contact");
+
+        sendTextArea.setColumns(20);
+        sendTextArea.setFont(new java.awt.Font("Tahoma", 0, 10));
+        sendTextArea.setLineWrap(true);
+        sendTextArea.setRows(1);
+        sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                sendTextAreaKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                sendTextAreaKeyReleased(evt);
+            }
+        });
+        jScrollPane2.setViewportView(sendTextArea);
+
+        sendButton.setText("Send");
+        sendButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("To:");
+
+        messageTextArea.setColumns(20);
+        messageTextArea.setEditable(false);
+        messageTextArea.setFont(new java.awt.Font("Tahoma", 0, 10));
+        messageTextArea.setLineWrap(true);
+        messageTextArea.setRows(5);
+        jScrollPane1.setViewportView(messageTextArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -47,21 +115,72 @@ public class ChatPanel extends javax.swing.JPanel
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(contact)
-                .addContainerGap(356, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(contact))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sendButton)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(contact)
-                .addContainerGap(275, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(contact)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
+    send();
+}//GEN-LAST:event_sendButtonActionPerformed
+    private void send()
+    {
+        if(sendTextArea.getText().trim().equals("")) return;
+        
+        try
+        {
+            newChat.sendMessage(sendTextArea.getText().trim());
+            messageTextArea.append("Me: " + sendTextArea.getText() + "\n");
+            sendTextArea.setText("");
+        }
+        catch (XMPPException ex)
+        {
+            Logger.getLogger(ChatPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void sendTextAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sendTextAreaKeyPressed
+        System.out.println(evt.getKeyCode());
+        if(evt.getKeyCode() == 10) send();
+    }//GEN-LAST:event_sendTextAreaKeyPressed
+
+    private void sendTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sendTextAreaKeyReleased
+        if(evt.getKeyCode() == 10) sendTextArea.setText("");
+    }//GEN-LAST:event_sendTextAreaKeyReleased
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel contact;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea messageTextArea;
+    private javax.swing.JButton sendButton;
+    private javax.swing.JTextArea sendTextArea;
     // End of variables declaration//GEN-END:variables
     
 }

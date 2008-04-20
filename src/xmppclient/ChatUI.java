@@ -8,6 +8,7 @@ package xmppclient;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JTabbedPane;
 import org.jivesoftware.smack.RosterEntry;
 
 /**
@@ -16,7 +17,6 @@ import org.jivesoftware.smack.RosterEntry;
  */
 public class ChatUI extends javax.swing.JFrame 
 {
-    private TabbedPane tabs = new TabbedPane();
     
     /** Creates new form ChatUI */
     public ChatUI() 
@@ -27,6 +27,7 @@ public class ChatUI extends javax.swing.JFrame
     public void addChat(RosterEntry user)
     {
         tabs.add( new ChatPanel(user) );
+        setVisible(true);
     }
     
     /** This method is called from within the constructor to
@@ -37,17 +38,21 @@ public class ChatUI extends javax.swing.JFrame
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        tabs = new javax.swing.JTabbedPane();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Chat");
+        setLocationByPlatform(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
         );
 
         pack();
@@ -66,6 +71,7 @@ public class ChatUI extends javax.swing.JFrame
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTabbedPane tabs;
     // End of variables declaration//GEN-END:variables
     
 }

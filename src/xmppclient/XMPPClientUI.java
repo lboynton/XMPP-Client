@@ -36,6 +36,7 @@ public class XMPPClientUI extends javax.swing.JFrame
     private TrayIcon trayIcon;
     private Image appIcon = new ImageIcon(this.getClass().getResource(
                 "/xmppclient/images/user.png")).getImage();
+    private ChatUI chatUI;
     
     /** Creates new form XMPPClientUI */
     public XMPPClientUI() 
@@ -50,6 +51,7 @@ public class XMPPClientUI extends javax.swing.JFrame
             System.out.println("Unable to use system look and feel");
         }
         
+        chatUI = new ChatUI();
         initComponents();
         initSystemTray();
         initStatusComboBox();
@@ -291,10 +293,8 @@ public class XMPPClientUI extends javax.swing.JFrame
 
     private void contactListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactListMouseClicked
         if(evt.getClickCount() == 2)
-        {
-            System.out.println("Double click");
-            
-            System.out.println(contactList.getSelectedValue().toString());
+        {          
+            chatUI.addChat((RosterEntry)contactList.getSelectedValue());
         }
     }//GEN-LAST:event_contactListMouseClicked
 
