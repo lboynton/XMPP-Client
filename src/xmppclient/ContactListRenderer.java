@@ -6,10 +6,18 @@
 
 package xmppclient;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import org.jivesoftware.smack.RosterEntry;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smackx.packet.VCard;
 
 /**
  *
@@ -39,36 +47,30 @@ public class ContactListRenderer extends javax.swing.JPanel implements ListCellR
 
         nicknameLabel = new javax.swing.JLabel();
         statusLabel = new javax.swing.JLabel();
-        presenceLabel = new javax.swing.JLabel();
 
-        nicknameLabel.setText("jLabel1");
+        setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 4, 3, 4));
+        setMaximumSize(new java.awt.Dimension(32767, 28));
+        setOpaque(false);
 
-        statusLabel.setText("jLabel2");
+        nicknameLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/status_online.png"))); // NOI18N
+        nicknameLabel.setText("user");
 
-        presenceLabel.setText("jLabel3");
+        statusLabel.setText("status");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(nicknameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(statusLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(presenceLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(statusLabel))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nicknameLabel)
-                    .addComponent(statusLabel)
-                    .addComponent(presenceLabel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(nicknameLabel)
+                .addComponent(statusLabel))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -78,23 +80,76 @@ public class ContactListRenderer extends javax.swing.JPanel implements ListCellR
             boolean isSelected, 
             boolean cellHasFocus)
     {
+        Presence presence;
+        VCard vCard = new VCard();
+        
         if(object instanceof RosterEntry == false) return this;
         
         RosterEntry rosterEntry = (RosterEntry)object;
         
-        nicknameLabel.setText(rosterEntry.getName());
-        statusLabel.setText(
-                clientUI.getConnection().getRoster().getPresence(
-                    rosterEntry.getName()
-                ).getStatus()
-        );
+        nicknameLabel.setText(rosterEntry.getUser());
+
+        if(rosterEntry.getName() != null)
+        {
+            nicknameLabel.setText(rosterEntry.getName());
+        }
+        else
+        {
+            try
+            {
+                vCard.load(XMPPClientUI.connection, rosterEntry.getUser());
+                if(vCard.getNickName() != null)
+                    nicknameLabel.setText(vCard.getNickName());
+            }
+            catch (XMPPException ex) {}
+        }
+        
+        presence = XMPPClientUI.connection.getRoster().getPresence(rosterEntry.getUser());
+                
+        if(presence.getStatus() != null)
+        {
+            statusLabel.setText("(" + presence.getStatus() + ")");
+        }
+        else statusLabel.setText("");
+        
+        setOpaque(false);
+        nicknameLabel.setIcon(getUserIcon(XMPPClientUI.connection.getRoster().getPresence(rosterEntry.getUser())));
+        
+        if(isSelected)
+        {
+            setBackground( new Color(240,240,240));
+            setOpaque(true);
+        }
+        if(cellHasFocus) 
+        {
+            setBackground( new Color(220,220,220));
+            setOpaque(true);
+        }
+        
+        
         return this;
+    }
+    
+    private ImageIcon getUserIcon(Presence presence)
+    {
+        if(presence.getMode() == Presence.Mode.dnd)
+        {
+            return new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/status_busy.png"));
+        }
+        if(!presence.isAvailable())
+        {
+            return new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/status_offline.png"));
+        }
+        if(presence.isAway())
+        {
+            return new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/status_away.png"));
+        }
+
+        return new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/status_online.png"));
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel nicknameLabel;
-    private javax.swing.JLabel presenceLabel;
     private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables
-    
 }

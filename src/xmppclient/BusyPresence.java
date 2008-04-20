@@ -11,17 +11,18 @@ import org.jivesoftware.smack.packet.Presence;
  *
  * @author Lee Boynton (323326)
  */
-public class OnlinePresence extends Presence 
+public class BusyPresence extends Presence
 {
-    public OnlinePresence()
+    public BusyPresence()
     {
         super(Presence.Type.available);
-        setMode(Presence.Mode.available);
+        setMode(Presence.Mode.dnd);
+        setStatus("Busy");
     }
     
     @Override
     public String toString()
     {
-        return("Online");
-    }
+        return("Busy");
+    } 
 }

@@ -31,7 +31,7 @@ import org.jivesoftware.smackx.packet.VCard;
  */
 public class XMPPClientUI extends javax.swing.JFrame
 {
-    private XMPPConnection connection;
+    public static XMPPConnection connection;
     private Roster roster;
     private TrayIcon trayIcon;
     private Image appIcon = new ImageIcon(this.getClass().getResource(
@@ -43,7 +43,7 @@ public class XMPPClientUI extends javax.swing.JFrame
         XMPPConnection.DEBUG_ENABLED = false;
         try
         {
-            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch (Exception ex)
         {
@@ -63,6 +63,7 @@ public class XMPPClientUI extends javax.swing.JFrame
         statusComboBox.removeAllItems();
         statusComboBox.addItem(new OnlinePresence());
         statusComboBox.addItem(new AwayPresence());
+        statusComboBox.addItem(new BusyPresence());
         statusComboBox.setSelectedIndex(0);
     }
     
@@ -71,14 +72,14 @@ public class XMPPClientUI extends javax.swing.JFrame
         if (SystemTray.isSupported()) 
         {
             SystemTray tray = SystemTray.getSystemTray();
-            Image image = Toolkit.getDefaultToolkit().getImage("tray.gif");
+            //Image image = Toolkit.getDefaultToolkit().getImage("images/user.png");
             
             PopupMenu popup = new PopupMenu();
             
-            trayIcon = new TrayIcon(image, "XMPPClient", popup);
+            trayIcon = new TrayIcon(appIcon, "XMPPClient", popup);
             trayIcon.setImageAutoSize(true);
             MenuItem exitMenuItem = new MenuItem("Exit");
-            MenuItem showMenuItem = new MenuItem("Show/Hide");
+            MenuItem showMenuItem = new MenuItem("Show/hide");
             exitMenuItem.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt)
                 {
@@ -171,7 +172,6 @@ public class XMPPClientUI extends javax.swing.JFrame
         });
 
         contactList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        contactList.setCellRenderer(new ContactListRenderer());
         contactList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 contactListMouseClicked(evt);
@@ -205,10 +205,10 @@ public class XMPPClientUI extends javax.swing.JFrame
                 .addContainerGap()
                 .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contentPanelLayout.createSequentialGroup()
-                        .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                        .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
+                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))
                 .addContainerGap())
         );
         contentPanelLayout.setVerticalGroup(
@@ -219,7 +219,7 @@ public class XMPPClientUI extends javax.swing.JFrame
                     .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -300,12 +300,11 @@ public class XMPPClientUI extends javax.swing.JFrame
 
     private void nicknameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nicknameTextFieldActionPerformed
         VCard vCard = new VCard();
-
         try
         {
             // first try to get stored VCard
             vCard.load(connection);
-            
+            System.out.println("Loaded nickname");
         }
         catch(XMPPException e) { } // no vcard
         
@@ -315,6 +314,7 @@ public class XMPPClientUI extends javax.swing.JFrame
         {
             // send the new nickname
             vCard.save(connection);
+            System.out.println("Saved nickname");
         }
         catch(XMPPException e)
         {
@@ -366,6 +366,7 @@ public class XMPPClientUI extends javax.swing.JFrame
         
         // set the contact list
         contactList.setListData(roster.getEntries().toArray());
+        contactList.setCellRenderer(new ContactListRenderer());
         
         // show the content panel
         contentPanel.setVisible(true);
@@ -379,6 +380,7 @@ public class XMPPClientUI extends javax.swing.JFrame
     public void updateContactList()
     {
         contactList.setListData(roster.getEntries().toArray());
+        try { contactList.updateUI(); } catch(Exception e) {}
     }
     
     private void signOut()

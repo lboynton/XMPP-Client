@@ -107,11 +107,11 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="nicknameTextField" pref="149" max="32767" attributes="0"/>
+                          <Component id="nicknameTextField" pref="192" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="statusComboBox" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="contactListScrollPane" alignment="0" pref="176" max="32767" attributes="0"/>
+                      <Component id="contactListScrollPane" alignment="0" pref="226" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -126,7 +126,7 @@
                       <Component id="statusComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="contactListScrollPane" pref="229" max="32767" attributes="0"/>
+                  <Component id="contactListScrollPane" pref="265" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -146,9 +146,6 @@
                   <StringArray count="0"/>
                 </Property>
                 <Property name="selectionMode" type="int" value="0"/>
-                <Property name="cellRenderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new ContactListRenderer()" type="code"/>
-                </Property>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="contactListMouseClicked"/>

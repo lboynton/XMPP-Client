@@ -15,7 +15,8 @@ public class AwayPresence extends Presence
 {
     public AwayPresence()
     {
-        super(Presence.Type.unavailable);
+        super(Presence.Type.available);
+        setMode(Presence.Mode.away);
         setStatus("Away");
     }
     
