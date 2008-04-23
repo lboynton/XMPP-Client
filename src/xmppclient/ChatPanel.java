@@ -25,11 +25,6 @@ public class ChatPanel extends javax.swing.JPanel
     private Chat newChat;
     
     /** Creates new form ChatPanel */
-    public ChatPanel() 
-    {
-        initComponents();
-    }
-    
     public ChatPanel(RosterEntry user)
     {
         this.user = user;
@@ -44,9 +39,16 @@ public class ChatPanel extends javax.swing.JPanel
         });
     }
     
+    public String getUser()
+    {
+        return user.getUser();
+    }
+    
     @Override
     public String getName()
     {
+        if(user == null) return "Conversation";
+        
         VCard vCard = new VCard();
         
         if(user.getName() != null) return user.getName();

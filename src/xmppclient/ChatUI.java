@@ -6,9 +6,6 @@
 
 package xmppclient;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JTabbedPane;
 import org.jivesoftware.smack.RosterEntry;
 
 /**
@@ -26,8 +23,25 @@ public class ChatUI extends javax.swing.JFrame
     
     public void addChat(RosterEntry user)
     {
-        tabs.add( new ChatPanel(user) );
+        if(getTab(user.getUser()) == -1) 
+        {
+            tabs.add( new ChatPanel(user) );
+        }
         setVisible(true);
+    }
+    
+    public int getTab(String user)
+    {
+        for(int i = 0; i < tabs.getTabCount(); i++)
+        {
+            ChatPanel tab = (ChatPanel)tabs.getComponentAt(i);
+            
+            // return the tab that contains the JID
+            if(tab.getUser().equals(user)) return i;
+        }
+        
+        // return -1 if tab is not present
+        return -1;
     }
     
     /** This method is called from within the constructor to
@@ -43,6 +57,7 @@ public class ChatUI extends javax.swing.JFrame
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Chat");
         setLocationByPlatform(true);
+        setUndecorated(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -52,7 +67,9 @@ public class ChatUI extends javax.swing.JFrame
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE))
         );
 
         pack();

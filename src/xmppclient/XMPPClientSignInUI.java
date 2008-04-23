@@ -227,7 +227,7 @@ public class XMPPClientSignInUI extends javax.swing.JDialog {
             return;
         }
         
-        clientUI.setConnection(connection);
+        clientUI.connection = connection;
         this.dispose();
     }//GEN-LAST:event_okButtonActionPerformed
 

@@ -11,7 +11,6 @@ import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
-import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -135,11 +134,6 @@ public class XMPPClientUI extends javax.swing.JFrame
         {
             XMPPClientUI.this.setVisible(true);
         }
-    }
-    
-    public void setConnection(XMPPConnection connection)
-    {
-        this.connection = connection;
     }
     
     /** This method is called from within the constructor to
