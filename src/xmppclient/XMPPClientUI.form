@@ -111,7 +111,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="statusComboBox" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="contactListScrollPane" alignment="0" pref="226" max="32767" attributes="0"/>
+                      <Component id="contactListScrollPane" alignment="0" pref="233" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>

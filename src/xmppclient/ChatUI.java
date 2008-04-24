@@ -6,8 +6,6 @@
 
 package xmppclient;
 
-import org.jivesoftware.smack.RosterEntry;
-
 /**
  *
  * @author  Lee Boynton (323326)
@@ -21,17 +19,20 @@ public class ChatUI extends javax.swing.JFrame
         initComponents();
     }
     
-    public void addChat(RosterEntry user)
+    public void addChat(String user)
     {
-        if(getTab(user.getUser()) == -1) 
+        System.out.printf("----\naddChat(RosterEntry %s) called\n", user);
+        if(getTab(user) == -1) 
         {
+            System.out.println("true");
             tabs.add( new ChatPanel(user) );
-        }
+        } else System.out.println("false");
         setVisible(true);
+        System.out.println("end of addChat\n-------");
     }
     
     public int getTab(String user)
-    {
+    {     
         for(int i = 0; i < tabs.getTabCount(); i++)
         {
             ChatPanel tab = (ChatPanel)tabs.getComponentAt(i);
@@ -54,10 +55,14 @@ public class ChatUI extends javax.swing.JFrame
 
         tabs = new javax.swing.JTabbedPane();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Chat");
         setLocationByPlatform(true);
-        setUndecorated(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -74,6 +79,12 @@ public class ChatUI extends javax.swing.JFrame
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        tabs.remove(tabs.getSelectedIndex());
+        
+        if(tabs.getTabCount() == 0) setVisible(false);
+    }//GEN-LAST:event_formWindowClosing
     
     /**
      * @param args the command line arguments

@@ -56,7 +56,6 @@ public class XMPPClientUI extends javax.swing.JFrame
         initStatusComboBox();
         this.setLocationRelativeTo(null);
         contentPanel.setVisible(false);
-        
     }
     
     private void initStatusComboBox()
@@ -287,8 +286,9 @@ public class XMPPClientUI extends javax.swing.JFrame
 
     private void contactListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactListMouseClicked
         if(evt.getClickCount() == 2)
-        {          
-            chatUI.addChat((RosterEntry)contactList.getSelectedValue());
+        {
+            RosterEntry rosterEntry = (RosterEntry)contactList.getSelectedValue();
+            chatUI.addChat(rosterEntry.getUser());
         }
     }//GEN-LAST:event_contactListMouseClicked
 
@@ -364,6 +364,14 @@ public class XMPPClientUI extends javax.swing.JFrame
         
         // show the content panel
         contentPanel.setVisible(true);
+        
+        connection.getChatManager().addChatListener( new ChatManagerListener() 
+        {
+            public void chatCreated(Chat chat, boolean createdLocally)
+            {
+                if(!createdLocally) chatUI.addChat(chat.getParticipant());
+            }
+        });
     }
     
     public XMPPConnection getConnection()
