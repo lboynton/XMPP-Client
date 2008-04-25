@@ -6,6 +6,8 @@
 
 package xmppclient;
 
+import org.jivesoftware.smack.Chat;
+
 /**
  *
  * @author  Lee Boynton (323326)
@@ -21,14 +23,20 @@ public class ChatUI extends javax.swing.JFrame
     
     public void addChat(String user)
     {
-        System.out.printf("----\naddChat(RosterEntry %s) called\n", user);
         if(getTab(user) == -1) 
         {
-            System.out.println("true");
             tabs.add( new ChatPanel(user) );
-        } else System.out.println("false");
+        }
         setVisible(true);
-        System.out.println("end of addChat\n-------");
+    }
+    
+    public void addChat(Chat chat)
+    {
+        setVisible(true);
+        if(getTab(chat.getParticipant()) == -1) 
+        {
+            tabs.add( new ChatPanel(chat) );
+        }
     }
     
     public int getTab(String user)
@@ -81,7 +89,11 @@ public class ChatUI extends javax.swing.JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        tabs.remove(tabs.getSelectedIndex());
+        
+        ChatPanel chatPanel = (ChatPanel) tabs.getSelectedComponent();
+        
+        chatPanel.endChat();
+        tabs.remove(chatPanel);
         
         if(tabs.getTabCount() == 0) setVisible(false);
     }//GEN-LAST:event_formWindowClosing

@@ -19,6 +19,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.packet.Presence;
@@ -31,7 +32,6 @@ import org.jivesoftware.smackx.packet.VCard;
 public class XMPPClientUI extends javax.swing.JFrame
 {
     public static XMPPConnection connection;
-    private Roster roster;
     private TrayIcon trayIcon;
     private Image appIcon = new ImageIcon(this.getClass().getResource(
                 "/xmppclient/images/user.png")).getImage();
@@ -43,7 +43,7 @@ public class XMPPClientUI extends javax.swing.JFrame
         XMPPConnection.DEBUG_ENABLED = false;
         try
         {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch (Exception ex)
         {
@@ -200,10 +200,10 @@ public class XMPPClientUI extends javax.swing.JFrame
                 .addContainerGap()
                 .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contentPanelLayout.createSequentialGroup()
-                        .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                        .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))
+                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
                 .addContainerGap())
         );
         contentPanelLayout.setVerticalGroup(
@@ -217,6 +217,8 @@ public class XMPPClientUI extends javax.swing.JFrame
                 .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        contentPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {nicknameTextField, statusComboBox});
 
         fileMenu.setText("File");
 
@@ -328,6 +330,8 @@ public class XMPPClientUI extends javax.swing.JFrame
  
     private void exit()
     {
+        requestFocus();
+        
         // if the user is signed in then sign them out before exiting
         if(connection != null) 
         {
@@ -348,30 +352,29 @@ public class XMPPClientUI extends javax.swing.JFrame
         new XMPPClientSignInUI(this).setVisible(true);
         
         // check if user clicked cancel
-        if(connection == null) return;
-        
-        // toggle the sign in/out menu items
-        signOutMenuItem.setEnabled(true);
-        signInMenuItem.setEnabled(false);
-        
-        // get the roster
-        roster = connection.getRoster();
-        roster.addRosterListener(new ContactListListener(this));
-        
-        // set the contact list
-        contactList.setListData(roster.getEntries().toArray());
-        contactList.setCellRenderer(new ContactListRenderer());
-        
-        // show the content panel
-        contentPanel.setVisible(true);
+        if(connection == null || !connection.isConnected()) return;
         
         connection.getChatManager().addChatListener( new ChatManagerListener() 
         {
             public void chatCreated(Chat chat, boolean createdLocally)
             {
-                if(!createdLocally) chatUI.addChat(chat.getParticipant());
+                if(!createdLocally) {System.out.printf("Received message!\n");
+                
+                chatUI.addChat(chat);}
             }
         });
+        
+        // toggle the sign in/out menu items
+        signOutMenuItem.setEnabled(true);
+        signInMenuItem.setEnabled(false);
+              
+        // set the contact list
+        contactList.setListData(connection.getRoster().getEntries().toArray());
+        connection.getRoster().addRosterListener(new ContactListListener(this));
+        contactList.setCellRenderer(new ContactListRenderer());
+        
+        // show the content panel
+        contentPanel.setVisible(true);
     }
     
     public XMPPConnection getConnection()
@@ -381,8 +384,17 @@ public class XMPPClientUI extends javax.swing.JFrame
     
     public void updateContactList()
     {
-        contactList.setListData(roster.getEntries().toArray());
-        try { contactList.updateUI(); } catch(Exception e) {}
+        SwingUtilities.invokeLater( new Runnable() {
+                public void run()
+                {
+                    try
+                    {
+                        contactList.setListData(connection.getRoster().getEntries().toArray());
+                        contactList.updateUI();
+                    }
+                    catch (Exception e) {}
+                }
+        });
     }
     
     private void signOut()

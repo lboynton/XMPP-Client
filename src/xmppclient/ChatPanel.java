@@ -9,7 +9,6 @@ package xmppclient;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
@@ -22,18 +21,21 @@ import org.jivesoftware.smackx.packet.VCard;
 public class ChatPanel extends javax.swing.JPanel 
 {
     private Chat chat;
+    private MessageListener messageListener;
     
     /** Creates new form ChatPanel */
     public ChatPanel(String user)
     {
+        messageListener = new MessageListener();
+        chat = XMPPClientUI.connection.getChatManager().createChat(user, messageListener);
         initComponents();
-        contact.setText(user);
-        chat = XMPPClientUI.connection.getChatManager().createChat(user, new MessageListener() {
-            public void processMessage(Chat chat, Message message)
-            {
-               messageTextArea.append(getName() + ": " + message.getBody() + "\n");
-            }
-        });
+    }
+    
+    public ChatPanel(Chat chat)
+    {
+        this.chat = chat;
+        initComponents();
+        chat.addMessageListener( new MessageListener());
     }
     
     public String getUser()
@@ -41,13 +43,18 @@ public class ChatPanel extends javax.swing.JPanel
         return chat.getParticipant();
     }
     
+    public void endChat()
+    {
+        chat = null;
+    }
+    
     @Override
     public String getName()
     {
-        //if(user == null) return "Conversation";
         VCard vCard = new VCard();
         
-        if(getRosterEntry().getName() != null) return getRosterEntry().getName();
+        if(getRosterEntry() != null && getRosterEntry().getName() != null && !getRosterEntry().getName().equals(""))
+            return getRosterEntry().getName();
         
         try
         {
@@ -59,8 +66,17 @@ public class ChatPanel extends javax.swing.JPanel
         return chat.getParticipant();
     }
     
+    /**
+     * Gets the roster entry of the chat participant from the contact list.
+     * @return The roster entry, or null if not in roster
+     */
     private RosterEntry getRosterEntry()
     {
+        /*
+         * NOTE:
+         * chat.getParticipant() returns the JID with the resource
+         * The roster JID does not have the resource
+         */
         return XMPPClientUI.connection.getRoster().getEntry(chat.getParticipant());
     }
     
@@ -80,7 +96,7 @@ public class ChatPanel extends javax.swing.JPanel
         jScrollPane1 = new javax.swing.JScrollPane();
         messageTextArea = new javax.swing.JTextArea();
 
-        contact.setText("Contact");
+        contact.setText(chat.getParticipant());
 
         sendTextArea.setColumns(20);
         sendTextArea.setFont(new java.awt.Font("Tahoma", 0, 10));
@@ -145,6 +161,9 @@ public class ChatPanel extends javax.swing.JPanel
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jScrollPane2, sendButton});
+
     }// </editor-fold>//GEN-END:initComponents
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
@@ -185,4 +204,11 @@ public class ChatPanel extends javax.swing.JPanel
     private javax.swing.JTextArea sendTextArea;
     // End of variables declaration//GEN-END:variables
     
+    private class MessageListener implements org.jivesoftware.smack.MessageListener
+    {
+        public void processMessage(Chat chat, Message message)
+        {
+           messageTextArea.append(getName() + ": " + message.getBody() + "\n");
+        }
+    }
 }

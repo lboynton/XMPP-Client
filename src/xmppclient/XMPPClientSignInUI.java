@@ -12,18 +12,14 @@ import org.jivesoftware.smack.*;
  *
  * @author  lee
  */
-public class XMPPClientSignInUI extends javax.swing.JDialog {
-    
-    private XMPPClientUI clientUI;
-    
+public class XMPPClientSignInUI extends javax.swing.JDialog 
+{
     /** Creates new form XMPPClientSignInUI */
-    public XMPPClientSignInUI(XMPPClientUI clientUI) {
-        
+    public XMPPClientSignInUI(XMPPClientUI clientUI) 
+    {
         super(clientUI, true);
         
         initComponents();
-        this.clientUI = clientUI;
-        this.setLocationRelativeTo(null);
     }
     
     /** This method is called from within the constructor to
@@ -52,6 +48,7 @@ public class XMPPClientSignInUI extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Sign In");
+        setLocationByPlatform(true);
         setMinimumSize(new java.awt.Dimension(400, 280));
         setName("Sign In"); // NOI18N
 
@@ -195,11 +192,11 @@ public class XMPPClientSignInUI extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        XMPPConnection connection = new XMPPConnection(hostTextField.getText());
+        XMPPClientUI.connection = new XMPPConnection(hostTextField.getText());
         
         try
         {
-            connection.connect();
+            XMPPClientUI.connection.connect();
         }
         catch(XMPPException e)
         {
@@ -213,7 +210,7 @@ public class XMPPClientSignInUI extends javax.swing.JDialog {
         
         try
         {
-            connection.login(usernameTextField.getText(),
+            XMPPClientUI.connection.login(usernameTextField.getText(),
                     passwordTextField.getText(),
                     resourceTextField.getText());
         }
@@ -227,25 +224,14 @@ public class XMPPClientSignInUI extends javax.swing.JDialog {
             return;
         }
         
-        clientUI.connection = connection;
+        while(!XMPPClientUI.connection.isConnected()) {}
+        
         this.dispose();
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
-    
-    /**
-     * @param args the command line arguments
-     *
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new XMPPClientSignInUI().setVisible(true);
-            }
-        });
-    }
-     */
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;

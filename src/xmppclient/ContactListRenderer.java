@@ -14,6 +14,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
+import javax.swing.SwingUtilities;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
@@ -79,11 +80,11 @@ public class ContactListRenderer extends javax.swing.JPanel implements ListCellR
             int index, 
             boolean isSelected, 
             boolean cellHasFocus)
-    {
+    {        
         Presence presence;
         VCard vCard = new VCard();
         
-        if(object instanceof RosterEntry == false) return this;
+        if(XMPPClientUI.connection == null || !XMPPClientUI.connection.isConnected()) return this;
         
         RosterEntry rosterEntry = (RosterEntry)object;
         
@@ -101,7 +102,7 @@ public class ContactListRenderer extends javax.swing.JPanel implements ListCellR
                 if(vCard.getNickName() != null)
                     nicknameLabel.setText(vCard.getNickName());
             }
-            catch (XMPPException ex) {}
+            catch (Exception ex) {}
         }
         
         presence = XMPPClientUI.connection.getRoster().getPresence(rosterEntry.getUser());
