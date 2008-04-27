@@ -7,12 +7,14 @@
 package xmppclient;
 
 import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.MessageListener;
+import org.jivesoftware.smack.packet.Message;
 
 /**
  *
  * @author  Lee Boynton (323326)
  */
-public class ChatUI extends javax.swing.JFrame 
+public class ChatUI extends javax.swing.JFrame implements MessageListener
 {
     
     /** Creates new form ChatUI */
@@ -21,41 +23,34 @@ public class ChatUI extends javax.swing.JFrame
         initComponents();
     }
     
-    public void addChat(String user)
-    {
-        if(getTabIndex(user) == -1) 
-        {
-            tabs.add( new ChatPanel(user) );
-        }
-        setVisible(true);
-    }
-    
     public void addChat(Chat chat)
     {
         setVisible(true);
-        if(getTabIndex(chat.getParticipant()) == -1) 
+        
+        if(getTabIndex(chat) == -1) 
         {
+            chat.addMessageListener(this);
             tabs.add( new ChatPanel(chat) );
         }
-        }
+    }
     
-    public int getTabIndex(String user)
+    public int getTabIndex(Chat chat)
     {     
         for(int i = 0; i < tabs.getTabCount(); i++)
         {
             ChatPanel tab = (ChatPanel)tabs.getComponentAt(i);
             
             // return the tab that contains the JID
-            if(tab.getUser().equals(user)) return i;
+            if(tab.getChat().getParticipant().equals(chat.getParticipant())) return i;
         }
         
         // return -1 if tab is not present
         return -1;
     }
     
-    public ChatPanel getTab(String user)
+    public ChatPanel getChat(Chat chat)
     {
-        return (ChatPanel) tabs.getTabComponentAt(getTabIndex(user));
+        return (ChatPanel) tabs.getComponentAt(getTabIndex(chat));
     }
     
     /** This method is called from within the constructor to
@@ -97,26 +92,19 @@ public class ChatUI extends javax.swing.JFrame
         
         ChatPanel chatPanel = (ChatPanel) tabs.getSelectedComponent();
         
-        chatPanel.endChat();
         tabs.remove(chatPanel);
         
         if(tabs.getTabCount() == 0) setVisible(false);
     }//GEN-LAST:event_formWindowClosing
     
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) 
-    {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ChatUI().setVisible(true);
-            }
-        });
-    }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane tabs;
     // End of variables declaration//GEN-END:variables
+
+    public void processMessage(Chat chat, Message message)
+    {
+        addChat(chat);
+        getChat(chat).addMessage(message);
+    }
     
 }

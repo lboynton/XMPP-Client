@@ -29,13 +29,13 @@ import org.jivesoftware.smackx.packet.VCard;
  *
  * @author  lee
  */
-public class XMPPClientUI extends javax.swing.JFrame
+public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListener
 {
     public static XMPPConnection connection;
     private TrayIcon trayIcon;
     private Image appIcon = new ImageIcon(this.getClass().getResource(
                 "/xmppclient/images/user.png")).getImage();
-    private ChatUI chatUI;
+    public static ChatUI chatUI;
     
     /** Creates new form XMPPClientUI */
     public XMPPClientUI() 
@@ -290,7 +290,8 @@ public class XMPPClientUI extends javax.swing.JFrame
         if(evt.getClickCount() == 2)
         {
             RosterEntry rosterEntry = (RosterEntry)contactList.getSelectedValue();
-            chatUI.addChat(rosterEntry.getUser());
+            
+            connection.getChatManager().createChat(rosterEntry.getUser(), chatUI);
         }
     }//GEN-LAST:event_contactListMouseClicked
 
@@ -354,15 +355,7 @@ public class XMPPClientUI extends javax.swing.JFrame
         // check if user clicked cancel
         if(connection == null || !connection.isConnected()) return;
         
-        connection.getChatManager().addChatListener( new ChatManagerListener() 
-        {
-            public void chatCreated(Chat chat, boolean createdLocally)
-            {
-                if(!createdLocally) {System.out.printf("Received message!\n");
-                
-                chatUI.addChat(chat);}
-            }
-        });
+        connection.getChatManager().addChatListener(this);
         
         // toggle the sign in/out menu items
         signOutMenuItem.setEnabled(true);
@@ -430,5 +423,9 @@ public class XMPPClientUI extends javax.swing.JFrame
     private javax.swing.JMenuItem signOutMenuItem;
     private javax.swing.JComboBox statusComboBox;
     // End of variables declaration//GEN-END:variables
-    
+
+    public void chatCreated(Chat chat, boolean createdLocally)
+    {
+        chatUI.addChat(chat);
+    } 
 }

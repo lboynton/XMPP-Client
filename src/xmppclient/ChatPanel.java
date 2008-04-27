@@ -21,31 +21,16 @@ import org.jivesoftware.smackx.packet.VCard;
 public class ChatPanel extends javax.swing.JPanel 
 {
     private Chat chat;
-    private MessageListener messageListener;
-    
-    /** Creates new form ChatPanel */
-    public ChatPanel(String user)
-    {
-        messageListener = new MessageListener();
-        chat = XMPPClientUI.connection.getChatManager().createChat(user, messageListener);
-        initComponents();
-    }
     
     public ChatPanel(Chat chat)
     {
         this.chat = chat;
         initComponents();
-        chat.addMessageListener( new MessageListener());
     }
     
-    public String getUser()
+    public Chat getChat()
     {
-        return chat.getParticipant();
-    }
-    
-    public void endChat()
-    {
-        chat = null;
+        return chat;
     }
     
     @Override
@@ -64,6 +49,11 @@ public class ChatPanel extends javax.swing.JPanel
         catch (XMPPException ex) {}
         
         return chat.getParticipant();
+    }
+
+    public void addMessage(Message message)
+    {
+        messageTextArea.append(getName() + ": " + message.getBody() + "\n");
     }
     
     /**
@@ -203,12 +193,4 @@ public class ChatPanel extends javax.swing.JPanel
     private javax.swing.JButton sendButton;
     private javax.swing.JTextArea sendTextArea;
     // End of variables declaration//GEN-END:variables
-    
-    private class MessageListener implements org.jivesoftware.smack.MessageListener
-    {
-        public void processMessage(Chat chat, Message message)
-        {
-           messageTextArea.append(getName() + ": " + message.getBody() + "\n");
-        }
-    }
 }
