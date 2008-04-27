@@ -8,15 +8,10 @@ package xmppclient;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
-import javax.swing.SwingUtilities;
 import org.jivesoftware.smack.RosterEntry;
-import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smackx.packet.VCard;
 
@@ -99,7 +94,7 @@ public class ContactListRenderer extends javax.swing.JPanel implements ListCellR
             try
             {
                 vCard.load(XMPPClientUI.connection, rosterEntry.getUser());
-                if(vCard.getNickName() != null)
+                if(vCard.getNickName() != null && !vCard.getNickName().equals(""))
                     nicknameLabel.setText(vCard.getNickName());
             }
             catch (Exception ex) {}

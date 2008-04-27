@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Collection;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -43,7 +44,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         XMPPConnection.DEBUG_ENABLED = false;
         try
         {
-            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch (Exception ex)
         {
@@ -307,6 +308,8 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         
         vCard.setNickName(nicknameTextField.getText());
         
+        if(nicknameTextField.getText().equals("")) vCard.setNickName(connection.getUser());
+        
         try
         {
             // send the new nickname
@@ -317,6 +320,10 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         {
             e.printStackTrace();
         }
+        
+        connection.sendPacket((Presence)statusComboBox.getSelectedItem());
+        
+        if(nicknameTextField.getText().equals("")) nicknameTextField.setText(connection.getUser());
     }//GEN-LAST:event_nicknameTextFieldActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -366,8 +373,24 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         connection.getRoster().addRosterListener(new ContactListListener(this));
         contactList.setCellRenderer(new ContactListRenderer());
         
+        nicknameTextField.setText(getUserNickname(connection.getUser()));
+                
         // show the content panel
         contentPanel.setVisible(true);
+    }
+    
+    public String getUserNickname(String user)
+    {
+        VCard VCard = new VCard();
+        
+        try 
+        { 
+            VCard.load(connection);
+            user = VCard.getNickName();
+        }
+        catch(XMPPException e) {}
+        
+        return user;
     }
     
     public XMPPConnection getConnection()
