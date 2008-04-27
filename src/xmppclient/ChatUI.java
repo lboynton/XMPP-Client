@@ -23,7 +23,7 @@ public class ChatUI extends javax.swing.JFrame
     
     public void addChat(String user)
     {
-        if(getTab(user) == -1) 
+        if(getTabIndex(user) == -1) 
         {
             tabs.add( new ChatPanel(user) );
         }
@@ -33,13 +33,13 @@ public class ChatUI extends javax.swing.JFrame
     public void addChat(Chat chat)
     {
         setVisible(true);
-        if(getTab(chat.getParticipant()) == -1) 
+        if(getTabIndex(chat.getParticipant()) == -1) 
         {
             tabs.add( new ChatPanel(chat) );
         }
-    }
+        }
     
-    public int getTab(String user)
+    public int getTabIndex(String user)
     {     
         for(int i = 0; i < tabs.getTabCount(); i++)
         {
@@ -51,6 +51,11 @@ public class ChatUI extends javax.swing.JFrame
         
         // return -1 if tab is not present
         return -1;
+    }
+    
+    public ChatPanel getTab(String user)
+    {
+        return (ChatPanel) tabs.getTabComponentAt(getTabIndex(user));
     }
     
     /** This method is called from within the constructor to
