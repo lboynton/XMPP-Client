@@ -39,10 +39,10 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
         jLabel6 = new javax.swing.JLabel();
         storedConnectionComboBox = new javax.swing.JComboBox();
         usernameTextField = new javax.swing.JTextField();
-        passwordTextField = new javax.swing.JTextField();
         resourceTextField = new javax.swing.JTextField();
         hostTextField = new javax.swing.JTextField();
         storeConnectionCheckBox = new javax.swing.JCheckBox();
+        passwordTextField = new javax.swing.JPasswordField();
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
 
@@ -71,8 +71,6 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
 
         usernameTextField.setText("lee");
 
-        passwordTextField.setText("password");
-
         resourceTextField.setText("home");
         resourceTextField.setToolTipText("Enter the resource");
 
@@ -81,6 +79,8 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
 
         storeConnectionCheckBox.setToolTipText("Tick this box to store this connection for future use");
         storeConnectionCheckBox.setEnabled(false);
+
+        passwordTextField.setText("password");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -92,23 +92,23 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(storedConnectionComboBox, 0, 234, Short.MAX_VALUE))
+                        .addComponent(storedConnectionComboBox, 0, 267, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
+                        .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
+                        .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(resourceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
+                        .addComponent(resourceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(hostTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
+                        .addComponent(hostTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -211,7 +211,7 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
         try
         {
             XMPPClientUI.connection.login(usernameTextField.getText(),
-                    passwordTextField.getText(),
+                    new String(passwordTextField.getPassword()),
                     resourceTextField.getText());
         }
         catch(XMPPException e)
@@ -244,7 +244,7 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton okButton;
-    private javax.swing.JTextField passwordTextField;
+    private javax.swing.JPasswordField passwordTextField;
     private javax.swing.JTextField resourceTextField;
     private javax.swing.JCheckBox storeConnectionCheckBox;
     private javax.swing.JComboBox storedConnectionComboBox;

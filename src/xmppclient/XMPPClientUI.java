@@ -16,7 +16,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Collection;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -55,7 +54,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         initComponents();
         initSystemTray();
         initStatusComboBox();
-        this.setLocationRelativeTo(null);
         contentPanel.setVisible(false);
     }
     
@@ -159,6 +157,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("XMPPClient");
         setIconImage(appIcon);
+        setLocationByPlatform(true);
         setMinimumSize(new java.awt.Dimension(200, 300));
         setName("XMPPClient"); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -204,7 +203,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
                         .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
+                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
                 .addContainerGap())
         );
         contentPanelLayout.setVerticalGroup(

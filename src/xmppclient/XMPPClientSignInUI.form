@@ -77,27 +77,27 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel1" linkSize="2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="storedConnectionComboBox" pref="234" max="32767" attributes="0"/>
+                          <Component id="storedConnectionComboBox" pref="267" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel2" linkSize="2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="usernameTextField" pref="234" max="32767" attributes="0"/>
+                          <Component id="usernameTextField" pref="267" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel3" linkSize="2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="passwordTextField" pref="234" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="passwordTextField" pref="267" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel4" linkSize="2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="resourceTextField" pref="234" max="32767" attributes="0"/>
+                          <Component id="resourceTextField" pref="267" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel5" linkSize="2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="hostTextField" pref="234" max="32767" attributes="0"/>
+                          <Component id="hostTextField" pref="267" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel6" linkSize="2" min="-2" max="-2" attributes="0"/>
@@ -191,11 +191,6 @@
             <Property name="text" type="java.lang.String" value="lee"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="passwordTextField">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="password"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JTextField" name="resourceTextField">
           <Properties>
             <Property name="text" type="java.lang.String" value="home"/>
@@ -212,6 +207,11 @@
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="Tick this box to store this connection for future use"/>
             <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JPasswordField" name="passwordTextField">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="password"/>
           </Properties>
         </Component>
       </SubComponents>
