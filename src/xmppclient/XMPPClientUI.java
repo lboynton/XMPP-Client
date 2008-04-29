@@ -18,6 +18,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -147,6 +148,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         contactList = new javax.swing.JList();
         nicknameTextField = new javax.swing.JTextField();
         statusComboBox = new javax.swing.JComboBox();
+        avatarButton = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         signInMenuItem = new javax.swing.JMenuItem();
@@ -166,6 +168,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
             }
         });
 
+        contactList.setModel(new DefaultListModel());
         contactList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         contactList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -192,6 +195,13 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
             }
         });
 
+        avatarButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/image.png"))); // NOI18N
+        avatarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                avatarButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
         contentPanelLayout.setHorizontalGroup(
@@ -199,10 +209,12 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contentPanelLayout.createSequentialGroup()
-                        .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                    .addGroup(contentPanelLayout.createSequentialGroup()
+                        .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(avatarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -211,14 +223,15 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(avatarButton)
+                    .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
+                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        contentPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {nicknameTextField, statusComboBox});
+        contentPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {avatarButton, nicknameTextField, statusComboBox});
 
         fileMenu.setText("File");
 
@@ -283,9 +296,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         signOut();
 }//GEN-LAST:event_signOutMenuItemActionPerformed
 
-    private void contactListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_contactListValueChanged
-    }//GEN-LAST:event_contactListValueChanged
-
     private void contactListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactListMouseClicked
         if(evt.getClickCount() == 2)
         {
@@ -293,6 +303,8 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
             
             connection.getChatManager().createChat(rosterEntry.getUser(), chatUI);
         }
+        JComponent c = (JComponent)contactList.getParent();
+        c.revalidate();
     }//GEN-LAST:event_contactListMouseClicked
 
     private void nicknameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nicknameTextFieldActionPerformed
@@ -334,6 +346,17 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         if(connection != null && connection.isConnected())
             connection.sendPacket((Presence)statusComboBox.getSelectedItem());
     }//GEN-LAST:event_statusComboBoxActionPerformed
+
+private void avatarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_avatarButtonActionPerformed
+    new AvatarChooser();
+}//GEN-LAST:event_avatarButtonActionPerformed
+
+private void contactListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_contactListValueChanged
+    if(!evt.getValueIsAdjusting())
+    {
+        contactList.setCellRenderer(new ContactListRenderer());
+    }
+}//GEN-LAST:event_contactListValueChanged
  
     private void exit()
     {
@@ -433,6 +456,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton avatarButton;
     private javax.swing.JList contactList;
     private javax.swing.JScrollPane contactListScrollPane;
     private javax.swing.JPanel contentPanel;

@@ -192,13 +192,14 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        
         XMPPClientUI.connection = new XMPPConnection(hostTextField.getText());
         
         try
         {
             XMPPClientUI.connection.connect();
         }
-        catch(XMPPException e)
+        catch(Exception e)
         {
             JOptionPane.showMessageDialog(this,
                     "Could not connect to host " + hostTextField.getText(),
@@ -214,7 +215,7 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
                     new String(passwordTextField.getPassword()),
                     resourceTextField.getText());
         }
-        catch(XMPPException e)
+        catch(Exception e)
         {
             JOptionPane.showMessageDialog(this,
                     "Could not log in with the username and password supplied",
