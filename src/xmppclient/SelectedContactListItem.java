@@ -46,13 +46,13 @@ public class SelectedContactListItem extends javax.swing.JPanel
 
         setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 4, 3, 4));
 
-        nicknameLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        nicknameLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         nicknameLabel.setText(Utils.getNickname(rosterEntry));
 
         avatarLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         avatarLabel.setIcon(Utils.getAvatar(rosterEntry));
 
-        JIDLabel.setText(rosterEntry.getUser());
+        JIDLabel.setText(presence.getFrom());
 
         statusLabel.setText(Utils.getStatus(presence));
 

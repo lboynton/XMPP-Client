@@ -30,7 +30,7 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener
         if(getTabIndex(chat) == -1) 
         {
             chat.addMessageListener(this);
-            tabs.add( new ChatPanel(chat) );
+            tabs.add( new ChatPanel(chat, this) );
         }
     }
     

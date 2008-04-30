@@ -8,6 +8,7 @@ package xmppclient;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
@@ -21,9 +22,11 @@ import org.jivesoftware.smackx.packet.VCard;
 public class ChatPanel extends javax.swing.JPanel 
 {
     private Chat chat;
+    private JFrame frame;
     
-    public ChatPanel(Chat chat)
+    public ChatPanel(Chat chat, JFrame frame)
     {
+        this.frame = frame;
         this.chat = chat;
         initComponents();
     }
@@ -85,7 +88,9 @@ public class ChatPanel extends javax.swing.JPanel
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         messageTextArea = new javax.swing.JTextArea();
+        sendFileButon = new javax.swing.JButton();
 
+        contact.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         contact.setText(chat.getParticipant());
 
         sendTextArea.setColumns(20);
@@ -118,6 +123,13 @@ public class ChatPanel extends javax.swing.JPanel
         messageTextArea.setRows(5);
         jScrollPane1.setViewportView(messageTextArea);
 
+        sendFileButon.setText("Send File");
+        sendFileButon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendFileButonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -129,7 +141,9 @@ public class ChatPanel extends javax.swing.JPanel
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(contact))
+                        .addComponent(contact)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 223, Short.MAX_VALUE)
+                        .addComponent(sendFileButon))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -142,9 +156,10 @@ public class ChatPanel extends javax.swing.JPanel
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(contact)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(sendFileButon))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
@@ -182,6 +197,11 @@ public class ChatPanel extends javax.swing.JPanel
     private void sendTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sendTextAreaKeyReleased
         if(evt.getKeyCode() == 10) sendTextArea.setText("");
     }//GEN-LAST:event_sendTextAreaKeyReleased
+
+private void sendFileButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFileButonActionPerformed
+
+    new FileTransferChooser(frame, true, XMPPClientUI.connection.getRoster().getPresence(getRosterEntry().getUser()).getFrom());
+}//GEN-LAST:event_sendFileButonActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -191,6 +211,7 @@ public class ChatPanel extends javax.swing.JPanel
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea messageTextArea;
     private javax.swing.JButton sendButton;
+    private javax.swing.JButton sendFileButon;
     private javax.swing.JTextArea sendTextArea;
     // End of variables declaration//GEN-END:variables
 }
