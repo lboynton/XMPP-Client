@@ -20,6 +20,7 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
         super(clientUI, true);
         
         initComponents();
+        validateInputs();
     }
     
     /** This method is called from within the constructor to
@@ -52,35 +53,55 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
         setMinimumSize(new java.awt.Dimension(400, 280));
         setName("Sign In"); // NOI18N
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sign In Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 1, 11)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sign In Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 1, 11))); // NOI18N
 
+        jLabel1.setLabelFor(storedConnectionComboBox);
         jLabel1.setText("Stored connection");
 
+        jLabel2.setLabelFor(usernameTextField);
         jLabel2.setText("Username");
 
+        jLabel3.setLabelFor(passwordTextField);
         jLabel3.setText("Password");
 
+        jLabel4.setLabelFor(resourceTextField);
         jLabel4.setText("Resource");
 
+        jLabel5.setLabelFor(hostTextField);
         jLabel5.setText("Host");
 
+        jLabel6.setLabelFor(storeConnectionCheckBox);
         jLabel6.setText("Store connection?");
 
         storedConnectionComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1" }));
         storedConnectionComboBox.setEnabled(false);
 
         usernameTextField.setText("lee");
+        usernameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                usernameTextFieldKeyReleased(evt);
+            }
+        });
 
         resourceTextField.setText("home");
         resourceTextField.setToolTipText("Enter the resource");
 
         hostTextField.setText("192.168.0.8");
         hostTextField.setToolTipText("Enter the server IP address or host name");
+        hostTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                hostTextFieldKeyReleased(evt);
+            }
+        });
 
         storeConnectionCheckBox.setToolTipText("Tick this box to store this connection for future use");
-        storeConnectionCheckBox.setEnabled(false);
 
         passwordTextField.setText("password");
+        passwordTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                passwordTextFieldKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -142,8 +163,9 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
                     .addComponent(hostTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(storeConnectionCheckBox)
-                    .addComponent(jLabel6)))
+                    .addComponent(jLabel6)
+                    .addComponent(storeConnectionCheckBox))
+                .addContainerGap())
         );
 
         okButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tick.png"))); // NOI18N
@@ -166,10 +188,10 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
@@ -178,13 +200,13 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(okButton)
-                    .addComponent(cancelButton))
+                    .addComponent(cancelButton)
+                    .addComponent(okButton))
                 .addContainerGap())
         );
 
@@ -192,6 +214,8 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        
+        validateInputs();
         
         XMPPClientUI.connection = new XMPPConnection(hostTextField.getText());
         
@@ -225,6 +249,8 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
             return;
         }
         
+        storeConnection(storeConnectionCheckBox.isSelected());
+        
         while(!XMPPClientUI.connection.isConnected()) {}
         
         this.dispose();
@@ -233,6 +259,18 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+private void usernameTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameTextFieldKeyReleased
+    validateInputs();
+}//GEN-LAST:event_usernameTextFieldKeyReleased
+
+private void passwordTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordTextFieldKeyReleased
+    validateInputs();
+}//GEN-LAST:event_passwordTextFieldKeyReleased
+
+private void hostTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_hostTextFieldKeyReleased
+    validateInputs();
+}//GEN-LAST:event_hostTextFieldKeyReleased
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
@@ -251,5 +289,20 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
     private javax.swing.JComboBox storedConnectionComboBox;
     private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
-    
+
+    private void storeConnection(boolean store)
+    {
+        if(!store) return;
+    }
+
+    private void validateInputs()
+    {
+        okButton.setEnabled(false);
+        
+        if(usernameTextField.getText().equals("")) return;
+        if(passwordTextField.getPassword().length == 0) return;
+        if(hostTextField.getText().equals("")) return;
+        
+        okButton.setEnabled(true);
+    }
 }
