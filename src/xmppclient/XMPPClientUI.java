@@ -382,7 +382,7 @@ private void contactListValueChanged(javax.swing.event.ListSelectionEvent evt) {
         new XMPPClientSignInUI(this).setVisible(true);
         
         // check if user clicked cancel
-        if(connection == null || !connection.isConnected()) return;
+        if(connection == null || !connection.isConnected() || !connection.isAuthenticated()) return;
         
         connection.getChatManager().addChatListener(this);
         
