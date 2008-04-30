@@ -27,6 +27,7 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
         storedConnectionComboBox.setSelectedItem(defaultConnection);
         usernameTextField.requestFocus();
         validateInputs();
+        getRootPane().setDefaultButton(okButton);
     }
     
     public void enableComponents(boolean enable)
@@ -38,6 +39,9 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
         
         okButton.setEnabled(enable);
         cancelButton.setEnabled(enable);
+        
+        if(enable) okButton.setText("OK");
+        else okButton.setText("Connecting");
     }
     
     /** This method is called from within the constructor to
@@ -106,7 +110,7 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
             }
         });
 
-        resourceTextField.setToolTipText("Enter the resource");
+        resourceTextField.setToolTipText("Enter the resource, or leave as default");
 
         hostTextField.setToolTipText("Enter the server IP address or host name");
         hostTextField.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -224,7 +228,7 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
 
         containerPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel6, jLabel8, nameTextField, storeConnectionCheckBox});
 
-        okButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tick.png"))); // NOI18N
+        okButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/go-next.png"))); // NOI18N
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -232,7 +236,7 @@ public class XMPPClientSignInUI extends javax.swing.JDialog
             }
         });
 
-        cancelButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/cancel.png"))); // NOI18N
+        cancelButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/go-previous.png"))); // NOI18N
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

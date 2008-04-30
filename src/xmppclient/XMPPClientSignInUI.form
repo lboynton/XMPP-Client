@@ -225,7 +225,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="resourceTextField">
           <Properties>
-            <Property name="toolTipText" type="java.lang.String" value="Enter the resource"/>
+            <Property name="toolTipText" type="java.lang.String" value="Enter the resource, or leave as default"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="hostTextField">
@@ -281,7 +281,7 @@
     <Component class="javax.swing.JButton" name="okButton">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/xmppclient/images/tick.png"/>
+          <Image iconType="3" name="/xmppclient/images/tango/go-next.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="OK"/>
       </Properties>
@@ -292,7 +292,7 @@
     <Component class="javax.swing.JButton" name="cancelButton">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/xmppclient/images/cancel.png"/>
+          <Image iconType="3" name="/xmppclient/images/tango/go-previous.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Cancel"/>
       </Properties>
