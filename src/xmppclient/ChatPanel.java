@@ -235,8 +235,6 @@ private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GE
             ex.printStackTrace();
             Logger.getLogger(FileTransferChooser.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        System.out.println("dsadsfa");
     }
 }//GEN-LAST:event_sendFileButtonActionPerformed
     

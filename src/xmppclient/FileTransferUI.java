@@ -6,6 +6,7 @@
 
 package xmppclient;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import org.jivesoftware.smackx.filetransfer.FileTransfer;
 import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
@@ -24,6 +25,7 @@ public class FileTransferUI extends javax.swing.JFrame
         this.transfer = transfer;
         initComponents();
         setVisible(true);
+        //transfer
         SwingWorker sw = new SwingWorker() {
 
             @Override
@@ -37,22 +39,27 @@ public class FileTransferUI extends javax.swing.JFrame
                         finish();
                         break;
                     }
-                    else
+
+                    statusLabel.setText(transfer.getStatus().toString());
+                    sizeLabel.setText(new Long(transfer.getAmountWritten()).toString() + "/" + new Long(transfer.getFileSize()).toString() );
+                    progressBar.setValue((int)transfer.getAmountWritten());
+                    
+                    if(transfer.getStatus()==Status.refused)
                     {
-                        statusLabel.setText(transfer.getStatus().toString());
-                        sizeLabel.setText(new Long(transfer.getAmountWritten()).toString() + "/" + new Long(transfer.getFileSize()).toString() );
-                        progressBar.setValue((int)transfer.getAmountWritten());
+                        finish();
+                        break;
                     }
 
                     if(transfer.getFileSize() == transfer.getAmountWritten()) 
                     {
+                        statusLabel.setText(transfer.getStatus().toString());
                         finish();
                         break;
                     }
                     Thread.sleep(1000);
                 }
                 
-                return transfer;
+                return null;
             }
         };
         sw.execute();
@@ -60,6 +67,7 @@ public class FileTransferUI extends javax.swing.JFrame
     
     public void finish()
     {
+        cancelButton.setEnabled(false);
         closeButton.setEnabled(true);
     }
 
@@ -80,6 +88,7 @@ public class FileTransferUI extends javax.swing.JFrame
         sizeLabel = new javax.swing.JLabel();
         statusLabel = new javax.swing.JLabel();
         errorLabel = new javax.swing.JLabel();
+        cancelButton = new javax.swing.JButton();
 
         jLabel2.setText("jLabel2");
 
@@ -92,6 +101,7 @@ public class FileTransferUI extends javax.swing.JFrame
         filenameLabel.setText(transfer.getFileName());
 
         progressBar.setMaximum((int)transfer.getFileSize());
+        progressBar.setStringPainted(true);
 
         closeButton.setText("Close");
         closeButton.setEnabled(false);
@@ -103,7 +113,15 @@ public class FileTransferUI extends javax.swing.JFrame
 
         sizeLabel.setText(String.valueOf(transfer.getFileSize()));
 
+        statusLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         statusLabel.setText(transfer.getStatus().toString());
+
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -112,18 +130,24 @@ public class FileTransferUI extends javax.swing.JFrame
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(filenameLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 222, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
                         .addComponent(sizeLabel))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(statusLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(errorLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(errorLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cancelButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addComponent(closeButton)))
                 .addContainerGap())
         );
@@ -141,7 +165,8 @@ public class FileTransferUI extends javax.swing.JFrame
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(closeButton)
                     .addComponent(statusLabel)
-                    .addComponent(errorLabel))
+                    .addComponent(errorLabel)
+                    .addComponent(cancelButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -152,7 +177,21 @@ private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     this.dispose();
 }//GEN-LAST:event_closeButtonActionPerformed
 
+private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+
+    if(JOptionPane.showConfirmDialog(this, 
+            "Do you want to cancel the transfer?", 
+            "Cancel Transfer", 
+            JOptionPane.YES_NO_OPTION, 
+            JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION)
+    {
+        transfer.cancel();
+        finish();
+    }
+}//GEN-LAST:event_cancelButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cancelButton;
     private javax.swing.JButton closeButton;
     private javax.swing.JLabel errorLabel;
     private javax.swing.JLabel filenameLabel;
