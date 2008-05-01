@@ -244,7 +244,7 @@ private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GE
         
         try
         {
-            transfer.sendFile(fileChooser.getSelectedFile(), ((JTextArea)fileChooser.getAccessory()).getText());
+            transfer.sendFile(fileChooser.getSelectedFile(), ((FileTransferChooserAccessory)fileChooser.getAccessory()).getFileDescription());
             new FileTransferUI(transfer);
         }
         catch (InterruptedException ex)

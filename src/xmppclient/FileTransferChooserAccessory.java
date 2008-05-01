@@ -6,6 +6,8 @@
 
 package xmppclient;
 
+import javax.swing.JTextArea;
+
 /**
  *
  * @author  Lee
@@ -21,6 +23,11 @@ public class FileTransferChooserAccessory extends javax.swing.JPanel
     public void setFilename(String name)
     {
         filenameTextField.setText(name);
+    }
+    
+    public String getFileDescription()
+    {
+        return descriptionTextArea.getText();
     }
 
     /** This method is called from within the constructor to
