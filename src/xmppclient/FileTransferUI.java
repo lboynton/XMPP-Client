@@ -25,7 +25,6 @@ public class FileTransferUI extends javax.swing.JFrame
         this.transfer = transfer;
         initComponents();
         setVisible(true);
-        //transfer
         SwingWorker sw = new SwingWorker() {
 
             @Override

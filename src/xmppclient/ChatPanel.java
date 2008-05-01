@@ -6,10 +6,16 @@
 
 package xmppclient;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
@@ -211,7 +217,23 @@ public class ChatPanel extends javax.swing.JPanel
 
 private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFileButtonActionPerformed
 
-    JFileChooser fileChooser = new JFileChooser();
+    final JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setAccessory(new FileTransferChooserAccessory());
+    fileChooser.addPropertyChangeListener(new PropertyChangeListener() 
+    {
+        public void propertyChange(PropertyChangeEvent evt)
+        {
+            if(evt.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY))
+            {
+                JFileChooser chooser = (JFileChooser)evt.getSource();
+                try
+                {
+                    ((FileTransferChooserAccessory)fileChooser.getAccessory()).setFilename(chooser.getSelectedFile().getName());  
+                }
+                catch(Exception e) {}
+            }
+        }
+    });
     
     int selection = fileChooser.showDialog(frame, "Send file to " + getName());
     
@@ -222,7 +244,7 @@ private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GE
         
         try
         {
-            transfer.sendFile(fileChooser.getSelectedFile(), "You won't believe this!");
+            transfer.sendFile(fileChooser.getSelectedFile(), ((JTextArea)fileChooser.getAccessory()).getText());
             new FileTransferUI(transfer);
         }
         catch (InterruptedException ex)

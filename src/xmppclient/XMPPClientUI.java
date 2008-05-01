@@ -150,6 +150,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuItem1 = new javax.swing.JMenuItem();
         contentPanel = new javax.swing.JPanel();
         contactListScrollPane = new javax.swing.JScrollPane();
         contactList = new javax.swing.JList();
@@ -162,6 +163,10 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         signOutMenuItem = new javax.swing.JMenuItem();
         fileMenuSeparator = new javax.swing.JSeparator();
         exitMenuItem = new javax.swing.JMenuItem();
+        sendFileMenuItem = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+
+        jMenuItem1.setText("Item");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("XMPPClient");
@@ -180,6 +185,11 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         contactList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 contactListMouseClicked(evt);
+            }
+        });
+        contactList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                contactListValueChanged(evt);
             }
         });
         contactListScrollPane.setViewportView(contactList);
@@ -270,6 +280,19 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
 
         menuBar.add(fileMenu);
 
+        sendFileMenuItem.setText("Tools");
+        sendFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendFileMenuItemActionPerformed(evt);
+            }
+        });
+
+        jMenuItem2.setText("Send file...");
+        jMenuItem2.setEnabled(false);
+        sendFileMenuItem.add(jMenuItem2);
+
+        menuBar.add(sendFileMenuItem);
+
         setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -352,6 +375,14 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
 private void avatarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_avatarButtonActionPerformed
     new AvatarChooser();
 }//GEN-LAST:event_avatarButtonActionPerformed
+
+private void contactListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_contactListValueChanged
+    sendFileMenuItem.setEnabled(true);
+}//GEN-LAST:event_contactListValueChanged
+
+private void sendFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFileMenuItemActionPerformed
+    contactList.getSelectedValue();
+}//GEN-LAST:event_sendFileMenuItemActionPerformed
  
     private void exit()
     {
@@ -460,8 +491,11 @@ private void avatarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JSeparator fileMenuSeparator;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JTextField nicknameTextField;
+    private javax.swing.JMenu sendFileMenuItem;
     private javax.swing.JMenuItem signInMenuItem;
     private javax.swing.JMenuItem signOutMenuItem;
     private javax.swing.JComboBox statusComboBox;
@@ -479,6 +513,7 @@ private void avatarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         int option = JOptionPane.showOptionDialog(this, 
                 "File transfer request received from " + request.getRequestor()
                 + "\nFilename: " + request.getFileName()
+                + "\nDescription: " + request.getDescription()
                 + "\nWould you like to accept or reject it?", 
                 "File Transfer Request", 
                 JOptionPane.YES_NO_OPTION, 
