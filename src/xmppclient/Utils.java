@@ -157,7 +157,7 @@ public class Utils
         Properties properties = new Properties();
         File connectionsDir = new File("connections");
         
-        if(!connectionsDir.isDirectory()) return null;
+        if(!connectionsDir.isDirectory()) return new Connection[0];
         
         String[] connections = connectionsDir.list( new FilenameFilter()
         {
