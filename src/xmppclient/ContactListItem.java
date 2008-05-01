@@ -24,7 +24,6 @@ public class ContactListItem extends javax.swing.JPanel
         this.rosterEntry = rosterEntry;
         this.presence = presence;
         initComponents();
-        setOpaque(false);
     }
     
     /** This method is called from within the constructor to

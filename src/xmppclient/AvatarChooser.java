@@ -92,12 +92,19 @@ private void avatarFileChooserActionPerformed(java.awt.event.ActionEvent evt) {/
         }
         catch(XMPPException e)
         {
-            JOptionPane.showMessageDialog(this,
+            /*
+             * 
+             * XMPPException occurs, but works
+             * 
+             */
+            e.printStackTrace();
+            
+            /*JOptionPane.showMessageDialog(this,
                     "Error setting the avatar:\n" + 
                     e.getMessage(),
-                    "Invalid Path",
+                    "Error",
                     JOptionPane.ERROR_MESSAGE);
-            return;
+            return;*/
         }
         dispose();
     }
@@ -111,7 +118,6 @@ private void avatarFileChooserActionPerformed(java.awt.event.ActionEvent evt) {/
     {
         VCard vCard = new VCard();
         vCard.load(XMPPClientUI.connection);
-        vCard.deleteProperty("avatar");
         vCard.setAvatar(avatarFileChooser.getSelectedFile().toURI().toURL());
         vCard.save(XMPPClientUI.connection);
     }

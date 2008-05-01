@@ -25,8 +25,6 @@ public class SelectedContactListItem extends javax.swing.JPanel
         this.rosterEntry = rosterEntry;
         this.presence = presence;
         initComponents();
-        setOpaque(true);
-        setBackground( new Color(240,240,240));
     }
 
     /** This method is called from within the constructor to
@@ -39,22 +37,11 @@ public class SelectedContactListItem extends javax.swing.JPanel
     private void initComponents() {
 
         nicknameLabel = new javax.swing.JLabel();
-        avatarLabel = new javax.swing.JLabel();
-        JIDLabel = new javax.swing.JLabel();
-        statusLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 4, 3, 4));
 
-        nicknameLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         nicknameLabel.setText(Utils.getNickname(rosterEntry));
-
-        avatarLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        avatarLabel.setIcon(Utils.getAvatar(rosterEntry));
-
-        JIDLabel.setText(presence.getFrom());
-
-        statusLabel.setText(Utils.getStatus(presence));
 
         jLabel1.setIcon(Utils.getUserIcon(presence));
 
@@ -65,34 +52,21 @@ public class SelectedContactListItem extends javax.swing.JPanel
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(nicknameLabel)
-                    .addComponent(statusLabel)
-                    .addComponent(JIDLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                .addComponent(avatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(nicknameLabel)
+                .addContainerGap(75, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(nicknameLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(statusLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(JIDLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(avatarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jLabel1)
+                .addComponent(nicknameLabel))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel JIDLabel;
-    private javax.swing.JLabel avatarLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel nicknameLabel;
-    private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables
 
 }

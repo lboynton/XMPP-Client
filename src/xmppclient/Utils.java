@@ -86,18 +86,38 @@ public class Utils
         else return null;
     }
     
-    public static Icon getAvatar(RosterEntry rosterEntry)
+    public static Icon getAvatar(RosterEntry rosterEntry, int height)
     {
         VCard vCard = new VCard();
         
         try
         {
             vCard.load(XMPPClientUI.connection, rosterEntry.getUser());
-            return Utils.resizeImage(new ImageIcon(vCard.getAvatar()), 60);
+            return Utils.resizeImage(new ImageIcon(vCard.getAvatar()), height);
         }
         catch (XMPPException ex) 
         {
             System.err.printf("Error loading avatar for user %s: %s", rosterEntry.getUser(), ex.getMessage());
+        }
+        catch (NullPointerException ex)
+        {
+            // user has no avatar
+        }
+        
+        return null;
+    }
+    
+    public static Icon getAvatar(int height)
+    {
+        VCard vCard = new VCard();
+        
+        try
+        {
+            vCard.load(XMPPClientUI.connection);
+            return Utils.resizeImage(new ImageIcon(vCard.getAvatar()), height);
+        }
+        catch (XMPPException ex) 
+        {
         }
         catch (NullPointerException ex)
         {

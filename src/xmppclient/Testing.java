@@ -26,13 +26,11 @@ class Testing extends JFrame
         //this block comes from this recent post, and would be better
           //http://saloon.javaranch.com/cgi-bin/ubb/ultimatebb.cgi?ubb=get_topic&f=2&t=006729
           //comment out the above reset line, and uncomment this block
-        if(lse.getValueIsAdjusting() == false)
-        {
           for(int x = 0; x < listModel.size(); x++)
           {
             listModel.setElementAt(listModel.getElementAt(x),x);
           }
-        }}});
+        }});
         
   }
   public static void main(String[] args){new Testing().setVisible(true);}

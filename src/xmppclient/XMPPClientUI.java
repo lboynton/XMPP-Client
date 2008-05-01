@@ -175,11 +175,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
                 contactListMouseClicked(evt);
             }
         });
-        contactList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                contactListValueChanged(evt);
-            }
-        });
         contactListScrollPane.setViewportView(contactList);
 
         nicknameTextField.setToolTipText("Press enter to set the nickname");
@@ -350,13 +345,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
 private void avatarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_avatarButtonActionPerformed
     new AvatarChooser();
 }//GEN-LAST:event_avatarButtonActionPerformed
-
-private void contactListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_contactListValueChanged
-    if(!evt.getValueIsAdjusting())
-    {
-        contactList.setCellRenderer(new ContactListRenderer());
-    }
-}//GEN-LAST:event_contactListValueChanged
  
     private void exit()
     {

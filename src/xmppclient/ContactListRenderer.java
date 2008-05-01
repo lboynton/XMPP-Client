@@ -6,14 +6,10 @@
 package xmppclient;
 
 import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import javax.swing.DefaultListCellRenderer;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.packet.Presence;
-import xmppclient.images.Icons;
 
 /**
  *
@@ -27,8 +23,8 @@ public class ContactListRenderer extends DefaultListCellRenderer
             int index, 
             boolean isSelected, 
             boolean cellHasFocus)
-    {        
-        if(XMPPClientUI.connection == null || !XMPPClientUI.connection.isConnected()) return new JLabel("Not connected", Icons.error, JLabel.LEFT);
+    {       
+        if(XMPPClientUI.connection == null || !XMPPClientUI.connection.isConnected()) return null;
         
         RosterEntry rosterEntry = (RosterEntry)object;
         Presence presence = XMPPClientUI.connection.getRoster().getPresence(rosterEntry.getUser());

@@ -89,12 +89,14 @@ public class ChatPanel extends javax.swing.JPanel
         jScrollPane1 = new javax.swing.JScrollPane();
         messageTextArea = new javax.swing.JTextArea();
         sendFileButon = new javax.swing.JButton();
+        contactAvatarLabel = new javax.swing.JLabel();
+        localAvatarLabel = new javax.swing.JLabel();
 
         contact.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         contact.setText(chat.getParticipant());
 
         sendTextArea.setColumns(20);
-        sendTextArea.setFont(new java.awt.Font("Tahoma", 0, 10));
+        sendTextArea.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         sendTextArea.setLineWrap(true);
         sendTextArea.setRows(1);
         sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -118,7 +120,7 @@ public class ChatPanel extends javax.swing.JPanel
 
         messageTextArea.setColumns(20);
         messageTextArea.setEditable(false);
-        messageTextArea.setFont(new java.awt.Font("Tahoma", 0, 10));
+        messageTextArea.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         messageTextArea.setLineWrap(true);
         messageTextArea.setRows(5);
         jScrollPane1.setViewportView(messageTextArea);
@@ -130,6 +132,12 @@ public class ChatPanel extends javax.swing.JPanel
             }
         });
 
+        contactAvatarLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        contactAvatarLabel.setIcon(Utils.getAvatar(getRosterEntry(), 120));
+
+        localAvatarLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        localAvatarLabel.setIcon(Utils.getAvatar(120));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -137,33 +145,43 @@ public class ChatPanel extends javax.swing.JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(contact)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 223, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
                         .addComponent(sendFileButon))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(contactAvatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(localAvatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(contact)
-                    .addComponent(jLabel1)
-                    .addComponent(sendFileButon))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(contactAvatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
+                        .addComponent(localAvatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(sendFileButon)
+                            .addComponent(jLabel1)
+                            .addComponent(contact))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
@@ -206,9 +224,11 @@ private void sendFileButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel contact;
+    private javax.swing.JLabel contactAvatarLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel localAvatarLabel;
     private javax.swing.JTextArea messageTextArea;
     private javax.swing.JButton sendButton;
     private javax.swing.JButton sendFileButon;
