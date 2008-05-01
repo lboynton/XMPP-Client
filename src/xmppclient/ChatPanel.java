@@ -8,11 +8,14 @@ package xmppclient;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smackx.filetransfer.FileTransferManager;
+import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 import org.jivesoftware.smackx.packet.VCard;
 
 /**
@@ -88,15 +91,14 @@ public class ChatPanel extends javax.swing.JPanel
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         messageTextArea = new javax.swing.JTextArea();
-        sendFileButon = new javax.swing.JButton();
-        contactAvatarLabel = new javax.swing.JLabel();
-        localAvatarLabel = new javax.swing.JLabel();
+        sendFileButton = new javax.swing.JButton();
+        statusLabel = new javax.swing.JLabel();
 
-        contact.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        contact.setFont(new java.awt.Font("Tahoma", 1, 12));
         contact.setText(chat.getParticipant());
 
         sendTextArea.setColumns(20);
-        sendTextArea.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        sendTextArea.setFont(new java.awt.Font("Tahoma", 0, 10));
         sendTextArea.setLineWrap(true);
         sendTextArea.setRows(1);
         sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -120,23 +122,21 @@ public class ChatPanel extends javax.swing.JPanel
 
         messageTextArea.setColumns(20);
         messageTextArea.setEditable(false);
-        messageTextArea.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        messageTextArea.setFont(new java.awt.Font("Tahoma", 0, 10));
         messageTextArea.setLineWrap(true);
         messageTextArea.setRows(5);
+        messageTextArea.setMinimumSize(new java.awt.Dimension(0, 0));
         jScrollPane1.setViewportView(messageTextArea);
 
-        sendFileButon.setText("Send File");
-        sendFileButon.addActionListener(new java.awt.event.ActionListener() {
+        sendFileButton.setText("Send File");
+        sendFileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sendFileButonActionPerformed(evt);
+                sendFileButtonActionPerformed(evt);
             }
         });
 
-        contactAvatarLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        contactAvatarLabel.setIcon(Utils.getAvatar(getRosterEntry(), 120));
-
-        localAvatarLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        localAvatarLabel.setIcon(Utils.getAvatar(120));
+        statusLabel.setFont(new java.awt.Font("Tahoma", 0, 10));
+        statusLabel.setText("(" + Utils.getStatus(XMPPClientUI.connection.getRoster().getPresence(chat.getParticipant())) + ")");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -146,42 +146,35 @@ public class ChatPanel extends javax.swing.JPanel
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(contact)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
-                        .addComponent(sendFileButon))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(contactAvatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(localAvatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(statusLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                        .addComponent(sendFileButton))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sendFileButton)
+                    .addComponent(jLabel1)
+                    .addComponent(contact)
+                    .addComponent(statusLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(contactAvatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
-                        .addComponent(localAvatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(sendFileButon)
-                            .addComponent(jLabel1)
-                            .addComponent(contact))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -216,22 +209,47 @@ public class ChatPanel extends javax.swing.JPanel
         if(evt.getKeyCode() == 10) sendTextArea.setText("");
     }//GEN-LAST:event_sendTextAreaKeyReleased
 
-private void sendFileButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFileButonActionPerformed
+private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFileButtonActionPerformed
 
-    new FileTransferChooser(frame, true, XMPPClientUI.connection.getRoster().getPresence(getRosterEntry().getUser()).getFrom());
-}//GEN-LAST:event_sendFileButonActionPerformed
+    JFileChooser fileChooser = new JFileChooser();
+    
+    int selection = fileChooser.showDialog(frame, "Send file to " + getName());
+    
+    if(selection == JFileChooser.APPROVE_OPTION)
+    {
+        FileTransferManager manager = new FileTransferManager(XMPPClientUI.connection);
+        OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(XMPPClientUI.connection.getRoster().getPresence(getRosterEntry().getUser()).getFrom());
+        
+        try
+        {
+            transfer.sendFile(fileChooser.getSelectedFile(), "You won't believe this!");
+            new FileTransferUI(transfer);
+        }
+        catch (InterruptedException ex)
+        {
+            ex.printStackTrace();
+            Logger.getLogger(FileTransferChooser.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        catch (XMPPException ex)
+        {
+            ex.printStackTrace();
+            Logger.getLogger(FileTransferChooser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        System.out.println("dsadsfa");
+    }
+}//GEN-LAST:event_sendFileButtonActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel contact;
-    private javax.swing.JLabel contactAvatarLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel localAvatarLabel;
     private javax.swing.JTextArea messageTextArea;
     private javax.swing.JButton sendButton;
-    private javax.swing.JButton sendFileButon;
+    private javax.swing.JButton sendFileButton;
     private javax.swing.JTextArea sendTextArea;
+    private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables
 }

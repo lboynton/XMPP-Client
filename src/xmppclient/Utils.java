@@ -77,13 +77,20 @@ public class Utils
         return null;
     }
     
-    public static String getStatus(Presence presence)
+    public static String getStatusMessage(Presence presence)
     {
         if(presence.getStatus() != null)
         {
             return presence.getStatus();
         }
         else return null;
+    }
+    
+    public static String getStatus(Presence presence)
+    {
+        if(!presence.isAvailable()) return "Offline";
+        
+        return "Available";
     }
     
     public static Icon getAvatar(RosterEntry rosterEntry, int height)

@@ -16,6 +16,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -24,13 +27,17 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smackx.filetransfer.FileTransferListener;
+import org.jivesoftware.smackx.filetransfer.FileTransferManager;
+import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
+import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.packet.VCard;
 
 /**
  *
  * @author  lee
  */
-public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListener
+public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListener, FileTransferListener
 {
     public static XMPPConnection connection;
     private TrayIcon trayIcon;
@@ -373,6 +380,8 @@ private void avatarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         if(connection == null || !connection.isConnected() || !connection.isAuthenticated()) return;
         
         connection.getChatManager().addChatListener(this);
+        FileTransferManager manager = new FileTransferManager(connection);
+        manager.addFileTransferListener(this);
         
         // toggle the sign in/out menu items
         signOutMenuItem.setEnabled(true);
@@ -461,5 +470,41 @@ private void avatarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     public void chatCreated(Chat chat, boolean createdLocally)
     {
         chatUI.addChat(chat);
-    } 
+    }
+
+    public void fileTransferRequest(FileTransferRequest request)
+    {
+        Object[] options = {"Accept", "Reject"};
+        
+        int option = JOptionPane.showOptionDialog(this, 
+                "File transfer request received from " + request.getRequestor()
+                + "\nFilename: " + request.getFileName()
+                + "\nWould you like to accept or reject it?", 
+                "File Transfer Request", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.QUESTION_MESSAGE, 
+                null, 
+                options, 
+                options[0]);
+        
+        if(option == JOptionPane.YES_OPTION) 
+        {
+            IncomingFileTransfer transfer = request.accept();
+            
+            try
+            {
+                transfer.recieveFile(new File("received/"+request.getFileName()));
+                new FileTransferUI(transfer);
+            }
+            catch (InterruptedException ex)
+            {
+                Logger.getLogger(XMPPClientUI.class.getName()).log(Level.SEVERE, null, ex);
+            }            
+            catch (XMPPException ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+        else request.reject();
+    }
 }

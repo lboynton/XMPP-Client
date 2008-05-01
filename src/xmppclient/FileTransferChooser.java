@@ -6,10 +6,8 @@
 
 package xmppclient;
 
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
@@ -28,7 +26,11 @@ public class FileTransferChooser extends javax.swing.JDialog
         super(parent, modal);
         this.JID = JID;
         initComponents();
-        setVisible(true);
+    }
+    
+    public int showFileChooser()
+    {
+        return fileChooser.showDialog(this, "Send file");
     }
 
     /** This method is called from within the constructor to
@@ -67,25 +69,7 @@ public class FileTransferChooser extends javax.swing.JDialog
     }// </editor-fold>//GEN-END:initComponents
 
 private void fileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileChooserActionPerformed
-    if(evt.getActionCommand().equals("ApproveSelection"))
-    {
-        FileTransferManager manager = new FileTransferManager(XMPPClientUI.connection);
-        OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(JID);
-        
-        try
-        {
-            transfer.sendFile(fileChooser.getSelectedFile(), "You won't believe this!");
-            this.dispose();
-        }
-        catch (XMPPException ex)
-        {
-            Logger.getLogger(FileTransferChooser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    else
-    {
-        this.dispose();
-    }
+
 }//GEN-LAST:event_fileChooserActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

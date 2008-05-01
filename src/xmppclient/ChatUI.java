@@ -9,6 +9,7 @@ package xmppclient;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.util.StringUtils;
 
 /**
  *
@@ -40,8 +41,9 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener
         {
             ChatPanel tab = (ChatPanel)tabs.getComponentAt(i);
             
-            // return the tab that contains the JID
-            if(tab.getChat().getParticipant().equals(chat.getParticipant())) return i;
+            // return the tab that contains the JID without resource
+            if(StringUtils.parseBareAddress(tab.getChat().getParticipant())
+                    .equals(StringUtils.parseBareAddress(chat.getParticipant()))) return i;
         }
         
         // return -1 if tab is not present
@@ -66,6 +68,7 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Chat");
         setLocationByPlatform(true);
+        setMinimumSize(new java.awt.Dimension(350, 400));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -76,13 +79,13 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+            .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE))
+                .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE))
         );
 
         pack();

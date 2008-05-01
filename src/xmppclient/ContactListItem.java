@@ -44,7 +44,7 @@ public class ContactListItem extends javax.swing.JPanel
         nicknameLabel.setIcon(Utils.getUserIcon(presence));
         nicknameLabel.setText(Utils.getNickname(rosterEntry));
 
-        statusLabel.setText(Utils.getStatus(presence));
+        statusLabel.setText(Utils.getStatusMessage(presence));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
