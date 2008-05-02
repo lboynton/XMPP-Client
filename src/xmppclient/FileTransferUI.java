@@ -51,7 +51,6 @@ public class FileTransferUI extends javax.swing.JFrame
 
                     if(transfer.getFileSize() == transfer.getAmountWritten()) 
                     {
-                        statusLabel.setText(transfer.getStatus().toString());
                         finish();
                         break;
                     }
@@ -66,6 +65,7 @@ public class FileTransferUI extends javax.swing.JFrame
     
     public void finish()
     {
+        statusLabel.setText("Complete");
         cancelButton.setEnabled(false);
         closeButton.setEnabled(true);
     }
