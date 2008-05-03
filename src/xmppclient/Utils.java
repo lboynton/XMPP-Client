@@ -83,7 +83,7 @@ public class Utils
         {
             return presence.getStatus();
         }
-        else return null;
+        else return getStatus(presence);
     }
     
     public static String getStatus(Presence presence)

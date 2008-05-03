@@ -6,8 +6,10 @@
 
 package xmppclient;
 
+import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileSystemView;
 import org.jivesoftware.smackx.filetransfer.FileTransfer;
 import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 
@@ -25,6 +27,7 @@ public class FileTransferUI extends javax.swing.JFrame
         this.transfer = transfer;
         initComponents();
         setVisible(true);
+        filenameLabel.setIcon(FileSystemView.getFileSystemView().getSystemIcon(new File(transfer.getFilePath())));
         SwingWorker sw = new SwingWorker() {
 
             @Override

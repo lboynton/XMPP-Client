@@ -5,6 +5,7 @@
 
 package xmppclient;
 
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
@@ -29,9 +30,10 @@ public class ContactListRenderer extends DefaultListCellRenderer
         RosterEntry rosterEntry = (RosterEntry)object;
         Presence presence = XMPPClientUI.connection.getRoster().getPresence(rosterEntry.getUser());
         
-        if(list.getSelectedIndex() == index) return new SelectedContactListItem(rosterEntry, presence);
-        
-        return new ContactListItem(rosterEntry, presence);
+        ContactListItem c = new ContactListItem(rosterEntry, presence);
+        if(cellHasFocus) c.setBackground(new Color(240,240,240));
+        if(isSelected) c.setBackground(new Color(220,220,220));
+        return c;
     }
 }
 

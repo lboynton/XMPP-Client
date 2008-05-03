@@ -37,14 +37,15 @@ public class ContactListItem extends javax.swing.JPanel
         nicknameLabel = new javax.swing.JLabel();
         statusLabel = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 4, 3, 4));
         setMaximumSize(new java.awt.Dimension(32767, 28));
-        setOpaque(false);
 
         nicknameLabel.setIcon(Utils.getUserIcon(presence));
         nicknameLabel.setText(Utils.getNickname(rosterEntry));
 
-        statusLabel.setText(Utils.getStatusMessage(presence));
+        statusLabel.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        statusLabel.setText("(" + Utils.getStatusMessage(presence) + ")");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -54,7 +55,7 @@ public class ContactListItem extends javax.swing.JPanel
                 .addComponent(nicknameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(statusLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -48,6 +49,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
     /** Creates new form XMPPClientUI */
     public XMPPClientUI() 
     {
+        
         XMPPConnection.DEBUG_ENABLED = false;
         try
         {
@@ -57,7 +59,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         {
             System.out.println("Unable to use system look and feel");
         }
-        
         chatUI = new ChatUI();
         initComponents();
         initSystemTray();
@@ -154,9 +155,15 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         contentPanel = new javax.swing.JPanel();
         contactListScrollPane = new javax.swing.JScrollPane();
         contactList = new javax.swing.JList();
+        jToolBar1 = new javax.swing.JToolBar();
+        addContactButton = new javax.swing.JButton();
+        vCardButton = new javax.swing.JButton();
+        avatarButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        hoverTextLabel = new javax.swing.JLabel();
         nicknameTextField = new javax.swing.JTextField();
         statusComboBox = new javax.swing.JComboBox();
-        avatarButton = new javax.swing.JButton();
+        avatarLabel = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         signInMenuItem = new javax.swing.JMenuItem();
@@ -172,7 +179,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         setTitle("XMPPClient");
         setIconImage(appIcon);
         setLocationByPlatform(true);
-        setMinimumSize(new java.awt.Dimension(200, 300));
+        setMinimumSize(new java.awt.Dimension(300, 400));
         setName("XMPPClient"); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -194,6 +201,81 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         });
         contactListScrollPane.setViewportView(contactList);
 
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+
+        addContactButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/user_add.png"))); // NOI18N
+        addContactButton.setToolTipText("Add contact");
+        addContactButton.setFocusable(false);
+        addContactButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        addContactButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        addContactButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                addContactButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                addContactButtonMouseExited(evt);
+            }
+        });
+        jToolBar1.add(addContactButton);
+
+        vCardButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/vcard_edit.png"))); // NOI18N
+        vCardButton.setToolTipText("Edit VCard");
+        vCardButton.setFocusable(false);
+        vCardButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        vCardButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        vCardButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                vCardButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                vCardButtonMouseExited(evt);
+            }
+        });
+        vCardButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vCardButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(vCardButton);
+
+        avatarButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/image.png"))); // NOI18N
+        avatarButton.setToolTipText("Change avatar");
+        avatarButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                avatarButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                avatarButtonMouseExited(evt);
+            }
+        });
+        avatarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                avatarButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(avatarButton);
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/cog.png"))); // NOI18N
+        jButton1.setToolTipText("Edit preferences");
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton1MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton1MouseExited(evt);
+            }
+        });
+        jToolBar1.add(jButton1);
+
+        hoverTextLabel.setFont(new java.awt.Font("Tahoma", 0, 10));
+        hoverTextLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 0));
+        jToolBar1.add(hoverTextLabel);
+
+        nicknameTextField.setFont(new java.awt.Font("Tahoma", 0, 12));
         nicknameTextField.setToolTipText("Press enter to set the nickname");
         nicknameTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -201,49 +283,51 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
             }
         });
 
+        statusComboBox.setFont(new java.awt.Font("Tahoma", 0, 12));
         statusComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 statusComboBoxActionPerformed(evt);
             }
         });
 
-        avatarButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/image.png"))); // NOI18N
-        avatarButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                avatarButtonActionPerformed(evt);
-            }
-        });
+        avatarLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
         contentPanelLayout.setHorizontalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contentPanelLayout.createSequentialGroup()
+            .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
                     .addGroup(contentPanelLayout.createSequentialGroup()
-                        .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(statusComboBox, 0, 230, Short.MAX_VALUE)
+                            .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contentPanelLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(avatarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
+                        .addComponent(avatarLabel)))
                 .addContainerGap())
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(avatarButton)
-                    .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(contentPanelLayout.createSequentialGroup()
+                        .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(avatarLabel))
+                .addGap(11, 11, 11)
+                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
                 .addContainerGap())
         );
-
-        contentPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {avatarButton, nicknameTextField, statusComboBox});
 
         fileMenu.setText("File");
 
@@ -299,7 +383,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements ChatManagerListe
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(contentPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -383,7 +467,53 @@ private void contactListValueChanged(javax.swing.event.ListSelectionEvent evt) {
 private void sendFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFileMenuItemActionPerformed
     contactList.getSelectedValue();
 }//GEN-LAST:event_sendFileMenuItemActionPerformed
+
+private void avatarButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_avatarButtonMouseEntered
+    setHoverText(evt);
+}//GEN-LAST:event_avatarButtonMouseEntered
+
+private void addContactButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addContactButtonMouseEntered
+    setHoverText(evt);
+}//GEN-LAST:event_addContactButtonMouseEntered
+
+private void vCardButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_vCardButtonMouseEntered
+    setHoverText(evt);
+}//GEN-LAST:event_vCardButtonMouseEntered
+
+private void avatarButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_avatarButtonMouseExited
+    clearHoverText();
+}//GEN-LAST:event_avatarButtonMouseExited
+
+private void addContactButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addContactButtonMouseExited
+    clearHoverText();
+}//GEN-LAST:event_addContactButtonMouseExited
+
+private void vCardButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_vCardButtonMouseExited
+    clearHoverText();
+}//GEN-LAST:event_vCardButtonMouseExited
+
+private void jButton1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseEntered
+    setHoverText(evt);
+}//GEN-LAST:event_jButton1MouseEntered
+
+private void jButton1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseExited
+    clearHoverText();
+}//GEN-LAST:event_jButton1MouseExited
+
+private void vCardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vCardButtonActionPerformed
+    new VCardEditor().setVisible(true);
+}//GEN-LAST:event_vCardButtonActionPerformed
  
+    private void setHoverText(java.awt.event.MouseEvent evt)
+    {
+        hoverTextLabel.setText(((JButton)evt.getSource()).getToolTipText());
+    }
+    
+    private void clearHoverText()
+    {
+        hoverTextLabel.setText("");
+    }
+    
     private void exit()
     {
         requestFocus();
@@ -424,9 +554,16 @@ private void sendFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         contactList.setCellRenderer(new ContactListRenderer());
         
         nicknameTextField.setText(getUserNickname(connection.getUser()));
+        setAvatar();
                 
         // show the content panel
         contentPanel.setVisible(true);
+    }
+    
+    public void setAvatar()
+    {
+        avatarLabel.setIcon(Utils.getAvatar(85));
+        if(avatarLabel.getIcon() == null) avatarLabel.setVisible(false);
     }
     
     public String getUserNickname(String user)
@@ -484,21 +621,27 @@ private void sendFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addContactButton;
     private javax.swing.JButton avatarButton;
+    private javax.swing.JLabel avatarLabel;
     private javax.swing.JList contactList;
     private javax.swing.JScrollPane contactListScrollPane;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JSeparator fileMenuSeparator;
+    private javax.swing.JLabel hoverTextLabel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JTextField nicknameTextField;
     private javax.swing.JMenu sendFileMenuItem;
     private javax.swing.JMenuItem signInMenuItem;
     private javax.swing.JMenuItem signOutMenuItem;
     private javax.swing.JComboBox statusComboBox;
+    private javax.swing.JButton vCardButton;
     // End of variables declaration//GEN-END:variables
 
     public void chatCreated(Chat chat, boolean createdLocally)
@@ -509,6 +652,8 @@ private void sendFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
     public void fileTransferRequest(FileTransferRequest request)
     {
         Object[] options = {"Accept", "Reject"};
+        String desc = request.getDescription();
+        if(desc == null) desc = "None entered";
         
         int option = JOptionPane.showOptionDialog(this, 
                 "File transfer request received from " + request.getRequestor()
@@ -525,6 +670,7 @@ private void sendFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         if(option == JOptionPane.YES_OPTION) 
         {
             IncomingFileTransfer transfer = request.accept();
+            (new File("received")).mkdir();
             
             try
             {
