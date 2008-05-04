@@ -13,8 +13,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -125,6 +123,7 @@ private void avatarFileChooserActionPerformed(java.awt.event.ActionEvent evt) {/
         }
 
         // The description of this filter
+        @Override
         public String getDescription() 
         {
             return "Images";
@@ -167,6 +166,7 @@ private void avatarFileChooserActionPerformed(java.awt.event.ActionEvent evt) {/
             }
         }
 
+        @Override
         public void propertyChange(PropertyChangeEvent e) {
             boolean update = false;
             String prop = e.getPropertyName();

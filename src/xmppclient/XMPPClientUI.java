@@ -23,7 +23,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smackx.filetransfer.FileTransferListener;
@@ -45,22 +44,31 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     public static ChatUI chatUI;
     
     /** Creates new form XMPPClientUI */
-    public XMPPClientUI() 
+    public XMPPClientUI(XMPPConnection connection) 
     {
-        XMPPConnection.DEBUG_ENABLED = false;
-        try
-        {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (Exception ex)
-        {
-            System.out.println("Unable to use system look and feel");
-        }
+        XMPPClientUI.connection = connection;
         chatUI = new ChatUI();
         initComponents();
         initSystemTray();
         initStatusComboBox();
         contentPanel.setVisible(false);
+        connection.getChatManager().addChatListener(chatUI);
+        FileTransferManager manager = new FileTransferManager(connection);
+        manager.addFileTransferListener(this);
+        
+        // toggle the sign in/out menu items
+        signOutMenuItem.setEnabled(true);
+              
+        // set the contact list
+        contactList.setListData(connection.getRoster().getEntries().toArray());
+        connection.getRoster().addRosterListener(new ContactListListener(this));
+        contactList.setCellRenderer(new ContactListRenderer());
+        
+        nicknameTextField.setText(getUserNickname(connection.getUser()));
+        setAvatar();
+                
+        // show the content panel
+        contentPanel.setVisible(true);
     }
     
     private void initStatusComboBox()
@@ -163,7 +171,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         avatarLabel = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
-        signInMenuItem = new javax.swing.JMenuItem();
         signOutMenuItem = new javax.swing.JMenuItem();
         fileMenuSeparator = new javax.swing.JSeparator();
         exitMenuItem = new javax.swing.JMenuItem();
@@ -280,14 +287,14 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
             }
         });
 
-        statusComboBox.setFont(new java.awt.Font("Tahoma", 0, 12));
+        statusComboBox.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         statusComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 statusComboBoxActionPerformed(evt);
             }
         });
 
-        avatarLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        avatarLabel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(160, 160, 160), 1, true));
 
         javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
@@ -296,15 +303,15 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE)
                     .addGroup(contentPanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(statusComboBox, 0, 230, Short.MAX_VALUE)
+                            .addComponent(statusComboBox, 0, 297, Short.MAX_VALUE)
                             .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contentPanelLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)))
+                                .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(avatarLabel)))
                 .addContainerGap())
@@ -322,21 +329,11 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
                         .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(avatarLabel))
                 .addGap(11, 11, 11)
-                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         fileMenu.setText("File");
-
-        signInMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        signInMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/connect.png"))); // NOI18N
-        signInMenuItem.setText("Sign in...");
-        signInMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                signInMenuItemActionPerformed(evt);
-            }
-        });
-        fileMenu.add(signInMenuItem);
 
         signOutMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/disconnect.png"))); // NOI18N
         signOutMenuItem.setText("Sign out");
@@ -380,7 +377,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(contentPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -389,10 +386,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void signInMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signInMenuItemActionPerformed
-        signIn();
-    }//GEN-LAST:event_signInMenuItemActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         exit();
@@ -538,24 +531,7 @@ private void vCardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         // check if user clicked cancel
         if(connection == null || !connection.isConnected() || !connection.isAuthenticated()) return;
         
-        connection.getChatManager().addChatListener(chatUI);
-        FileTransferManager manager = new FileTransferManager(connection);
-        manager.addFileTransferListener(this);
         
-        // toggle the sign in/out menu items
-        signOutMenuItem.setEnabled(true);
-        signInMenuItem.setEnabled(false);
-              
-        // set the contact list
-        contactList.setListData(connection.getRoster().getEntries().toArray());
-        connection.getRoster().addRosterListener(new ContactListListener(this));
-        contactList.setCellRenderer(new ContactListRenderer());
-        
-        nicknameTextField.setText(getUserNickname(connection.getUser()));
-        setAvatar();
-                
-        // show the content panel
-        contentPanel.setVisible(true);
     }
     
     public void setAvatar()
@@ -592,6 +568,7 @@ private void vCardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     public void updateContactList()
     {
         SwingUtilities.invokeLater( new Runnable() {
+            @Override
                 public void run()
                 {
                     try
@@ -609,19 +586,10 @@ private void vCardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         contactList.setModel(new DefaultListModel());
         connection.disconnect();
         connection = null;
-        signInMenuItem.setEnabled(true);
         signOutMenuItem.setEnabled(false);
         contentPanel.setVisible(false);
-    }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new XMPPClientUI().setVisible(true);
-            }
-        });
+        new XMPPClient().setVisible(true);
+        this.dispose();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -641,7 +609,6 @@ private void vCardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JTextField nicknameTextField;
     private javax.swing.JMenu sendFileMenuItem;
-    private javax.swing.JMenuItem signInMenuItem;
     private javax.swing.JMenuItem signOutMenuItem;
     private javax.swing.JComboBox statusComboBox;
     private javax.swing.JToolBar toolBar;

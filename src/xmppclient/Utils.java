@@ -194,6 +194,7 @@ public class Utils
         
         String[] connections = connectionsDir.list( new FilenameFilter()
         {
+            @Override
             public boolean accept(File file, String name)
             {
                 return name.contains(".properties");
@@ -217,7 +218,7 @@ public class Utils
             }
             catch(Exception ex) {}
         }
-        
+               
         return connectionsArray;
     }
     
@@ -240,6 +241,11 @@ public class Utils
         {
             throw new Exception("Invalid filename");
         }
+    }
+    
+    public static void deleteConnection(String name)
+    {      
+        new File("connections/" + name + ".properties").delete();
     }
     
     public static Icon getFileIcon(String filename)
