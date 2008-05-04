@@ -46,6 +46,8 @@ public class ChatPanel extends javax.swing.JPanel
     {
         VCard vCard = new VCard();
         
+        if(chat == null) return "Unnamed";
+        
         if(getRosterEntry() != null && getRosterEntry().getName() != null && !getRosterEntry().getName().equals(""))
             return getRosterEntry().getName();
         
@@ -217,6 +219,7 @@ private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GE
     fileChooser.setAccessory(new FileTransferChooserAccessory());
     fileChooser.addPropertyChangeListener(new PropertyChangeListener() 
     {
+        @Override
         public void propertyChange(PropertyChangeEvent evt)
         {
             if(evt.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY))

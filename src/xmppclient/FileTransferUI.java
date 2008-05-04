@@ -27,7 +27,7 @@ public class FileTransferUI extends javax.swing.JFrame
         this.transfer = transfer;
         initComponents();
         setVisible(true);
-        filenameLabel.setIcon(FileSystemView.getFileSystemView().getSystemIcon(new File(transfer.getFilePath())));
+        filenameLabel.setIcon(Utils.getFileIcon(transfer.getFileName()));
         SwingWorker sw = new SwingWorker() 
         {
             @Override
@@ -41,7 +41,7 @@ public class FileTransferUI extends javax.swing.JFrame
                         finish();
                         break;
                     }
-
+                                        
                     statusLabel.setText(transfer.getStatus().toString());
                     sizeLabel.setText(new Long(transfer.getAmountWritten()).toString() + "/" + new Long(transfer.getFileSize()).toString() );
                     progressBar.setValue((int)transfer.getAmountWritten());

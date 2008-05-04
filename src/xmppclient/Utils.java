@@ -15,9 +15,12 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.filechooser.FileSystemView;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
@@ -237,5 +240,34 @@ public class Utils
         {
             throw new Exception("Invalid filename");
         }
+    }
+    
+    public static Icon getFileIcon(String filename)
+    {
+        Icon icon = null;
+                
+        try
+        {
+            //Create a temporary file with the specified extension
+            File file = File.createTempFile("file", "." + getFileExtension(filename));
+            
+            System.out.println(file.getName());
+
+            FileSystemView view = FileSystemView.getFileSystemView();
+            icon = view.getSystemIcon(file);
+
+            //Delete the temporary file
+            file.delete();
+        }
+        catch (IOException ex) {}
+        
+        return icon;
+    }
+    
+    public static String getFileExtension(String filename)
+    {
+        String[] split = filename.split("\\.");
+
+	return split[split.length - 1];
     }
 }

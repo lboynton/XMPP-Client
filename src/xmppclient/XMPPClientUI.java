@@ -17,8 +17,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -650,6 +648,7 @@ private void vCardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private javax.swing.JButton vCardButton;
     // End of variables declaration//GEN-END:variables
 
+    @Override
     public void fileTransferRequest(FileTransferRequest request)
     {
         Object[] options = {"Accept", "Reject"};
