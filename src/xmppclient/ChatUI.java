@@ -7,6 +7,7 @@
 package xmppclient;
 
 import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.ChatManagerListener;
 import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.util.StringUtils;
@@ -15,7 +16,7 @@ import org.jivesoftware.smack.util.StringUtils;
  *
  * @author  Lee Boynton (323326)
  */
-public class ChatUI extends javax.swing.JFrame implements MessageListener
+public class ChatUI extends javax.swing.JFrame implements MessageListener, ChatManagerListener
 {
     
     /** Creates new form ChatUI */
@@ -26,8 +27,6 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener
     
     public void addChat(Chat chat)
     {
-        setVisible(true);
-        
         if(getTabIndex(chat) == -1) 
         {
             chat.addMessageListener(this);
@@ -54,7 +53,7 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener
     {
         return (ChatPanel) tabs.getComponentAt(getTabIndex(chat));
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -104,10 +103,30 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener
     private javax.swing.JTabbedPane tabs;
     // End of variables declaration//GEN-END:variables
 
+    public void chatCreated(Chat chat, boolean createdLocally)
+    {
+        chat.addMessageListener(this);
+        
+        if(createdLocally) 
+        {
+            // add the chat
+            addChat(chat);
+            
+            // show the window
+            setVisible(true);
+        }
+    }
+
     public void processMessage(Chat chat, Message message)
     {
-        addChat(chat);
-        getChat(chat).addMessage(message);
+        // body is null if created locally or if no message was sent
+        if(message.getBody() != null)
+        {
+            // a message has been sent, show the window
+            setVisible(true);
+            addChat(chat);
+            getChat(chat).addMessage(message);
+        }
     }
     
 }

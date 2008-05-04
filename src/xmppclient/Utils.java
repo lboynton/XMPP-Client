@@ -5,12 +5,17 @@
 
 package xmppclient;
 
+import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.Properties;
+import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.jivesoftware.smack.RosterEntry;
@@ -56,6 +61,31 @@ public class Utils
         }
         
         return resizedImage;
+    }
+    
+    public static byte[] getBytesFromImage(Image image) 
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(convert(image), "PNG", baos);
+        }
+        catch (IOException ex) 
+        {
+        }
+        catch (InterruptedException ex) 
+        {
+        }
+
+        return baos.toByteArray();
+    }
+    
+    public static BufferedImage convert(Image im) throws InterruptedException, IOException 
+    {
+        BufferedImage bi = new BufferedImage(im.getWidth(null), im.getHeight(null), BufferedImage.TYPE_INT_RGB);
+        Graphics bg = bi.getGraphics();
+        bg.drawImage(im, 0, 0, null);
+        bg.dispose();
+        return bi;
     }
     
     public static String getNickname(RosterEntry rosterEntry)

@@ -11,19 +11,18 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.net.MalformedURLException;
-import javax.imageio.ImageIO;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileFilter;
+import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.packet.VCard;
 
@@ -31,11 +30,15 @@ import org.jivesoftware.smackx.packet.VCard;
  *
  * @author  Lee
  */
-public class AvatarChooser extends javax.swing.JFrame {
-
+public class AvatarChooser extends javax.swing.JDialog 
+{
+    private XMPPClientUI clientUI;
+    
     /** Creates new form AvatarChooser */
-    public AvatarChooser() 
+    public AvatarChooser(JFrame owner, boolean modal) 
     {
+        super(owner, "Choose Avatar", modal);
+        clientUI = (XMPPClientUI) owner;
         initComponents();
         setVisible(true);
     }
@@ -51,7 +54,7 @@ public class AvatarChooser extends javax.swing.JFrame {
 
         avatarFileChooser = new javax.swing.JFileChooser();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         avatarFileChooser.setAcceptAllFileFilterUsed(false);
         avatarFileChooser.setAccessory(new ImagePreview(avatarFileChooser));
@@ -82,51 +85,14 @@ private void avatarFileChooserActionPerformed(java.awt.event.ActionEvent evt) {/
 
     if(evt.getActionCommand().equals("ApproveSelection"))
     {
-        try
-        {
-            System.out.println(avatarFileChooser.getSelectedFile().getAbsolutePath());
-            setAvatar();
-        }
-        catch(MalformedURLException e)
-        {
-            JOptionPane.showMessageDialog(this,
-                    "Could not find the following file\n" + 
-                    avatarFileChooser.getSelectedFile().getAbsolutePath(),
-                    "Invalid Path",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        catch(XMPPException e)
-        {
-            /*
-             * 
-             * XMPPException occurs, but works
-             * 
-             */
-            e.printStackTrace();
-            
-            /*JOptionPane.showMessageDialog(this,
-                    "Error setting the avatar:\n" + 
-                    e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;*/
-        }
-        dispose();
+        this.setVisible(false);
+        new AvatarSwingWorker().execute();
     }
     else
     {
         dispose();
     }
 }//GEN-LAST:event_avatarFileChooserActionPerformed
-
-    private void setAvatar() throws XMPPException, MalformedURLException
-    {
-        VCard vCard = new VCard();
-        vCard.load(XMPPClientUI.connection);
-        vCard.setAvatar(avatarFileChooser.getSelectedFile().toURI().toURL());
-        vCard.save(XMPPClientUI.connection);
-    }
     
     public class ImageFilter extends FileFilter
     {
@@ -250,5 +216,55 @@ private void avatarFileChooserActionPerformed(java.awt.event.ActionEvent evt) {/
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser avatarFileChooser;
     // End of variables declaration//GEN-END:variables
+    
+    private class AvatarSwingWorker extends SwingWorker<Object, Object>
+    {
+        @Override
+        protected Object doInBackground()
+        {
+            try
+            {
+                VCard vCard = new VCard();
+                vCard.load(XMPPClientUI.connection);
+                ImageIcon image = new ImageIcon(avatarFileChooser.getSelectedFile().toURI().toURL());
+                image = (ImageIcon) Utils.resizeImage(image, 85);
+                clientUI.setAvatar(image);
+                vCard.setAvatar(Utils.getBytesFromImage(image.getImage()));
 
+                // Change packet reply timeout to cater for larger avatars
+                int oldTimeout = SmackConfiguration.getPacketReplyTimeout();
+                SmackConfiguration.setPacketReplyTimeout(15000);
+
+                // save vcard
+                vCard.save(XMPPClientUI.connection);
+
+                // reset packet reply timeout
+                SmackConfiguration.setPacketReplyTimeout(oldTimeout);
+            }
+            catch (MalformedURLException ex)
+            {
+                JOptionPane.showMessageDialog(AvatarChooser.this,
+                    "Could not find the following file\n" + 
+                    avatarFileChooser.getSelectedFile().getAbsolutePath(),
+                    "Invalid Path",
+                    JOptionPane.ERROR_MESSAGE);
+            }            
+            catch (XMPPException ex)
+            {
+                JOptionPane.showMessageDialog(AvatarChooser.this,
+                    "The avatar could not be saved on the server\n" +
+                    ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+            
+            return null;
+        }
+        
+        @Override
+        protected void done()
+        {
+            AvatarChooser.this.dispose();
+        }
+    }
 }

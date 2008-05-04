@@ -17,7 +17,7 @@ import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
  *
  * @author  Lee
  */
-public class FileTransferUI extends javax.swing.JFrame 
+public class FileTransferUI extends javax.swing.JFrame
 {
     private FileTransfer transfer;
             
@@ -28,8 +28,8 @@ public class FileTransferUI extends javax.swing.JFrame
         initComponents();
         setVisible(true);
         filenameLabel.setIcon(FileSystemView.getFileSystemView().getSystemIcon(new File(transfer.getFilePath())));
-        SwingWorker sw = new SwingWorker() {
-
+        SwingWorker sw = new SwingWorker() 
+        {
             @Override
             protected Object doInBackground() throws Exception
             {
