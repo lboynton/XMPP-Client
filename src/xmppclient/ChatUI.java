@@ -103,6 +103,7 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener, ChatM
     private javax.swing.JTabbedPane tabs;
     // End of variables declaration//GEN-END:variables
 
+    @Override
     public void chatCreated(Chat chat, boolean createdLocally)
     {
         chat.addMessageListener(this);
@@ -117,6 +118,7 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener, ChatM
         }
     }
 
+    @Override
     public void processMessage(Chat chat, Message message)
     {
         // body is null if created locally or if no message was sent

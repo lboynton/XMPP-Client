@@ -6,13 +6,18 @@
 
 package xmppclient;
 
+import java.awt.Component;
 import xmppclient.formatter.FormatterUI;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
@@ -30,6 +35,7 @@ public class ChatPanel extends javax.swing.JPanel
 {
     private Chat chat;
     private JFrame frame;
+    private Format format = new Format();
     
     public ChatPanel(Chat chat, JFrame frame)
     {
@@ -65,7 +71,7 @@ public class ChatPanel extends javax.swing.JPanel
 
     public void addMessage(Message message)
     {
-        messageTextArea.append(getName() + ": " + message.getBody() + "\n");
+        ((DefaultListModel)messageList.getModel()).addElement(message);
     }
     
     /**
@@ -95,18 +101,18 @@ public class ChatPanel extends javax.swing.JPanel
         sendTextArea = new javax.swing.JTextArea();
         sendButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        messageTextArea = new javax.swing.JTextArea();
         sendFileButton = new javax.swing.JButton();
         statusLabel = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         formatButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        messageList = new javax.swing.JList(new DefaultListModel());
 
         contact.setFont(new java.awt.Font("Tahoma", 1, 12));
         contact.setText(chat.getParticipant());
 
         sendTextArea.setColumns(20);
-        sendTextArea.setFont(new java.awt.Font("Tahoma", 0, 10));
+        sendTextArea.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         sendTextArea.setLineWrap(true);
         sendTextArea.setRows(1);
         sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -128,14 +134,6 @@ public class ChatPanel extends javax.swing.JPanel
 
         jLabel1.setText("To:");
 
-        messageTextArea.setColumns(20);
-        messageTextArea.setEditable(false);
-        messageTextArea.setFont(new java.awt.Font("Tahoma", 0, 10));
-        messageTextArea.setLineWrap(true);
-        messageTextArea.setRows(5);
-        messageTextArea.setMinimumSize(new java.awt.Dimension(0, 0));
-        jScrollPane1.setViewportView(messageTextArea);
-
         sendFileButton.setText("Send File");
         sendFileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -155,6 +153,9 @@ public class ChatPanel extends javax.swing.JPanel
             }
         });
 
+        messageList.setCellRenderer(new MessageListRenderer());
+        jScrollPane1.setViewportView(messageList);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -162,6 +163,7 @@ public class ChatPanel extends javax.swing.JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(formatButton, 0, 0, Short.MAX_VALUE)
@@ -177,8 +179,7 @@ public class ChatPanel extends javax.swing.JPanel
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(statusLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
-                        .addComponent(sendFileButton))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE))
+                        .addComponent(sendFileButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -213,8 +214,11 @@ public class ChatPanel extends javax.swing.JPanel
         
         try
         {
-            chat.sendMessage(sendTextArea.getText().trim());
-            messageTextArea.append("Me: " + sendTextArea.getText() + "\n");
+            Message message = new Message();
+            message.setBody(sendTextArea.getText().trim());
+            message.setProperty("format", format);
+            chat.sendMessage(message);
+            addMessage(message);
             sendTextArea.setText("");
         }
         catch (XMPPException ex)
@@ -279,7 +283,7 @@ private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GE
 
 private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formatButtonActionPerformed
     FormatterUI formatter = new FormatterUI(null);
-    Format format = formatter.showDialog();
+    format = formatter.showDialog();
     sendTextArea.setFont(format.getFont());
     sendTextArea.setForeground(format.getColor());
 }//GEN-LAST:event_formatButtonActionPerformed
@@ -292,10 +296,26 @@ private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea messageTextArea;
+    private javax.swing.JList messageList;
     private javax.swing.JButton sendButton;
     private javax.swing.JButton sendFileButton;
     private javax.swing.JTextArea sendTextArea;
     private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables
+
+    private class MessageListRenderer extends DefaultListCellRenderer
+    {
+        @Override
+        public Component getListCellRendererComponent(JList list, 
+                Object object, 
+                int index, 
+                boolean isSelected, 
+                boolean cellHasFocus)
+        {       
+            Message message = (Message) object;
+            
+            return new JLabel(Utils.getNickname(message.getFrom()) + ": " + message.getBody());
+        }
+    }
+        
 }

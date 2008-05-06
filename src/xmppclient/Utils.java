@@ -110,6 +110,12 @@ public class Utils
         return null;
     }
     
+    public static String getNickname(String JID)
+    {
+        System.out.printf("Getting nickname for %s\n", JID);
+        return getNickname(XMPPClientUI.connection.getRoster().getEntry(JID));
+    }
+    
     public static String getStatusMessage(Presence presence)
     {
         if(presence.getStatus() != null)
