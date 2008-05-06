@@ -4,26 +4,64 @@
  * Created on 06 May 2008, 13:14
  */
 
-package xmppclient;
+package xmppclient.formatter;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import javax.swing.JColorChooser;
+import javax.swing.JFrame;
 
 /**
  *
  * @author  Lee Boynton (323326)
  */
-public class FormatterUI extends javax.swing.JFrame 
+public class FormatterUI extends javax.swing.JDialog 
 {
     private GraphicsEnvironment gEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private final String[] sizes = { "8", "10", "11", "12", "14", "16", "18",
       "20", "24", "30", "36", "40", "48", "60", "72" };
-    private Font font;
+    private Font font = new Font("Tahoma", 12, Font.PLAIN);
+    private Font defaultFont;
+    private Color colour = Color.black;
+    private Color defaultColour;
     
-    /** Creates new form FormatterUI */
-    public FormatterUI() 
+    /** 
+     * Creates a new hidden FormatterUI dialog
+     * @param owner The owner of the dialog, or null
+     */
+    public FormatterUI(JFrame owner) 
     {
+        super(owner, "Format text", true);
         initComponents();
+        previewText();
+    }
+    
+    /**
+     * Creates a new hidden FormatterUI dialog
+     * @param owner The owner of the dialog, or null
+     * @param defaultFont The default starting font
+     * @param defaultColour The default starting colour
+     */
+    public FormatterUI(JFrame owner, Font defaultFont, Color defaultColour)
+    {
+        super(owner, "Format text", true);
+        this.defaultFont = defaultFont;
+        this.defaultColour = defaultColour;
+        this.colour = defaultColour;
+        this.font = defaultFont;
+    }
+    
+    /**
+     * Shows the modal formatting dialog.
+     * @return A Format object containing the font and colour.
+     * If the user selected save the new font and colour is returned,
+     * else the default font and colour are returned
+     */
+    public Format showDialog()
+    {
+        setVisible(true);
+        return new Format(font, colour);
     }
 
     /** This method is called from within the constructor to
@@ -42,11 +80,13 @@ public class FormatterUI extends javax.swing.JFrame
         previewTextLabel = new javax.swing.JLabel();
         boldCheckBox = new javax.swing.JCheckBox();
         italicCheckBox = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        colourButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationByPlatform(true);
 
         fontListScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Font", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 
@@ -87,9 +127,26 @@ public class FormatterUI extends javax.swing.JFrame
             }
         });
 
-        jButton1.setText("Save");
+        saveButton.setText("Save");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Cancel");
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
+
+        colourButton.setText("Colour...");
+        colourButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colourButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -107,11 +164,13 @@ public class FormatterUI extends javax.swing.JFrame
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(boldCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(italicCheckBox))
+                        .addComponent(italicCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 211, Short.MAX_VALUE)
+                        .addComponent(colourButton))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addComponent(cancelButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 286, Short.MAX_VALUE)
+                        .addComponent(saveButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -122,17 +181,19 @@ public class FormatterUI extends javax.swing.JFrame
                     .addComponent(fontListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(sizeListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(boldCheckBox)
-                    .addComponent(italicCheckBox))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(boldCheckBox)
+                        .addComponent(italicCheckBox))
+                    .addComponent(colourButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(previewTextLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(saveButton)
+                    .addComponent(cancelButton))
                 .addContainerGap())
         );
 
@@ -157,6 +218,19 @@ private void italicCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GE
     previewText();
 }//GEN-LAST:event_italicCheckBoxActionPerformed
 
+private void colourButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colourButtonActionPerformed
+    this.colour = JColorChooser.showDialog(this, "Select text colour", Color.black);
+    previewText();
+}//GEN-LAST:event_colourButtonActionPerformed
+
+private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+    dispose();
+}//GEN-LAST:event_cancelButtonActionPerformed
+
+private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+    dispose();
+}//GEN-LAST:event_saveButtonActionPerformed
+
     /**
     * @param args the command line arguments
     */
@@ -164,11 +238,14 @@ private void italicCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GE
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new FormatterUI().setVisible(true);
+                new FormatterUI(null).setVisible(true);
             }
         });
     }
     
+    /**
+     * Called every time the preview text needs updating
+     */
     private void previewText()
     {
         String fontname = (String) fontList.getSelectedValue();
@@ -181,26 +258,22 @@ private void italicCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GE
         
         Font newFont = new Font(fontname, style, size);
         previewTextLabel.setFont(newFont);
+        previewTextLabel.setForeground(colour);
         font = newFont;
         pack();
-    }
-    
-    public Font getFormat()
-    {
-        return font;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox boldCheckBox;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JButton colourButton;
     private javax.swing.JList fontList;
     private javax.swing.JScrollPane fontListScrollPane;
     private javax.swing.JCheckBox italicCheckBox;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel previewTextLabel;
+    private javax.swing.JButton saveButton;
     private javax.swing.JList sizeList;
     private javax.swing.JScrollPane sizeListScrollPane;
     // End of variables declaration//GEN-END:variables
-
 }

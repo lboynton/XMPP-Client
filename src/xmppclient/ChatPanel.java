@@ -6,6 +6,7 @@
 
 package xmppclient;
 
+import xmppclient.formatter.FormatterUI;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
@@ -19,6 +20,7 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 import org.jivesoftware.smackx.packet.VCard;
+import xmppclient.formatter.Format;
 
 /**
  *
@@ -98,13 +100,13 @@ public class ChatPanel extends javax.swing.JPanel
         sendFileButton = new javax.swing.JButton();
         statusLabel = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        formatButton = new javax.swing.JButton();
 
         contact.setFont(new java.awt.Font("Tahoma", 1, 12));
         contact.setText(chat.getParticipant());
 
         sendTextArea.setColumns(20);
-        sendTextArea.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        sendTextArea.setFont(new java.awt.Font("Tahoma", 0, 10));
         sendTextArea.setLineWrap(true);
         sendTextArea.setRows(1);
         sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -146,10 +148,10 @@ public class ChatPanel extends javax.swing.JPanel
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/emoticons/face-smile.png"))); // NOI18N
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/format-text-bold-16x16.png"))); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        formatButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/format-text-bold-16x16.png"))); // NOI18N
+        formatButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                formatButtonActionPerformed(evt);
             }
         });
 
@@ -162,8 +164,8 @@ public class ChatPanel extends javax.swing.JPanel
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton2, 0, 0, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, Short.MAX_VALUE))
+                            .addComponent(formatButton, 0, 0, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -174,7 +176,7 @@ public class ChatPanel extends javax.swing.JPanel
                         .addComponent(contact)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(statusLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
                         .addComponent(sendFileButton))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE))
                 .addContainerGap())
@@ -195,7 +197,7 @@ public class ChatPanel extends javax.swing.JPanel
                     .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(formatButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)))
                 .addContainerGap())
@@ -275,17 +277,18 @@ private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GE
     }
 }//GEN-LAST:event_sendFileButtonActionPerformed
 
-private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    FormatterUI formatter = new FormatterUI();
-    formatter.setVisible(true);
-    formatter.getFormat();
-}//GEN-LAST:event_jButton2ActionPerformed
+private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formatButtonActionPerformed
+    FormatterUI formatter = new FormatterUI(null);
+    Format format = formatter.showDialog();
+    sendTextArea.setFont(format.getFont());
+    sendTextArea.setForeground(format.getColor());
+}//GEN-LAST:event_formatButtonActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel contact;
+    private javax.swing.JButton formatButton;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
