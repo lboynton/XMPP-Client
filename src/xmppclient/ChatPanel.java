@@ -279,7 +279,6 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     FormatterUI formatter = new FormatterUI();
     formatter.setVisible(true);
     formatter.getFormat();
-    formatter.dispose();
 }//GEN-LAST:event_jButton2ActionPerformed
     
     
