@@ -172,7 +172,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         signOutMenuItem = new javax.swing.JMenuItem();
-        fileMenuSeparator = new javax.swing.JSeparator();
         exitMenuItem = new javax.swing.JMenuItem();
         sendFileMenuItem = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -287,7 +286,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
             }
         });
 
-        statusComboBox.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        statusComboBox.setFont(new java.awt.Font("Tahoma", 0, 12));
         statusComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 statusComboBoxActionPerformed(evt);
@@ -335,7 +334,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
 
         fileMenu.setText("File");
 
-        signOutMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/disconnect.png"))); // NOI18N
+        signOutMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/log-out-22x22.png"))); // NOI18N
         signOutMenuItem.setText("Sign out");
         signOutMenuItem.setEnabled(false);
         signOutMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -344,10 +343,9 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
             }
         });
         fileMenu.add(signOutMenuItem);
-        fileMenu.add(fileMenuSeparator);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
-        exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/cross.png"))); // NOI18N
+        exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/system-shutdown.png"))); // NOI18N
         exitMenuItem.setText("Exit");
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -601,7 +599,6 @@ private void vCardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private javax.swing.JPanel contentPanel;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JSeparator fileMenuSeparator;
     private javax.swing.JLabel hoverTextLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JMenuItem jMenuItem1;

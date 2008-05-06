@@ -6,6 +6,7 @@
 
 package xmppclient;
 
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -43,6 +44,9 @@ public class AccountManager extends javax.swing.JFrame
             
             ((DefaultTableModel)accountsTable.getModel()).addRow(row);
         }
+        
+        // change the background colour of the table
+        scrollPane.getViewport().setBackground(Color.white);
     }
     
     private void initColumnSizes() 
@@ -60,7 +64,7 @@ public class AccountManager extends javax.swing.JFrame
             for(int col = 0; col < model.getColumnCount(); col++)
             {
                 if(model.getValueAt(row, col) instanceof String)
-                {
+                {       
                     if(longValues[col] == null || ((String)model.getValueAt(row, col)).length() > ((String)longValues[col]).length())
                     {
                         longValues[col] = model.getValueAt(row, col);
@@ -103,13 +107,15 @@ public class AccountManager extends javax.swing.JFrame
     private void initComponents() {
 
         jSeparator1 = new javax.swing.JSeparator();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        scrollPane = new javax.swing.JScrollPane();
         accountsTable = new javax.swing.JTable();
-        jSeparator2 = new javax.swing.JSeparator();
         cancelButton = new javax.swing.JButton();
         applyButton = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Account Manager");
         setLocationByPlatform(true);
 
         accountsTable.setAutoCreateRowSorter(true);
@@ -118,11 +124,11 @@ public class AccountManager extends javax.swing.JFrame
 
             },
             new String [] {
-                "Name", "Username", "Host", "Port", "Resource", "Delete"
+                "Name", "Username", "Resource", "Host", "Port", "Delete"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, true
@@ -137,7 +143,13 @@ public class AccountManager extends javax.swing.JFrame
             }
         });
         accountsTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        jScrollPane1.setViewportView(accountsTable);
+        accountsTable.setFocusable(false);
+        accountsTable.setIntercellSpacing(new java.awt.Dimension(15, 5));
+        accountsTable.setRowHeight(20);
+        accountsTable.setRowSelectionAllowed(false);
+        accountsTable.setShowHorizontalLines(false);
+        accountsTable.setShowVerticalLines(false);
+        scrollPane.setViewportView(accountsTable);
 
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
@@ -153,6 +165,9 @@ public class AccountManager extends javax.swing.JFrame
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14));
+        jLabel1.setText("Accounts");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -160,26 +175,29 @@ public class AccountManager extends javax.swing.JFrame
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE)
+                    .addComponent(scrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                    .addComponent(jLabel1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(applyButton))
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE))
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelButton)
-                    .addComponent(applyButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(applyButton)
+                    .addComponent(cancelButton))
+                .addContainerGap())
         );
 
         pack();
@@ -205,9 +223,10 @@ private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private javax.swing.JTable accountsTable;
     private javax.swing.JButton applyButton;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JScrollPane scrollPane;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -118,7 +118,7 @@ public class XMPPClient extends javax.swing.JFrame
 
         jLabel5.setText("Host");
 
-        storedConnectionComboBox.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        storedConnectionComboBox.setFont(new java.awt.Font("Tahoma", 0, 12));
         storedConnectionComboBox.setToolTipText("Select a previously stored connection, or select new connection to create a new connection");
         storedConnectionComboBox.setFocusable(false);
         storedConnectionComboBox.setOpaque(false);
@@ -181,7 +181,7 @@ public class XMPPClient extends javax.swing.JFrame
 
         jLabel1.setText("Connection");
 
-        signInButton.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        signInButton.setFont(new java.awt.Font("Tahoma", 0, 12));
         signInButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/go-next.png"))); // NOI18N
         signInButton.setText("Sign in");
         signInButton.setEnabled(false);
@@ -278,7 +278,7 @@ public class XMPPClient extends javax.swing.JFrame
         jMenu1.setText("File");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/log-out-22x22.png"))); // NOI18N
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/system-shutdown.png"))); // NOI18N
         jMenuItem1.setText("Exit");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -338,7 +338,12 @@ private void hostTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:
 }//GEN-LAST:event_hostTextFieldKeyReleased
 
 private void storeConnectionCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_storeConnectionCheckBoxActionPerformed
-    if(storeConnectionCheckBox.isSelected()) nameTextField.setEnabled(true);
+    if(storeConnectionCheckBox.isSelected()) 
+    {
+        nameTextField.setEnabled(true);
+        nameTextField.requestFocus();
+        nameTextField.selectAll();
+    }
     else nameTextField.setEnabled(false);
 }//GEN-LAST:event_storeConnectionCheckBoxActionPerformed
 
