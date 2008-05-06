@@ -15,7 +15,8 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 
 /**
- *
+ * Contains the main method for starting the application.
+ * Shows the main login JFrame.
  * @author  Lee Boynton (323326)
  */
 public class XMPPClient extends javax.swing.JFrame 
@@ -47,6 +48,10 @@ public class XMPPClient extends javax.swing.JFrame
         getRootPane().setDefaultButton(signInButton);
     }
 
+    /**
+     * Gets the XMPPConnection instance
+     * @return The XMPPConnection
+     */
     public XMPPConnection getXMPPConnection()
     {
         return XMPPConnection;
@@ -392,7 +397,7 @@ private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                 nameTextField.getText());
     }
     
-    public void validateInputs()
+    private void validateInputs()
     {
         signInButton.setEnabled(false);
         
@@ -414,7 +419,7 @@ private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         signInButton.setEnabled(true);
     }
     
-    public void enableComponents(boolean enable)
+    private void enableComponents(boolean enable)
     {
         storedConnectionComboBox.setEnabled(enable);
         usernameTextField.setEnabled(enable);

@@ -19,7 +19,12 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="jScrollPane2" pref="262" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jButton2" min="0" pref="0" max="32767" attributes="1"/>
+                          <Component id="jButton1" alignment="0" pref="37" max="32767" attributes="1"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPane2" pref="219" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="sendButton" min="-2" pref="69" max="-2" attributes="0"/>
                   </Group>
@@ -51,9 +56,14 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="267" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="sendButton" linkSize="1" pref="60" max="32767" attributes="1"/>
-                  <Component id="jScrollPane2" linkSize="1" min="-2" pref="60" max="-2" attributes="1"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="sendButton" max="32767" attributes="1"/>
+                  <Component id="jScrollPane2" alignment="0" pref="56" max="32767" attributes="1"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -149,6 +159,23 @@
           <Connection code="&quot;(&quot; + Utils.getStatus(XMPPClientUI.connection.getRoster().getPresence(chat.getParticipant())) + &quot;)&quot;" type="code"/>
         </Property>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButton1">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/xmppclient/emoticons/face-smile.png"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButton2">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/xmppclient/images/tango/format-text-bold-16x16.png"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
