@@ -27,6 +27,11 @@ public class ListMessage
         return name;
     }
     
+    public Message getMessage()
+    {
+        return message;
+    }
+    
     @Override
     public String toString()
     {

@@ -121,13 +121,12 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener, ChatM
     @Override
     public void processMessage(Chat chat, Message message)
     {
-        // body is null if created locally or if no message was sent
-        if(message.getBody() != null)
+        if(message.getType() == Message.Type.chat)
         {
             // a message has been sent, show the window
             setVisible(true);
             addChat(chat);
-            getChat(chat).addMessage(message);
+            getChat(chat).addMessage(Utils.getNickname(chat.getParticipant()), message);
         }
     }
     

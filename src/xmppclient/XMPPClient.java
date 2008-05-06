@@ -154,6 +154,7 @@ public class XMPPClient extends javax.swing.JFrame
         storeConnectionCheckBox.setToolTipText("Tick this box to store this connection for future use");
         storeConnectionCheckBox.setBorder(null);
         storeConnectionCheckBox.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        storeConnectionCheckBox.setOpaque(false);
         storeConnectionCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 storeConnectionCheckBoxActionPerformed(evt);
@@ -187,6 +188,7 @@ public class XMPPClient extends javax.swing.JFrame
         signInButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/go-next.png"))); // NOI18N
         signInButton.setText("Sign in");
         signInButton.setEnabled(false);
+        signInButton.setOpaque(false);
         signInButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 signInButtonActionPerformed(evt);
@@ -208,15 +210,15 @@ public class XMPPClient extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(containerPanelLayout.createSequentialGroup()
-                        .addComponent(hostTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                        .addComponent(hostTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(portTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(resourceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                    .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                    .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                    .addComponent(storedConnectionComboBox, 0, 216, Short.MAX_VALUE))
+                    .addComponent(resourceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                    .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                    .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                    .addComponent(storedConnectionComboBox, 0, 251, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerPanelLayout.createSequentialGroup()
                 .addContainerGap(236, Short.MAX_VALUE)
@@ -224,14 +226,14 @@ public class XMPPClient extends javax.swing.JFrame
                 .addGap(10, 10, 10))
             .addGroup(containerPanelLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(storeConnectionCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-                .addContainerGap(31, Short.MAX_VALUE))
-            .addGroup(containerPanelLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(containerPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(storeConnectionCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         containerPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5});

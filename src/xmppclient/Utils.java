@@ -24,6 +24,7 @@ import javax.swing.filechooser.FileSystemView;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.packet.VCard;
 import xmppclient.images.Icons;
 
@@ -95,6 +96,7 @@ public class Utils
     {
         VCard vCard = new VCard();
         
+        if(rosterEntry == null) return null;
         if(rosterEntry.getName() != null) return rosterEntry.getName();
         
         try
@@ -112,7 +114,7 @@ public class Utils
     
     public static String getNickname(String JID)
     {
-        System.out.printf("Getting nickname for %s\n", JID);
+        JID = StringUtils.parseBareAddress(JID);
         return getNickname(XMPPClientUI.connection.getRoster().getEntry(JID));
     }
     

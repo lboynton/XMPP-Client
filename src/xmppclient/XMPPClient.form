@@ -113,16 +113,16 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="hostTextField" pref="113" max="32767" attributes="0"/>
+                          <Component id="hostTextField" pref="167" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="portTextField" min="-2" pref="56" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="resourceTextField" alignment="0" pref="216" max="32767" attributes="1"/>
-                      <Component id="passwordTextField" alignment="0" pref="216" max="32767" attributes="1"/>
-                      <Component id="usernameTextField" alignment="0" pref="216" max="32767" attributes="3"/>
-                      <Component id="storedConnectionComboBox" alignment="0" pref="216" max="32767" attributes="3"/>
+                      <Component id="resourceTextField" alignment="0" pref="251" max="32767" attributes="1"/>
+                      <Component id="passwordTextField" alignment="0" pref="251" max="32767" attributes="1"/>
+                      <Component id="usernameTextField" alignment="0" pref="251" max="32767" attributes="3"/>
+                      <Component id="storedConnectionComboBox" alignment="0" pref="251" max="32767" attributes="3"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -133,15 +133,15 @@
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                  <Component id="storeConnectionCheckBox" pref="273" max="32767" attributes="0"/>
-                  <EmptySpace pref="31" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
                   <Component id="jLabel8" min="-2" pref="43" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="nameTextField" pref="222" max="32767" attributes="0"/>
-                  <EmptySpace pref="27" max="32767" attributes="0"/>
+                  <Component id="nameTextField" pref="262" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="storeConnectionCheckBox" pref="309" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -256,6 +256,7 @@
               <Border info="null"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="opaque" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="storeConnectionCheckBoxActionPerformed"/>
@@ -306,6 +307,7 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Sign in"/>
             <Property name="enabled" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="signInButtonActionPerformed"/>

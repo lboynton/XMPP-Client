@@ -69,9 +69,9 @@ public class ChatPanel extends javax.swing.JPanel
         return chat.getParticipant();
     }
 
-    public void addMessage(Message message)
+    public void addMessage(String name, Message message)
     {
-        ((DefaultListModel)messageList.getModel()).addElement(message);
+        ((DefaultListModel)messageList.getModel()).addElement( new ListMessage(name, message));
     }
     
     /**
@@ -112,7 +112,7 @@ public class ChatPanel extends javax.swing.JPanel
         contact.setText(chat.getParticipant());
 
         sendTextArea.setColumns(20);
-        sendTextArea.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        sendTextArea.setFont(new java.awt.Font("Tahoma", 0, 10));
         sendTextArea.setLineWrap(true);
         sendTextArea.setRows(1);
         sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -163,13 +163,13 @@ public class ChatPanel extends javax.swing.JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(formatButton, 0, 0, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -218,7 +218,7 @@ public class ChatPanel extends javax.swing.JPanel
             message.setBody(sendTextArea.getText().trim());
             message.setProperty("format", format);
             chat.sendMessage(message);
-            addMessage(message);
+            addMessage("Me", message);
             sendTextArea.setText("");
         }
         catch (XMPPException ex)
@@ -312,9 +312,9 @@ private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                 boolean isSelected, 
                 boolean cellHasFocus)
         {       
-            Message message = (Message) object;
+            ListMessage message = (ListMessage) object;
             
-            return new JLabel(Utils.getNickname(message.getFrom()) + ": " + message.getBody());
+            return new ListMessageRenderer(message);
         }
     }
         

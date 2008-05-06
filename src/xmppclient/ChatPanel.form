@@ -18,14 +18,14 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="0" pref="337" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="348" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="formatButton" min="0" pref="0" max="32767" attributes="1"/>
                           <Component id="jButton1" alignment="0" pref="37" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" pref="219" max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" pref="230" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="sendButton" min="-2" pref="69" max="-2" attributes="0"/>
                   </Group>
