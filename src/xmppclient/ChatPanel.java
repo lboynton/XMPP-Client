@@ -13,6 +13,7 @@ import javax.swing.text.BadLocationException;
 import xmppclient.formatter.FormatterUI;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
@@ -20,6 +21,7 @@ import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -31,6 +33,8 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 import org.jivesoftware.smackx.packet.VCard;
+import xmppclient.emoticons.Emoticon;
+import xmppclient.emoticons.Emoticons;
 import xmppclient.formatter.Format;
 
 /**
@@ -49,6 +53,7 @@ public class ChatPanel extends javax.swing.JPanel
         this.chat = chat;
         initComponents();
         initTextPane();
+        if(!XMPPClientUI.connection.getRoster().getPresence(chat.getParticipant()).isAvailable()) sendFileButton.setEnabled(false);
     }
     
     public Chat getChat()
@@ -79,10 +84,18 @@ public class ChatPanel extends javax.swing.JPanel
     private void initTextPane()
     {
         StyledDocument doc = messageTextPane.getStyledDocument();
-        Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
-        doc.addStyle("default", def);
-        doc.addStyle("nickname", def);
-        doc.addStyle("icon", def);
+        // create the default style
+        Style def = doc.addStyle("default", null);
+        
+        // create the nickname style
+        Style nickname = doc.addStyle("nickname", def);
+        StyleConstants.setBold(nickname, true);
+        
+        // create the icon style
+        Style icon = doc.addStyle("icon", def);
+        StyleConstants.setAlignment(icon, StyleConstants.ALIGN_CENTER);
+        
+
         messageTextPane.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
     }
 
@@ -99,11 +112,42 @@ public class ChatPanel extends javax.swing.JPanel
             StyleConstants.setForeground(newStyle, newFormat.getColor());
             
             Style icon = doc.getStyle("icon");
-            if(avatar != null) StyleConstants.setIcon(icon, Utils.resizeImage((ImageIcon) avatar, 40));
-            
-            doc.insertString(doc.getLength(), "", icon);
-            doc.insertString(doc.getLength(), name + ": ", doc.getStyle("default"));
+            if(avatar != null) StyleConstants.setIcon(icon, Utils.resizeImage((ImageIcon) avatar, 30));
+
+            doc.insertString(doc.getLength(), name + ": ", doc.getStyle("nickname"));
+            int start = doc.getLength();
             doc.insertString(doc.getLength(), message.getBody(), doc.getStyle("newStyle"));
+            int end = doc.getLength();
+            
+            SimpleAttributeSet smi;
+            
+            for(int i = start; i < end; i++)
+            {
+                for(Emoticon e: Emoticons.getEmoticons())
+                {
+                    if((i + e.getSequence().length()) > end) continue;
+                    String newString = doc.getText(i, e.getSequence().length());
+                
+                    if(newString.equals(e.getSequence()))
+                    {
+                        System.out.println("Emoticon");
+                        doc.remove(i, e.getSequence().length());
+                        smi=new SimpleAttributeSet();
+                        StyleConstants.setIcon(smi, e.getIcon());
+                        doc.insertString(i, e.getSequence(), smi);
+
+                        // can't seem to have two icons next to each other
+                        // therefore a space will be added after the icon
+                        doc.insertString(i+e.getSequence().length(), " ", null);
+                        i+=e.getSequence().length() + 1;
+
+                        // increment the end of the document to take into account
+                        // the space that was added
+                        end++;
+                    }
+                }       
+            }
+
             doc.insertString(doc.getLength(), "\n", doc.getStyle("default"));
 
             messageTextPane.setCaretPosition(doc.getLength());
@@ -137,8 +181,6 @@ public class ChatPanel extends javax.swing.JPanel
     private void initComponents() {
 
         contact = new javax.swing.JLabel();
-        sendScrollPane = new javax.swing.JScrollPane();
-        sendTextArea = new javax.swing.JTextArea();
         sendButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         sendFileButton = new javax.swing.JButton();
@@ -147,23 +189,11 @@ public class ChatPanel extends javax.swing.JPanel
         formatButton = new javax.swing.JButton();
         messageScrollPane = new javax.swing.JScrollPane();
         messageTextPane = new javax.swing.JTextPane();
+        sendScrollPane = new javax.swing.JScrollPane();
+        sendTextPane = new javax.swing.JTextPane();
 
         contact.setFont(new java.awt.Font("Tahoma", 1, 12));
         contact.setText(chat.getParticipant());
-
-        sendTextArea.setColumns(20);
-        sendTextArea.setFont(new java.awt.Font("Tahoma", 0, 10));
-        sendTextArea.setLineWrap(true);
-        sendTextArea.setRows(1);
-        sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                sendTextAreaKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                sendTextAreaKeyReleased(evt);
-            }
-        });
-        sendScrollPane.setViewportView(sendTextArea);
 
         sendButton.setText("Send");
         sendButton.addActionListener(new java.awt.event.ActionListener() {
@@ -195,6 +225,16 @@ public class ChatPanel extends javax.swing.JPanel
 
         messageTextPane.setEditable(false);
         messageScrollPane.setViewportView(messageTextPane);
+
+        sendTextPane.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                sendTextPaneKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                sendTextPaneKeyReleased(evt);
+            }
+        });
+        sendScrollPane.setViewportView(sendTextPane);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -234,13 +274,14 @@ public class ChatPanel extends javax.swing.JPanel
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(messageScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sendScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(formatButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(formatButton)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton1)))
+                    .addComponent(sendScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -250,16 +291,16 @@ public class ChatPanel extends javax.swing.JPanel
 }//GEN-LAST:event_sendButtonActionPerformed
     private void send()
     {
-        if(sendTextArea.getText().trim().equals("")) return;
+        if(sendTextPane.getText().trim().equals("")) return;
         
         try
         {
             Message message = new Message();
-            message.setBody(sendTextArea.getText().trim());
+            message.setBody(sendTextPane.getText().trim());
             message.setProperty("format", format);
             chat.sendMessage(message);
             addMessage(Utils.getAvatar(50), "Me", message);
-            sendTextArea.setText("");
+            sendTextPane.setText("");
         }
         catch (XMPPException ex)
         {
@@ -267,14 +308,6 @@ public class ChatPanel extends javax.swing.JPanel
         }
     }
     
-    private void sendTextAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sendTextAreaKeyPressed
-       if(evt.getKeyCode() == 10) send();
-    }//GEN-LAST:event_sendTextAreaKeyPressed
-
-    private void sendTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sendTextAreaKeyReleased
-        if(evt.getKeyCode() == 10) sendTextArea.setText("");
-    }//GEN-LAST:event_sendTextAreaKeyReleased
-
 private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFileButtonActionPerformed
 
     final JFileChooser fileChooser = new JFileChooser();
@@ -324,10 +357,17 @@ private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GE
 private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formatButtonActionPerformed
     FormatterUI formatter = new FormatterUI(null);
     format = formatter.showDialog();
-    sendTextArea.setFont(format.getFont());
-    sendTextArea.setForeground(format.getColor());
+    sendTextPane.setFont(format.getFont());
+    sendTextPane.setForeground(format.getColor());
 }//GEN-LAST:event_formatButtonActionPerformed
-    
+
+private void sendTextPaneKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sendTextPaneKeyPressed
+    if(evt.getKeyCode() == 10) send();
+}//GEN-LAST:event_sendTextPaneKeyPressed
+
+private void sendTextPaneKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sendTextPaneKeyReleased
+    if(evt.getKeyCode() == 10) sendTextPane.setText("");
+}//GEN-LAST:event_sendTextPaneKeyReleased
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel contact;
@@ -339,23 +379,7 @@ private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private javax.swing.JButton sendButton;
     private javax.swing.JButton sendFileButton;
     private javax.swing.JScrollPane sendScrollPane;
-    private javax.swing.JTextArea sendTextArea;
+    private javax.swing.JTextPane sendTextPane;
     private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables
-
-    private class MessageListRenderer extends DefaultListCellRenderer
-    {
-        @Override
-        public Component getListCellRendererComponent(JList list, 
-                Object object, 
-                int index, 
-                boolean isSelected, 
-                boolean cellHasFocus)
-        {       
-            ListMessage message = (ListMessage) object;
-            
-            return new ListMessageRenderer(message);
-        }
-    }
-        
 }

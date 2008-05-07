@@ -23,7 +23,9 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import org.jivesoftware.smack.*;
+import org.jivesoftware.smack.RosterEntry;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smackx.filetransfer.FileTransferListener;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
@@ -33,7 +35,7 @@ import org.jivesoftware.smackx.packet.VCard;
 
 /**
  *
- * @author  lee
+ * @author  Lee Boynton (323326)
  */
 public class XMPPClientUI extends javax.swing.JFrame implements FileTransferListener
 {
