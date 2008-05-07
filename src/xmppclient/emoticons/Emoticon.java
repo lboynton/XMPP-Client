@@ -31,6 +31,12 @@ public class Emoticon
     {
         return sequence;
     }
+    
+    @Override
+    public String toString()
+    {
+        return name;
+    }
 
     public Emoticon(String name, ImageIcon icon, String sequence)
     {

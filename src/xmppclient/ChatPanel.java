@@ -7,6 +7,7 @@
 package xmppclient;
 
 import java.awt.Cursor;
+import java.awt.Point;
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import xmppclient.formatter.FormatterUI;
@@ -17,6 +18,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -180,20 +182,20 @@ public class ChatPanel extends javax.swing.JPanel
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        contact = new javax.swing.JLabel();
+        contactLabel = new javax.swing.JLabel();
         sendButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        toLabel = new javax.swing.JLabel();
         sendFileButton = new javax.swing.JButton();
         statusLabel = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        emoticonsButton = new javax.swing.JButton();
         formatButton = new javax.swing.JButton();
         messageScrollPane = new javax.swing.JScrollPane();
         messageTextPane = new javax.swing.JTextPane();
         sendScrollPane = new javax.swing.JScrollPane();
         sendTextPane = new javax.swing.JTextPane();
 
-        contact.setFont(new java.awt.Font("Tahoma", 1, 12));
-        contact.setText(chat.getParticipant());
+        contactLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        contactLabel.setText(chat.getParticipant());
 
         sendButton.setText("Send");
         sendButton.addActionListener(new java.awt.event.ActionListener() {
@@ -202,7 +204,7 @@ public class ChatPanel extends javax.swing.JPanel
             }
         });
 
-        jLabel1.setText("To:");
+        toLabel.setText("To:");
 
         sendFileButton.setText("Send File");
         sendFileButton.addActionListener(new java.awt.event.ActionListener() {
@@ -214,7 +216,12 @@ public class ChatPanel extends javax.swing.JPanel
         statusLabel.setFont(new java.awt.Font("Tahoma", 0, 10));
         statusLabel.setText("(" + Utils.getStatus(XMPPClientUI.connection.getRoster().getPresence(chat.getParticipant())) + ")");
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/emoticons/face-smile.png"))); // NOI18N
+        emoticonsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/emoticons/face-smile.png"))); // NOI18N
+        emoticonsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                emoticonsButtonActionPerformed(evt);
+            }
+        });
 
         formatButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/format-text-bold-16x16.png"))); // NOI18N
         formatButton.addActionListener(new java.awt.event.ActionListener() {
@@ -247,15 +254,15 @@ public class ChatPanel extends javax.swing.JPanel
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(formatButton, 0, 0, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, Short.MAX_VALUE))
+                            .addComponent(emoticonsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sendScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(toLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(contact)
+                        .addComponent(contactLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(statusLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
@@ -268,8 +275,8 @@ public class ChatPanel extends javax.swing.JPanel
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sendFileButton)
-                    .addComponent(jLabel1)
-                    .addComponent(contact)
+                    .addComponent(toLabel)
+                    .addComponent(contactLabel)
                     .addComponent(statusLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(messageScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
@@ -280,7 +287,7 @@ public class ChatPanel extends javax.swing.JPanel
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(formatButton)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton1)))
+                            .addComponent(emoticonsButton)))
                     .addComponent(sendScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -368,12 +375,17 @@ private void sendTextPaneKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:ev
 private void sendTextPaneKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sendTextPaneKeyReleased
     if(evt.getKeyCode() == 10) sendTextPane.setText("");
 }//GEN-LAST:event_sendTextPaneKeyReleased
+
+private void emoticonsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emoticonsButtonActionPerformed
+    Point point = emoticonsButton.getMousePosition();
+    SwingUtilities.convertPointToScreen(point, emoticonsButton);
+    new EmoticonsUI(null, sendTextPane, point).setVisible(true);
+}//GEN-LAST:event_emoticonsButtonActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel contact;
+    private javax.swing.JLabel contactLabel;
+    private javax.swing.JButton emoticonsButton;
     private javax.swing.JButton formatButton;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane messageScrollPane;
     private javax.swing.JTextPane messageTextPane;
     private javax.swing.JButton sendButton;
@@ -381,5 +393,6 @@ private void sendTextPaneKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
     private javax.swing.JScrollPane sendScrollPane;
     private javax.swing.JTextPane sendTextPane;
     private javax.swing.JLabel statusLabel;
+    private javax.swing.JLabel toLabel;
     // End of variables declaration//GEN-END:variables
 }
