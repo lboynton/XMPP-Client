@@ -427,7 +427,7 @@ private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         passwordTextField.setEnabled(enable);
         signInButton.setEnabled(enable);
         
-        if(enable) signInButton.setText("OK");
+        if(enable) signInButton.setText("Sign in");
         else signInButton.setText("Connecting");
     }
     
@@ -462,7 +462,8 @@ private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             }
             catch(Exception ex)
             {
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog(XMPPClient.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                enableComponents(true);
             }
         }
     }

@@ -175,6 +175,11 @@ public class Utils
         return null;
     }
     
+    public static Icon getAvatar(String JID, int height)
+    {
+        return getAvatar(XMPPClientUI.connection.getRoster().getEntry(StringUtils.parseBareAddress(JID)), height);
+    }
+    
     public static ImageIcon getUserIcon(Presence presence)
     {
         if(presence.getMode() == Presence.Mode.dnd)

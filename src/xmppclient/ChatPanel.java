@@ -7,17 +7,23 @@
 package xmppclient;
 
 import java.awt.Component;
+import java.awt.Cursor;
+import javax.swing.ImageIcon;
+import javax.swing.text.BadLocationException;
 import xmppclient.formatter.FormatterUI;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
-import javax.swing.DefaultListModel;
+import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
@@ -42,6 +48,7 @@ public class ChatPanel extends javax.swing.JPanel
         this.frame = frame;
         this.chat = chat;
         initComponents();
+        initTextPane();
     }
     
     public Chat getChat()
@@ -68,10 +75,43 @@ public class ChatPanel extends javax.swing.JPanel
         
         return chat.getParticipant();
     }
-
-    public void addMessage(String name, Message message)
+    
+    private void initTextPane()
     {
-        ((DefaultListModel)messageList.getModel()).addElement( new ListMessage(name, message));
+        StyledDocument doc = messageTextPane.getStyledDocument();
+        Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
+        doc.addStyle("default", def);
+        doc.addStyle("nickname", def);
+        doc.addStyle("icon", def);
+        messageTextPane.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+    }
+
+    public void addMessage(Icon avatar, String name, Message message)
+    {
+        try
+        {
+            StyledDocument doc = messageTextPane.getStyledDocument();
+            Format newFormat = (Format) message.getProperty("format");
+            
+            Style newStyle = doc.addStyle("newStyle", null);
+            StyleConstants.setFontFamily(newStyle, newFormat.getFont().getFamily());
+            StyleConstants.setFontSize(newStyle, newFormat.getFont().getSize());
+            StyleConstants.setForeground(newStyle, newFormat.getColor());
+            
+            Style icon = doc.getStyle("icon");
+            if(avatar != null) StyleConstants.setIcon(icon, Utils.resizeImage((ImageIcon) avatar, 40));
+            
+            doc.insertString(doc.getLength(), "", icon);
+            doc.insertString(doc.getLength(), name + ": ", doc.getStyle("default"));
+            doc.insertString(doc.getLength(), message.getBody(), doc.getStyle("newStyle"));
+            doc.insertString(doc.getLength(), "\n", doc.getStyle("default"));
+
+            messageTextPane.setCaretPosition(doc.getLength());
+        }
+        catch (BadLocationException ex)
+        {
+            Logger.getLogger(ChatPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
@@ -97,7 +137,7 @@ public class ChatPanel extends javax.swing.JPanel
     private void initComponents() {
 
         contact = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        sendScrollPane = new javax.swing.JScrollPane();
         sendTextArea = new javax.swing.JTextArea();
         sendButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -105,8 +145,8 @@ public class ChatPanel extends javax.swing.JPanel
         statusLabel = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         formatButton = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        messageList = new javax.swing.JList(new DefaultListModel());
+        messageScrollPane = new javax.swing.JScrollPane();
+        messageTextPane = new javax.swing.JTextPane();
 
         contact.setFont(new java.awt.Font("Tahoma", 1, 12));
         contact.setText(chat.getParticipant());
@@ -123,7 +163,7 @@ public class ChatPanel extends javax.swing.JPanel
                 sendTextAreaKeyReleased(evt);
             }
         });
-        jScrollPane2.setViewportView(sendTextArea);
+        sendScrollPane.setViewportView(sendTextArea);
 
         sendButton.setText("Send");
         sendButton.addActionListener(new java.awt.event.ActionListener() {
@@ -153,8 +193,8 @@ public class ChatPanel extends javax.swing.JPanel
             }
         });
 
-        messageList.setCellRenderer(new MessageListRenderer());
-        jScrollPane1.setViewportView(messageList);
+        messageTextPane.setEditable(false);
+        messageScrollPane.setViewportView(messageTextPane);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -163,13 +203,13 @@ public class ChatPanel extends javax.swing.JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
+                    .addComponent(messageScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(formatButton, 0, 0, Short.MAX_VALUE)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                        .addComponent(sendScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -192,11 +232,11 @@ public class ChatPanel extends javax.swing.JPanel
                     .addComponent(contact)
                     .addComponent(statusLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
+                .addComponent(messageScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
+                    .addComponent(sendScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(formatButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -218,7 +258,7 @@ public class ChatPanel extends javax.swing.JPanel
             message.setBody(sendTextArea.getText().trim());
             message.setProperty("format", format);
             chat.sendMessage(message);
-            addMessage("Me", message);
+            addMessage(Utils.getAvatar(50), "Me", message);
             sendTextArea.setText("");
         }
         catch (XMPPException ex)
@@ -294,11 +334,11 @@ private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private javax.swing.JButton formatButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JList messageList;
+    private javax.swing.JScrollPane messageScrollPane;
+    private javax.swing.JTextPane messageTextPane;
     private javax.swing.JButton sendButton;
     private javax.swing.JButton sendFileButton;
+    private javax.swing.JScrollPane sendScrollPane;
     private javax.swing.JTextArea sendTextArea;
     private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables

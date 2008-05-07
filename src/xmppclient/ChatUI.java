@@ -126,7 +126,7 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener, ChatM
             // a message has been sent, show the window
             setVisible(true);
             addChat(chat);
-            getChat(chat).addMessage(Utils.getNickname(chat.getParticipant()), message);
+            getChat(chat).addMessage(Utils.getAvatar(chat.getParticipant(), 50), Utils.getNickname(chat.getParticipant()), message);
         }
     }
     
