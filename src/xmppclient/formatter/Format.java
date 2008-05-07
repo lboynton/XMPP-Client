@@ -29,7 +29,7 @@ public class Format implements Serializable
      */
     public Format()
     {
-        font = new Font("Tahoma", 12, Font.PLAIN);
+        font = new Font("Tahoma", Font.PLAIN, 12);
         colour = Color.black;
     }
 

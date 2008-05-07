@@ -21,9 +21,9 @@ public class FormatterUI extends javax.swing.JDialog
     private GraphicsEnvironment gEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private final String[] sizes = { "8", "10", "11", "12", "14", "16", "18",
       "20", "24", "30", "36", "40", "48", "60", "72" };
-    private Font font = new Font("Tahoma", 12, Font.PLAIN);
+    private Font font;
     private Font defaultFont;
-    private Color colour = Color.black;
+    private Color colour;
     private Color defaultColour;
     
     /** 
@@ -33,7 +33,10 @@ public class FormatterUI extends javax.swing.JDialog
     public FormatterUI(JFrame owner) 
     {
         super(owner, "Format text", true);
+        font = new Font(null, 12, Font.PLAIN);
+        colour = Color.black;
         initComponents();
+        initSelection();
         previewText();
     }
     
@@ -50,6 +53,17 @@ public class FormatterUI extends javax.swing.JDialog
         this.defaultColour = defaultColour;
         this.colour = defaultColour;
         this.font = defaultFont;
+        initComponents();
+        initSelection();
+        previewText();
+    }
+    
+    private void initSelection()
+    {
+        fontList.setSelectedValue(defaultFont.getFamily(), true);
+        sizeList.setSelectedValue(String.valueOf(defaultFont.getSize()), true);
+        boldCheckBox.setSelected(defaultFont.isBold());
+        italicCheckBox.setSelected(defaultFont.isItalic());
     }
     
     /**
@@ -90,7 +104,6 @@ public class FormatterUI extends javax.swing.JDialog
 
         fontListScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Font", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 
-        fontList.setSelectedIndex(0);
         fontList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 fontListValueChanged(evt);
@@ -224,6 +237,8 @@ private void colourButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 }//GEN-LAST:event_colourButtonActionPerformed
 
 private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+    font = defaultFont;
+    colour = defaultColour;
     dispose();
 }//GEN-LAST:event_cancelButtonActionPerformed
 

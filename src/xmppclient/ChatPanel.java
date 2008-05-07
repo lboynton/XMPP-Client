@@ -6,25 +6,20 @@
 
 package xmppclient;
 
-import java.awt.Component;
 import java.awt.Cursor;
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import xmppclient.formatter.FormatterUI;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.RosterEntry;
@@ -104,12 +99,17 @@ public class ChatPanel extends javax.swing.JPanel
         try
         {
             StyledDocument doc = messageTextPane.getStyledDocument();
+            
             Format newFormat = (Format) message.getProperty("format");
             
             Style newStyle = doc.addStyle("newStyle", null);
-            StyleConstants.setFontFamily(newStyle, newFormat.getFont().getFamily());
-            StyleConstants.setFontSize(newStyle, newFormat.getFont().getSize());
-            StyleConstants.setForeground(newStyle, newFormat.getColor());
+            
+            if(newFormat != null)
+            {
+                StyleConstants.setFontFamily(newStyle, newFormat.getFont().getFamily());
+                StyleConstants.setFontSize(newStyle, newFormat.getFont().getSize());
+                StyleConstants.setForeground(newStyle, newFormat.getColor());
+            }
             
             Style icon = doc.getStyle("icon");
             if(avatar != null) StyleConstants.setIcon(icon, Utils.resizeImage((ImageIcon) avatar, 30));
@@ -355,7 +355,7 @@ private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GE
 }//GEN-LAST:event_sendFileButtonActionPerformed
 
 private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formatButtonActionPerformed
-    FormatterUI formatter = new FormatterUI(null);
+    FormatterUI formatter = new FormatterUI(null, format.getFont(), format.getColor());
     format = formatter.showDialog();
     sendTextPane.setFont(format.getFont());
     sendTextPane.setForeground(format.getColor());
