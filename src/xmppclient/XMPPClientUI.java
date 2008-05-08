@@ -23,16 +23,22 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.filter.PacketTypeFilter;
+import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.filetransfer.FileTransferListener;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.packet.VCard;
-import xmppclient.images.tango.Icons;
+import xmppclient.images.Icons;
+import xmppclient.images.tango.TangoIcons;
 
 /**
  *
@@ -50,12 +56,14 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     public XMPPClientUI(XMPPConnection connection) 
     {
         XMPPClientUI.connection = connection;
+        Roster.setDefaultSubscriptionMode(Roster.SubscriptionMode.manual);
         chatUI = new ChatUI();
         initComponents();
         initSystemTray();
         initStatusComboBox();
         contentPanel.setVisible(false);
         connection.getChatManager().addChatListener(chatUI);
+        connection.addPacketListener( new SubscriptionRequestListener(), new PacketTypeFilter(Presence.class));
         FileTransferManager manager = new FileTransferManager(connection);
         manager.addFileTransferListener(this);
         
@@ -69,6 +77,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         
         nicknameTextField.setText(getUserNickname(connection.getUser()));
         setAvatar();
+        
                 
         // show the content panel
         contentPanel.setVisible(true);
@@ -514,7 +523,11 @@ private void addContactButtonActionPerformed(java.awt.event.ActionEvent evt) {//
     
     private void showAddContactDialog()
     {
-        JOptionPane.showInputDialog(this, "Enter the JID of the contact you wish to add", "Add user", JOptionPane.PLAIN_MESSAGE, Icons.users32x32, null, null);
+        String contact = (String) JOptionPane.showInputDialog(this, "Enter the JID of the contact you wish to add", "Add user", JOptionPane.PLAIN_MESSAGE, TangoIcons.users32x32, null, null);
+        contact = StringUtils.parseBareAddress(contact);
+        Presence request = new Presence(Presence.Type.subscribe);
+        request.setTo(contact);
+        connection.sendPacket(request);
     }
     
     private void exit()
@@ -534,16 +547,6 @@ private void addContactButtonActionPerformed(java.awt.event.ActionEvent evt) {//
         }
         
         System.exit(0);
-    }
-    
-    private void signIn()
-    {
-        new XMPPClientSignInUI(this).setVisible(true);
-        
-        // check if user clicked cancel
-        if(connection == null || !connection.isConnected() || !connection.isAuthenticated()) return;
-        
-        
     }
     
     public void setAvatar()
@@ -665,5 +668,45 @@ private void addContactButtonActionPerformed(java.awt.event.ActionEvent evt) {//
             }
         }
         else request.reject();
+    }
+    
+    private class SubscriptionRequestListener implements PacketListener
+    {
+        @Override
+        public void processPacket(Packet packet)
+        {
+            Presence presence = (Presence) packet;
+            
+            if(presence.getType() == Presence.Type.subscribe)
+            {
+                Object options[] = { "Accept", "Reject" };
+                
+                int selection = JOptionPane.showOptionDialog(XMPPClientUI.this,
+                        "The user " + presence.getFrom() + " wishes to subscribe" +
+                        "\nto your presence information. Do you accept or reject?", 
+                        "Subscription Request", 
+                        JOptionPane.YES_NO_OPTION, 
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        null);
+                
+                Presence auth;
+                
+                if(selection == JOptionPane.YES_OPTION)
+                {
+                    // accept
+                    auth = new Presence(Presence.Type.subscribe);
+                }
+                else
+                {
+                    // reject
+                    auth = new Presence(Presence.Type.unsubscribe);
+                }
+                
+                auth.setTo(presence.getFrom());
+                connection.sendPacket(auth);
+            }
+        }
     }
 }

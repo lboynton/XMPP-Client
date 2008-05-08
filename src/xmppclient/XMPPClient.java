@@ -382,7 +382,7 @@ private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 }//GEN-LAST:event_jMenuItem1ActionPerformed
 
 private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-    new RegistrationUI().setVisible(true);
+    new RegistrationUI(this).setVisible(true);
 }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**

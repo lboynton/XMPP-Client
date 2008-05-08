@@ -116,11 +116,11 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="statusComboBox" pref="297" max="32767" attributes="2"/>
+                              <Component id="statusComboBox" pref="305" max="32767" attributes="2"/>
                               <Component id="toolBar" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Component id="nicknameTextField" pref="297" max="32767" attributes="2"/>
+                                  <Component id="nicknameTextField" pref="305" max="32767" attributes="2"/>
                               </Group>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
