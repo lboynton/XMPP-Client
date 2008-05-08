@@ -45,14 +45,16 @@ public class Utils
         return ext;
     }
     
-    public static JLabel createErrorLabel(String message)
+    public static void createErrorLabel(JLabel label, String message)
     {
-        return new JLabel(message, Icons.error, JLabel.LEADING);
+        label.setText(message);
+        label.setIcon(Icons.error);
     }
     
-    public static JLabel createSuccessLabel(String message)
+    public static void createSuccessLabel(JLabel label, String message)
     {
-        return new JLabel(message, Icons.success, JLabel.LEADING);
+        label.setText(message);
+        label.setIcon(Icons.success);
     }
     
     public static Icon resizeImage(ImageIcon image, int height)

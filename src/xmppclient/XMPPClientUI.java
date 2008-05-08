@@ -32,6 +32,7 @@ import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.packet.VCard;
+import xmppclient.images.tango.Icons;
 
 /**
  *
@@ -222,6 +223,11 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
                 addContactButtonMouseExited(evt);
             }
         });
+        addContactButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addContactButtonActionPerformed(evt);
+            }
+        });
         toolBar.add(addContactButton);
 
         vCardButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/vcard_edit.png"))); // NOI18N
@@ -280,7 +286,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         hoverTextLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 0));
         toolBar.add(hoverTextLabel);
 
-        nicknameTextField.setFont(new java.awt.Font("Tahoma", 0, 12));
         nicknameTextField.setToolTipText("Press enter to set the nickname");
         nicknameTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -288,7 +293,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
             }
         });
 
-        statusComboBox.setFont(new java.awt.Font("Tahoma", 0, 12));
         statusComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 statusComboBoxActionPerformed(evt);
@@ -304,7 +308,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE)
+                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
                     .addGroup(contentPanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -347,7 +351,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         fileMenu.add(signOutMenuItem);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
-        exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/system-shutdown.png"))); // NOI18N
+        exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/system-shutdown-22x22.png"))); // NOI18N
         exitMenuItem.setText("Exit");
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -493,6 +497,10 @@ private void jButton1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
 private void vCardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vCardButtonActionPerformed
     new VCardEditor().setVisible(true);
 }//GEN-LAST:event_vCardButtonActionPerformed
+
+private void addContactButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addContactButtonActionPerformed
+    showAddContactDialog();
+}//GEN-LAST:event_addContactButtonActionPerformed
  
     private void setHoverText(java.awt.event.MouseEvent evt)
     {
@@ -502,6 +510,11 @@ private void vCardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private void clearHoverText()
     {
         hoverTextLabel.setText("");
+    }
+    
+    private void showAddContactDialog()
+    {
+        JOptionPane.showInputDialog(this, "Enter the JID of the contact you wish to add", "Add user", JOptionPane.PLAIN_MESSAGE, Icons.users32x32, null, null);
     }
     
     private void exit()

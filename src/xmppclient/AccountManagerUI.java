@@ -145,6 +145,7 @@ public class AccountManagerUI extends javax.swing.JFrame
         accountsTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         accountsTable.setFocusable(false);
         accountsTable.setIntercellSpacing(new java.awt.Dimension(15, 5));
+        accountsTable.setOpaque(false);
         accountsTable.setRowHeight(20);
         accountsTable.setRowSelectionAllowed(false);
         accountsTable.setShowHorizontalLines(false);
@@ -179,7 +180,7 @@ public class AccountManagerUI extends javax.swing.JFrame
                     .addComponent(jLabel1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cancelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 376, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 411, Short.MAX_VALUE)
                         .addComponent(applyButton))
                     .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
                 .addContainerGap())
