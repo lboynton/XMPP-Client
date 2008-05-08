@@ -5,7 +5,9 @@
  */
 package xmppclient.audio;
 
-import java.util.Collection;
+import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.ChatManagerListener;
+import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -19,7 +21,7 @@ import org.jivesoftware.smack.packet.PacketExtension;
  *
  * @author  Lee Boynton (323326)
  */
-public class TestReceiver extends javax.swing.JFrame implements PacketListener
+public class TestReceiver extends javax.swing.JFrame implements ChatManagerListener, MessageListener
 {
     private XMPPConnection connection;
     /** Creates new form TestReceiver2 */
@@ -33,23 +35,14 @@ public class TestReceiver extends javax.swing.JFrame implements PacketListener
             connection = new XMPPConnection("192.168.0.8");
             connection.connect();
             connection.login("bob", "password");
-            connection.addPacketListener(this, new PacketTypeFilter(Message.class));
+            connection.getChatManager().addChatListener(this);
         }
         catch (XMPPException ex)
         {
             ex.printStackTrace();
         }
     }
-    
-    @Override
-    public void processPacket(Packet packet)
-    {
-        System.out.printf("Packet received from %s\n", packet.getFrom());
-        for(PacketExtension pe:packet.getExtensions())
-        {
-            System.out.println(((DefaultPacketExtension)pe).getValue("name"));
-        }
-    }
+
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -89,6 +82,24 @@ public class TestReceiver extends javax.swing.JFrame implements PacketListener
                 new TestReceiver();
             }
         });
+    }
+
+    @Override
+    public void chatCreated(Chat chat, boolean createdLocally)
+    {
+        System.out.println("Bleb");
+        chat.addMessageListener(this);
+    }
+
+    @Override
+    public void processMessage(Chat chat, Message message)
+    {
+        System.out.printf("Message received from %s\n", message.getFrom());
+        System.out.printf("Message type %s\n", message.getType());
+        for(PacketExtension pe:message.getExtensions())
+        {
+            System.out.println(((DefaultPacketExtension)pe).getValue("name"));
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
