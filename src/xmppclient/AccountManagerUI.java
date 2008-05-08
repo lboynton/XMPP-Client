@@ -16,11 +16,11 @@ import javax.swing.table.TableColumn;
  *
  * @author  Lee Boynton (323326)
  */
-public class AccountManager extends javax.swing.JFrame 
+public class AccountManagerUI extends javax.swing.JFrame 
 {
 
     /** Creates new form AccountManager */
-    public AccountManager() 
+    public AccountManagerUI() 
     {
         initComponents();
         initTable();

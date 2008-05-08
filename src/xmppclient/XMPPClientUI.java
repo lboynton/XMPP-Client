@@ -398,7 +398,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     private void contactListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactListMouseClicked
         if(evt.getClickCount() == 2)
         {
-            System.out.println("Doulbe click");
             RosterEntry rosterEntry = (RosterEntry)contactList.getSelectedValue();
             
             connection.getChatManager().createChat(rosterEntry.getUser(), chatUI);

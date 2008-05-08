@@ -8,7 +8,6 @@ package xmppclient;
 
 import java.awt.Cursor;
 import java.awt.Point;
-import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import xmppclient.formatter.FormatterUI;
 import java.beans.PropertyChangeEvent;
@@ -53,11 +52,22 @@ public class ChatPanel extends javax.swing.JPanel
         if(!XMPPClientUI.connection.getRoster().getPresence(chat.getParticipant()).isAvailable()) sendFileButton.setEnabled(false);
     }
     
+    
+    /**
+     * Gets the chat instance associated with this chat panel
+     * @return The chat
+     */
     public Chat getChat()
     {
         return chat;
     }
     
+    /**
+     * Gets the name of the user. If the local user has given the contact a name
+     * then that name is used. If not, the contact's nickname is returned. If there
+     * is no nickname then the user's JID is returned.
+     * @return The name of the user
+     */
     @Override
     public String getName()
     {
@@ -78,6 +88,10 @@ public class ChatPanel extends javax.swing.JPanel
         return chat.getParticipant();
     }
     
+    /**
+     * Creates some initial text styles
+     * Sets the cursor of the text pane
+     */
     private void initTextPane()
     {
         StyledDocument doc = messageTextPane.getStyledDocument();
@@ -86,35 +100,39 @@ public class ChatPanel extends javax.swing.JPanel
         
         // create the nickname style
         Style nickname = doc.addStyle("nickname", def);
-        StyleConstants.setBold(nickname, true);
-        
-        // create the icon style
-        Style icon = doc.addStyle("icon", def);
-        StyleConstants.setAlignment(icon, StyleConstants.ALIGN_CENTER);
-        
+        StyleConstants.setBold(nickname, true);      
 
         messageTextPane.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
     }
 
+    /**
+     * Adds a message to the messages text pane. Where available is uses the formatting
+     * specified in the message.
+     * @param avatar The avatar of the user
+     * @param name The name of the user who sent the message
+     * @param message The message sent
+     */
     public void addMessage(Icon avatar, String name, Message message)
     {
         try
         {
             StyledDocument doc = messageTextPane.getStyledDocument();
             
+            // get the formatted text
             Format newFormat = (Format) message.getProperty("format");
             
+            // create a new style for the formatted text
             Style newStyle = doc.addStyle("newStyle", null);
             
+            // the format property will only be set by this client
             if(newFormat != null)
             {
                 StyleConstants.setFontFamily(newStyle, newFormat.getFont().getFamily());
                 StyleConstants.setFontSize(newStyle, newFormat.getFont().getSize());
                 StyleConstants.setForeground(newStyle, newFormat.getColor());
+                StyleConstants.setItalic(newStyle, newFormat.getFont().isItalic());
+                StyleConstants.setBold(newStyle, newFormat.getFont().isBold());
             }
-            
-            Style icon = doc.getStyle("icon");
-            if(avatar != null) StyleConstants.setIcon(icon, Utils.resizeImage((ImageIcon) avatar, 30));
 
             doc.insertString(doc.getLength(), name + ": ", doc.getStyle("nickname"));
             int start = doc.getLength();
@@ -128,11 +146,10 @@ public class ChatPanel extends javax.swing.JPanel
                 for(Emoticon e: Emoticons.getEmoticons())
                 {
                     if((i + e.getSequence().length()) > end) continue;
-                    String newString = doc.getText(i, e.getSequence().length());
+                    String newString = doc.getText(i, e.getSequence().length()).toUpperCase();
                 
                     if(newString.equals(e.getSequence()))
                     {
-                        System.out.println("Emoticon");
                         doc.remove(i, e.getSequence().length());
                         smi=new SimpleAttributeSet();
                         StyleConstants.setIcon(smi, e.getIcon());

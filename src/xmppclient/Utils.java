@@ -15,11 +15,10 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.filechooser.FileSystemView;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
@@ -44,6 +43,16 @@ public class Utils
             ext = s.substring(i+1).toLowerCase();
         }
         return ext;
+    }
+    
+    public static JLabel createErrorLabel(String message)
+    {
+        return new JLabel(message, Icons.error, JLabel.LEADING);
+    }
+    
+    public static JLabel createSuccessLabel(String message)
+    {
+        return new JLabel(message, Icons.success, JLabel.LEADING);
     }
     
     public static Icon resizeImage(ImageIcon image, int height)

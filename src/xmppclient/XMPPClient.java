@@ -102,6 +102,7 @@ public class XMPPClient extends javax.swing.JFrame
         signInButton = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -149,7 +150,7 @@ public class XMPPClient extends javax.swing.JFrame
             }
         });
 
-        storeConnectionCheckBox.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        storeConnectionCheckBox.setFont(new java.awt.Font("Tahoma", 0, 10));
         storeConnectionCheckBox.setText("Save connection");
         storeConnectionCheckBox.setToolTipText("Tick this box to store this connection for future use");
         storeConnectionCheckBox.setBorder(null);
@@ -280,6 +281,15 @@ public class XMPPClient extends javax.swing.JFrame
 
         jMenu1.setText("File");
 
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem3.setText("Register");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
+
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/system-shutdown-22x22.png"))); // NOI18N
         jMenuItem1.setText("Exit");
@@ -364,12 +374,16 @@ private void signInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 }//GEN-LAST:event_signInButtonActionPerformed
 
 private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-    new AccountManager().setVisible(true);
+    new AccountManagerUI().setVisible(true);
 }//GEN-LAST:event_jMenuItem2ActionPerformed
 
 private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
     dispose();
 }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    new RegistrationUI().setVisible(true);
+}//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
     * @param args the command line arguments
@@ -483,6 +497,7 @@ private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JTextField nameTextField;
     private javax.swing.JPasswordField passwordTextField;
     private javax.swing.JTextField portTextField;

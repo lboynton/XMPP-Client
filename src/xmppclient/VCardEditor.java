@@ -6,13 +6,12 @@
 
 package xmppclient;
 
-import java.awt.BorderLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListModel;
 import javax.swing.SwingConstants;
-import xmppclient.images.tango.Icons;
+import xmppclient.images.tango.TangoIcons;
 import xmppclient.tabs.VerticalRenderer;
 
 /**
@@ -34,9 +33,9 @@ public class VCardEditor extends javax.swing.JFrame
     private ListModel getModel()
     {
         DefaultListModel listModel = listModel = new DefaultListModel();
-        listModel.addElement(new JLabel("Personal", Icons.users32x32, SwingConstants.CENTER));
-        listModel.addElement(new JLabel("Home", Icons.home32x32, SwingConstants.CENTER));
-        listModel.addElement(new JLabel("Work", Icons.shirtTie32x32, SwingConstants.CENTER));
+        listModel.addElement(new JLabel("Personal", TangoIcons.users32x32, SwingConstants.CENTER));
+        listModel.addElement(new JLabel("Home", TangoIcons.home32x32, SwingConstants.CENTER));
+        listModel.addElement(new JLabel("Work", TangoIcons.shirtTie32x32, SwingConstants.CENTER));
         return listModel;
     }
     
