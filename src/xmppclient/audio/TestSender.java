@@ -10,7 +10,6 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.DefaultPacketExtension;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.packet.PacketExtension;
 
 /**
  *
@@ -32,6 +31,7 @@ public class TestSender extends javax.swing.JFrame
             connection.connect();
             connection.login("lee", "password");
             Audio audio = new Audio("audio");
+            audio.generateDirectory();
             audio.generateListing();
             List<AudioFile> files = audio.getAudioFiles();
             

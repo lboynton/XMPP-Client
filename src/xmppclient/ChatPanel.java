@@ -211,7 +211,7 @@ public class ChatPanel extends javax.swing.JPanel
         sendScrollPane = new javax.swing.JScrollPane();
         sendTextPane = new javax.swing.JTextPane();
 
-        contactLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        contactLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
         contactLabel.setText(chat.getParticipant());
 
         sendButton.setText("Send");
@@ -247,9 +247,11 @@ public class ChatPanel extends javax.swing.JPanel
             }
         });
 
+        messageTextPane.setBackground(new java.awt.Color(255, 255, 255));
         messageTextPane.setEditable(false);
         messageScrollPane.setViewportView(messageTextPane);
 
+        sendTextPane.setBackground(new java.awt.Color(255, 255, 255));
         sendTextPane.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 sendTextPaneKeyPressed(evt);
@@ -271,7 +273,7 @@ public class ChatPanel extends javax.swing.JPanel
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(formatButton, 0, 0, Short.MAX_VALUE)
-                            .addComponent(emoticonsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, Short.MAX_VALUE))
+                            .addComponent(emoticonsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sendScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -282,7 +284,7 @@ public class ChatPanel extends javax.swing.JPanel
                         .addComponent(contactLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(statusLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
                         .addComponent(sendFileButton)))
                 .addContainerGap())
         );
@@ -305,7 +307,7 @@ public class ChatPanel extends javax.swing.JPanel
                             .addComponent(formatButton)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(emoticonsButton)))
-                    .addComponent(sendScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE))
+                    .addComponent(sendScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
