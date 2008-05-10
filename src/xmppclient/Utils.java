@@ -129,6 +129,21 @@ public class Utils
         return getNickname(XMPPClientUI.connection.getRoster().getEntry(JID));
     }
     
+    public static String getNickname()
+    {
+        VCard vCard = new VCard();
+          
+        try
+        {
+            vCard.load(XMPPClientUI.connection);
+            if(vCard.getNickName() != null && !vCard.getNickName().equals(""))
+                return vCard.getNickName();
+        }
+        catch (Exception ex) {}
+        
+        return XMPPClientUI.connection.getUser();
+    }
+    
     public static String getStatusMessage(Presence presence)
     {
         if(presence.getStatus() != null)

@@ -17,8 +17,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -39,7 +37,6 @@ import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.packet.VCard;
-import xmppclient.images.Icons;
 import xmppclient.images.tango.TangoIcons;
 
 /**
@@ -108,12 +105,14 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
             MenuItem exitMenuItem = new MenuItem("Exit");
             MenuItem showMenuItem = new MenuItem("Show/hide");
             exitMenuItem.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent evt)
                 {
                     exit();
                 }
             });
             showMenuItem.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent evt)
                 {
                     toggleWindowVisibility();
@@ -534,30 +533,38 @@ private void addContactButtonActionPerformed(java.awt.event.ActionEvent evt) {//
 private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
     String room = JOptionPane.showInputDialog(this, "Enter room name");
     MultiUserChatUI mucui = new MultiUserChatUI(room);
-    mucui.setVisible(true);
     try
-    {//GEN-LAST:event_jMenuItem4ActionPerformed
-        mucui.join(Utils.getNickname(connection.getUser()));
+    {
+        mucui.join(Utils.getNickname());
+        mucui.connect();
     }
     catch (XMPPException ex)
     {
-        Logger.getLogger(XMPPClientUI.class.getName()).log(Level.SEVERE, null, ex);
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-}
+    
+    mucui.setVisible(true);
+
+}//GEN-LAST:event_jMenuItem4ActionPerformed
 
 private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
     String room = JOptionPane.showInputDialog(this, "Enter room name");
     MultiUserChatUI mucui = new MultiUserChatUI(room);
-    mucui.setVisible(true);
+    
     try
-    {//GEN-LAST:event_jMenuItem3ActionPerformed
-        mucui.create(Utils.getNickname(connection.getUser()));
+    {
+        mucui.create(Utils.getNickname());
+        mucui.connect();
     }
     catch (XMPPException ex)
     {
-        Logger.getLogger(XMPPClientUI.class.getName()).log(Level.SEVERE, null, ex);
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        return;
     }
-}
+    
+    mucui.setVisible(true);
+    
+}//GEN-LAST:event_jMenuItem3ActionPerformed
  
     private void setHoverText(java.awt.event.MouseEvent evt)
     {
