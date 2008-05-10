@@ -29,20 +29,17 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         initComponents();
     }
     
-    public void connect() throws XMPPException
-    {
-        muc.sendConfigurationForm(new Form(Form.TYPE_SUBMIT));
-        muc.addMessageListener(this);
-    }
-    
     public void create(String nickname) throws XMPPException
     {
         muc.create(nickname);
+        muc.sendConfigurationForm(new Form(Form.TYPE_SUBMIT));
+        muc.addMessageListener(this);
     }
     
     public void join(String nickname) throws XMPPException
     {
         muc.join(nickname);
+        muc.addMessageListener(this);
     }
 
     /** This method is called from within the constructor to

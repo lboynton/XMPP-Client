@@ -536,7 +536,6 @@ private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     try
     {
         mucui.join(Utils.getNickname());
-        mucui.connect();
     }
     catch (XMPPException ex)
     {
@@ -554,7 +553,6 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     try
     {
         mucui.create(Utils.getNickname());
-        mucui.connect();
     }
     catch (XMPPException ex)
     {
