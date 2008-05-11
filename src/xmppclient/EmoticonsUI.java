@@ -51,6 +51,7 @@ public class EmoticonsUI extends javax.swing.JDialog
 
         setUndecorated(true);
 
+        emoticonsList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         emoticonsList.setCellRenderer(new EmoticonsListRenderer());
         emoticonsList.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
         emoticonsList.addMouseListener(new java.awt.event.MouseAdapter() {
