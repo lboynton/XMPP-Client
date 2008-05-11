@@ -5,12 +5,22 @@
  */
 package xmppclient;
 
+import java.awt.Component;
+import java.awt.event.MouseEvent;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.Form;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 
@@ -20,26 +30,34 @@ import org.jivesoftware.smackx.muc.MultiUserChat;
  */
 public class MultiUserChatUI extends javax.swing.JFrame implements PacketListener
 {
+
     private MultiUserChat muc;
-    
+
     /** Creates new form MultiUserChatUI */
     public MultiUserChatUI(String room)
     {
-        muc = new MultiUserChat(XMPPClientUI.connection, room + "@conference.192.168.0.8");         
+        muc = new MultiUserChat(XMPPClientUI.connection, room + "@conference.192.168.0.8");
         initComponents();
     }
-    
+
     public void create(String nickname) throws XMPPException
     {
         muc.create(nickname);
         muc.sendConfigurationForm(new Form(Form.TYPE_SUBMIT));
-        muc.addMessageListener(this);
+        initialise();
     }
-    
+
     public void join(String nickname) throws XMPPException
     {
         muc.join(nickname);
+        initialise();
+    }
+
+    private void initialise()
+    {
+        updateOccupantList();
         muc.addMessageListener(this);
+        muc.addParticipantListener(new ParticipantListener());
     }
 
     /** This method is called from within the constructor to
@@ -51,20 +69,36 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        messageTextArea = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         sendTextArea = new javax.swing.JTextArea();
         sendButton = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        memberList = new javax.swing.JList()
+        {
+            public String getToolTipText(MouseEvent evt)
+            {
+                // Get item index
+                int index = locationToIndex(evt.getPoint());
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                // Get item
+                String item = (String) getModel().getElementAt(index);
 
-        messageTextArea.setColumns(20);
-        messageTextArea.setRows(5);
-        jScrollPane1.setViewportView(messageTextArea);
+                // Return the tool tip text
+                return muc.getOccupant(item).getJid();
+            }
+        };//);
+        jScrollPane1 = new javax.swing.JScrollPane();
+        messageTextPane = new javax.swing.JTextPane();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle(muc.getRoom() + " - Conference");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         sendTextArea.setColumns(20);
-        sendTextArea.setRows(5);
         jScrollPane2.setViewportView(sendTextArea);
 
         sendButton.setText("Send");
@@ -74,29 +108,41 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
             }
         });
 
+        memberList.setCellRenderer(new MemberListRenderer());
+        jScrollPane3.setViewportView(memberList);
+
+        messageTextPane.setBackground(new java.awt.Color(255, 255, 255));
+        messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
+        jScrollPane1.setViewportView(messageTextPane);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(sendButton)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -105,28 +151,85 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
 
 private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
     try
-    {//GEN-LAST:event_sendButtonActionPerformed
+    {
         muc.sendMessage(sendTextArea.getText());
+        sendTextArea.setText("");
     }
     catch (XMPPException ex)
     {
         Logger.getLogger(MultiUserChatUI.class.getName()).log(Level.SEVERE, null, ex);
     }
-}
+}//GEN-LAST:event_sendButtonActionPerformed
+
+private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+    int option = JOptionPane.showConfirmDialog(this, 
+            "Do you wish to leave the conference?", 
+            "Leaving Conference", 
+            JOptionPane.YES_NO_OPTION, 
+            JOptionPane.QUESTION_MESSAGE);
+    
+    if(option == JOptionPane.YES_OPTION)
+    {
+        muc.leave();
+        dispose();
+    }
+}//GEN-LAST:event_formWindowClosing
 
     @Override
-    public
-    void processPacket(Packet packet)
+    public void processPacket(Packet packet)
     {
         Message message = (Message) packet;
-        messageTextArea.append(message.getFrom() + ": " + message.getBody() + "\n");
+        //messageTextPane.append(StringUtils.parseResource(message.getFrom()) + ": " + message.getBody() + "\n");
+        ChatTextPaneStyledDocument doc = (ChatTextPaneStyledDocument) messageTextPane.getStyledDocument();
+        doc.insertUser(StringUtils.parseResource(message.getFrom()));
+        doc.insertMessage(message.getBody());
+    }
+
+    private void updateOccupantList()
+    {
+        DefaultListModel model = null;
+
+        model = new DefaultListModel();
+
+        Iterator<String> occupants = muc.getOccupants();
+
+        while (occupants.hasNext())
+        {
+            model.addElement(occupants.next());
+        }
+
+        memberList.setModel(model);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea messageTextArea;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JList memberList;
+    private javax.swing.JTextPane messageTextPane;
     private javax.swing.JButton sendButton;
     private javax.swing.JTextArea sendTextArea;
     // End of variables declaration//GEN-END:variables
+
+    private class ParticipantListener implements PacketListener
+    {
+
+        @Override
+        public void processPacket(Packet packet)
+        {
+            updateOccupantList();
+        }
+    }
+
+    private class MemberListRenderer extends DefaultListCellRenderer
+    {
+
+        @Override
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+        {
+            JLabel lbl = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            lbl.setText(StringUtils.parseResource((String) value));
+            return lbl;
+        }
+    }
 }
