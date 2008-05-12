@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <Properties>
@@ -106,7 +106,7 @@
         <Property name="opaque" type="boolean" value="false"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel()&#xa;{&#xa;    protected void paintComponent(Graphics g)&#xa;    {&#xa;        //  Dispaly image at at full size&#xa;        g.drawImage(icon.getImage(), 0, 0, null);&#xa;&#xa;        //  Scale image to size of component&#xa;        //Dimension d = getSize();&#xa;        //g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);&#xa;&#xa;        //  Fix the image position in the scroll pane&#xa;        //Point p = scrollPane.getViewport().getViewPosition();&#xa;        //g.drawImage(icon.getImage(), p.x, p.y, null);&#xa;&#xa;        super.paintComponent(g);&#xa;    }&#xa;};//)"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel()&#xa;{&#xa;    protected void paintComponent(Graphics g)&#xa;    {&#xa;        //  Dispaly image at at full size&#xa;        //g.drawImage(icon.getImage(), 0, 0, null);&#xa;&#xa;        //  Scale image to size of component&#xa;        //Dimension d = getSize();&#xa;        //g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);&#xa;&#xa;        //  Fix the image position in the scroll pane&#xa;        //Point p = scrollPane.getViewport().getViewPosition();&#xa;        //g.drawImage(icon.getImage(), p.x, p.y, null);&#xa;&#xa;        super.paintComponent(g);&#xa;    }&#xa;};//)"/>
       </AuxValues>
 
       <Layout>
@@ -124,21 +124,21 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="hostTextField" pref="167" max="32767" attributes="0"/>
+                          <Component id="hostTextField" pref="91" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="portTextField" min="-2" pref="56" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="resourceTextField" alignment="0" pref="273" max="32767" attributes="1"/>
-                      <Component id="passwordTextField" alignment="0" pref="273" max="32767" attributes="1"/>
-                      <Component id="usernameTextField" alignment="0" pref="273" max="32767" attributes="3"/>
-                      <Component id="storedConnectionComboBox" alignment="0" pref="273" max="32767" attributes="3"/>
+                      <Component id="resourceTextField" alignment="0" pref="193" max="32767" attributes="1"/>
+                      <Component id="passwordTextField" alignment="0" pref="193" max="32767" attributes="1"/>
+                      <Component id="usernameTextField" alignment="0" pref="193" max="32767" attributes="3"/>
+                      <Component id="storedConnectionComboBox" alignment="0" pref="193" max="32767" attributes="3"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="296" max="32767" attributes="0"/>
+                  <EmptySpace pref="212" max="32767" attributes="0"/>
                   <Component id="signInButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="10" pref="10" max="10" attributes="0"/>
               </Group>
@@ -146,12 +146,12 @@
                   <EmptySpace min="10" pref="10" max="10" attributes="0"/>
                   <Component id="jLabel8" min="-2" pref="43" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="nameTextField" pref="304" max="32767" attributes="0"/>
+                  <Component id="nameTextField" pref="215" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="storeConnectionCheckBox" pref="357" max="32767" attributes="0"/>
+                  <Component id="storeConnectionCheckBox" pref="268" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -223,6 +223,11 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="storedConnectionComboBox">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="storedConnectionComboBox" property="font" relativeSize="true" size="0"/>
+              </FontInfo>
+            </Property>
             <Property name="toolTipText" type="java.lang.String" value="Select a previously stored connection, or select new connection to create a new connection"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="opaque" type="boolean" value="false"/>

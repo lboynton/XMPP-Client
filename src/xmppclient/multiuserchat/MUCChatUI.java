@@ -3,42 +3,40 @@
  *
  * Created on 09 May 2008, 15:22
  */
-package xmppclient;
+package xmppclient.multiuserchat;
 
+import xmppclient.*;
+import xmppclient.multiuserchat.MultiUserChatInviteUI;
 import java.awt.Component;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.Form;
+import org.jivesoftware.smackx.muc.InvitationRejectionListener;
 import org.jivesoftware.smackx.muc.MultiUserChat;
-import xmppclient.popupmenu.PopUpMenu;
 
 /**
  *
  * @author  Lee Boynton (323326)
  */
-public class MultiUserChatUI extends javax.swing.JFrame implements PacketListener
+public class MUCChatUI extends javax.swing.JFrame implements PacketListener
 {
 
     private MultiUserChat muc;
 
     /** Creates new form MultiUserChatUI */
-    public MultiUserChatUI(String room)
+    public MUCChatUI(String room)
     {
         muc = new MultiUserChat(XMPPClientUI.connection, room + "@conference.192.168.0.8");
         initComponents();
@@ -56,12 +54,31 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         muc.join(nickname);
         initialise();
     }
+    
+    @Override
+    public void setVisible(boolean b)
+    {
+        super.setVisible(b);
+        pack();
+        splitPane.setDividerLocation(0.8);
+    }
 
     private void initialise()
     {
         updateOccupantList();
         muc.addMessageListener(this);
         muc.addParticipantListener(new ParticipantListener());
+        muc.addInvitationRejectionListener(new InvitationRejectionListener() 
+        {
+            @Override
+            public void invitationDeclined(String invitee, String reason)
+            {
+                JOptionPane.showMessageDialog(MUCChatUI.this, 
+                        invitee + " rejected your invitation.\nReason: " + reason, 
+                        "Invitation rejected", 
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
     }
 
     /** This method is called from within the constructor to
@@ -76,6 +93,10 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         jScrollPane2 = new javax.swing.JScrollPane();
         sendTextArea = new javax.swing.JTextArea();
         sendButton = new javax.swing.JButton();
+        inviteButton = new javax.swing.JButton();
+        splitPane = new javax.swing.JSplitPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        messageTextPane = new javax.swing.JTextPane();
         jScrollPane3 = new javax.swing.JScrollPane();
         memberList = new javax.swing.JList()
         {
@@ -102,9 +123,6 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
                 return text.toString();
             }
         };//);
-        jScrollPane1 = new javax.swing.JScrollPane();
-        messageTextPane = new javax.swing.JTextPane();
-        inviteButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(muc.getRoom() + " - Conference");
@@ -125,20 +143,24 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
             }
         });
 
-        memberList.setCellRenderer(new MemberListRenderer());
-        jScrollPane3.setViewportView(memberList);
-
-        messageTextPane.setBackground(new java.awt.Color(255, 255, 255));
-        messageTextPane.setEditable(false);
-        messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
-        jScrollPane1.setViewportView(messageTextPane);
-
         inviteButton.setText("Invite");
         inviteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inviteButtonActionPerformed(evt);
             }
         });
+
+        messageTextPane.setBackground(new java.awt.Color(255, 255, 255));
+        messageTextPane.setEditable(false);
+        messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
+        jScrollPane1.setViewportView(messageTextPane);
+
+        splitPane.setLeftComponent(jScrollPane1);
+
+        memberList.setCellRenderer(new MemberListRenderer());
+        jScrollPane3.setViewportView(memberList);
+
+        splitPane.setRightComponent(jScrollPane3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,30 +169,25 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(inviteButton))
+                    .addComponent(inviteButton)
+                    .addComponent(splitPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(13, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(inviteButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane3)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE))
+                .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(sendButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -185,7 +202,7 @@ private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }
     catch (XMPPException ex)
     {
-        Logger.getLogger(MultiUserChatUI.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(MUCChatUI.class.getName()).log(Level.SEVERE, null, ex);
     }
 }//GEN-LAST:event_sendButtonActionPerformed
 
@@ -204,14 +221,19 @@ private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:even
 }//GEN-LAST:event_formWindowClosing
 
 private void inviteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inviteButtonActionPerformed
-    PopUpMenu menu = new PopUpMenu(XMPPClientUI.connection.getRoster().getEntries().toArray(), inviteButton);
+    
+    MultiUserChatInviteUI invite = new MultiUserChatInviteUI(this, true);
+    String values[] = invite.showDialog();
+    
+    if(values[0] == null) return;
+
+    muc.invite(values[0], values[1]);
 }//GEN-LAST:event_inviteButtonActionPerformed
 
     @Override
     public void processPacket(Packet packet)
     {
         Message message = (Message) packet;
-        //messageTextPane.append(StringUtils.parseResource(message.getFrom()) + ": " + message.getBody() + "\n");
         ChatTextPaneStyledDocument doc = (ChatTextPaneStyledDocument) messageTextPane.getStyledDocument();
         doc.insertUser(StringUtils.parseResource(message.getFrom()));
         doc.insertMessage(message.getBody());
@@ -242,11 +264,11 @@ private void inviteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private javax.swing.JTextPane messageTextPane;
     private javax.swing.JButton sendButton;
     private javax.swing.JTextArea sendTextArea;
+    private javax.swing.JSplitPane splitPane;
     // End of variables declaration//GEN-END:variables
 
     private class ParticipantListener implements PacketListener
     {
-
         @Override
         public void processPacket(Packet packet)
         {
@@ -256,7 +278,6 @@ private void inviteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 
     private class MemberListRenderer extends DefaultListCellRenderer
     {
-
         @Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
         {

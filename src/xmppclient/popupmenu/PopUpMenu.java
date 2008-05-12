@@ -7,6 +7,7 @@ package xmppclient.popupmenu;
 
 import java.awt.Component;
 import java.awt.Point;
+import javax.swing.JFrame;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
 
@@ -19,25 +20,32 @@ public class PopUpMenu extends javax.swing.JDialog
     private Object data[];
     
     /** Creates new form PopUpMenu */
-    public PopUpMenu(Object data[])
+    public PopUpMenu(JFrame owner, Object data[])
     {
+        super(owner, true);
         this.data = data;
         initComponents();
     }
     
-    public PopUpMenu(Object data[], Component component)
+    public PopUpMenu(JFrame owner, Object data[], Component component)
     {
+        super(owner, true);
         this.data = data;
         initComponents();
         Point point = component.getMousePosition();
         SwingUtilities.convertPointToScreen(point, component);
         setLocation(point);
-        setVisible(true);
     }
     
     public void setRenderer(ListCellRenderer renderer)
     {
         list.setCellRenderer(renderer);
+    }
+
+    public Object showMenu()
+    {
+        setVisible(true);
+        return list.getSelectedValue();
     }
 
     /** This method is called from within the constructor to
@@ -58,9 +66,12 @@ public class PopUpMenu extends javax.swing.JDialog
 
         list.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         list.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
-        list.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                listFocusLost(evt);
+        list.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listMouseClicked(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                listMouseExited(evt);
             }
         });
         jScrollPane1.setViewportView(list);
@@ -79,9 +90,16 @@ public class PopUpMenu extends javax.swing.JDialog
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-private void listFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_listFocusLost
+private void listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listMouseClicked
+    if(evt.getClickCount() == 2)
+    {
+        dispose();
+    }
+}//GEN-LAST:event_listMouseClicked
+
+private void listMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listMouseExited
     dispose();
-}//GEN-LAST:event_listFocusLost
+}//GEN-LAST:event_listMouseExited
 
     /**
      * @param args the command line arguments
@@ -94,7 +112,7 @@ private void listFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_lis
             public void run()
             {
                 Object data[] = { "Item 1", "Item 2" };
-                new PopUpMenu(data).setVisible(true);
+                new PopUpMenu(null, data).setVisible(true);
             }
         });
     }

@@ -227,7 +227,7 @@ private void avatarFileChooserActionPerformed(java.awt.event.ActionEvent evt) {/
                 VCard vCard = new VCard();
                 vCard.load(XMPPClientUI.connection);
                 ImageIcon image = new ImageIcon(avatarFileChooser.getSelectedFile().toURI().toURL());
-                image = (ImageIcon) Utils.resizeImage(image, 85);
+                image = (ImageIcon) Utils.resizeImage(image, 48);
                 clientUI.setAvatar(image);
                 vCard.setAvatar(Utils.getBytesFromImage(image.getImage()));
 

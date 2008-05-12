@@ -6,6 +6,7 @@
 
 package xmppclient;
 
+import xmppclient.multiuserchat.MUCChatUI;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -29,6 +30,7 @@ import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
+import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.util.StringUtils;
@@ -36,8 +38,11 @@ import org.jivesoftware.smackx.filetransfer.FileTransferListener;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
+import org.jivesoftware.smackx.muc.InvitationListener;
+import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.packet.VCard;
 import xmppclient.images.tango.TangoIcons;
+import xmppclient.multiuserchat.InvitationReceivedUI;
 
 /**
  *
@@ -50,11 +55,14 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     private Image appIcon = new ImageIcon(this.getClass().getResource(
                 "/xmppclient/images/user.png")).getImage();
     public static ChatUI chatUI;
+    private String accountName;
     
     /** Creates new form XMPPClientUI */
-    public XMPPClientUI(XMPPConnection connection) 
+    public XMPPClientUI(XMPPConnection connection, String accountName) 
     {
         XMPPClientUI.connection = connection;
+        this.accountName = accountName;
+        MultiUserChat.addInvitationListener(connection, new InvitationReceivedUI(this, true));
         Roster.setDefaultSubscriptionMode(Roster.SubscriptionMode.manual);
         chatUI = new ChatUI();
         initComponents();
@@ -185,11 +193,12 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         signOutMenuItem = new javax.swing.JMenuItem();
+        minimiseMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
-        sendFileMenuItem = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        toolsMenu = new javax.swing.JMenu();
+        createChatRoomMenuItem = new javax.swing.JMenuItem();
+        joinChatRoomMenuItem = new javax.swing.JMenuItem();
+        sendFileMenuItem = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("Item");
 
@@ -320,33 +329,33 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                    .addComponent(contactListScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
                     .addGroup(contentPanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(statusComboBox, 0, 305, Short.MAX_VALUE)
-                            .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(statusComboBox, 0, 217, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contentPanelLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)))
+                                .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(avatarLabel)))
+                        .addComponent(avatarLabel))
+                    .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE))
                 .addContainerGap())
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(contentPanelLayout.createSequentialGroup()
                         .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(avatarLabel))
-                .addGap(11, 11, 11)
-                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(contactListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -362,6 +371,15 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         });
         fileMenu.add(signOutMenuItem);
 
+        minimiseMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        minimiseMenuItem.setText("Minimise");
+        minimiseMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                minimiseMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(minimiseMenuItem);
+
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/system-shutdown-22x22.png"))); // NOI18N
         exitMenuItem.setText("Exit");
@@ -374,34 +392,34 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
 
         menuBar.add(fileMenu);
 
-        sendFileMenuItem.setText("Tools");
-        sendFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        toolsMenu.setText("Tools");
+        toolsMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sendFileMenuItemActionPerformed(evt);
+                toolsMenuActionPerformed(evt);
             }
         });
 
-        jMenuItem3.setText("Create chat room");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        createChatRoomMenuItem.setText("Create chat room");
+        createChatRoomMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                createChatRoomMenuItemActionPerformed(evt);
             }
         });
-        sendFileMenuItem.add(jMenuItem3);
+        toolsMenu.add(createChatRoomMenuItem);
 
-        jMenuItem4.setText("Join chat room");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        joinChatRoomMenuItem.setText("Join chat room");
+        joinChatRoomMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                joinChatRoomMenuItemActionPerformed(evt);
             }
         });
-        sendFileMenuItem.add(jMenuItem4);
+        toolsMenu.add(joinChatRoomMenuItem);
 
-        jMenuItem2.setText("Send file...");
-        jMenuItem2.setEnabled(false);
-        sendFileMenuItem.add(jMenuItem2);
+        sendFileMenuItem.setText("Send file...");
+        sendFileMenuItem.setEnabled(false);
+        toolsMenu.add(sendFileMenuItem);
 
-        menuBar.add(sendFileMenuItem);
+        menuBar.add(toolsMenu);
 
         setJMenuBar(menuBar);
 
@@ -469,7 +487,22 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     }//GEN-LAST:event_nicknameTextFieldActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        exit();
+        
+        if(Utils.loadProperty(accountName, "display_minimise_message").equals("false"))
+        {
+            setVisible(false);
+            return;
+        }
+        
+        JOptionPane.showMessageDialog(this, 
+                "Closing the window minimises to tray. " +
+                "\nTo close, right click the tray icon and select exit.", 
+                "Minimising client", 
+                JOptionPane.INFORMATION_MESSAGE);
+        
+        Utils.saveProperty(accountName, "display_minimise_message", "false");
+        
+        setVisible(false);
     }//GEN-LAST:event_formWindowClosing
 
     private void statusComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusComboBoxActionPerformed
@@ -483,12 +516,12 @@ private void avatarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 }//GEN-LAST:event_avatarButtonActionPerformed
 
 private void contactListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_contactListValueChanged
-    sendFileMenuItem.setEnabled(true);
+    toolsMenu.setEnabled(true);
 }//GEN-LAST:event_contactListValueChanged
 
-private void sendFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFileMenuItemActionPerformed
+private void toolsMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toolsMenuActionPerformed
     contactList.getSelectedValue();
-}//GEN-LAST:event_sendFileMenuItemActionPerformed
+}//GEN-LAST:event_toolsMenuActionPerformed
 
 private void avatarButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_avatarButtonMouseEntered
     setHoverText(evt);
@@ -530,9 +563,9 @@ private void addContactButtonActionPerformed(java.awt.event.ActionEvent evt) {//
     showAddContactDialog();
 }//GEN-LAST:event_addContactButtonActionPerformed
 
-private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+private void joinChatRoomMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_joinChatRoomMenuItemActionPerformed
     String room = JOptionPane.showInputDialog(this, "Enter room name");
-    MultiUserChatUI mucui = new MultiUserChatUI(room);
+    MUCChatUI mucui = new MUCChatUI(room);
     try
     {
         mucui.join(Utils.getNickname());
@@ -544,11 +577,11 @@ private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     
     mucui.setVisible(true);
 
-}//GEN-LAST:event_jMenuItem4ActionPerformed
+}//GEN-LAST:event_joinChatRoomMenuItemActionPerformed
 
-private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+private void createChatRoomMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createChatRoomMenuItemActionPerformed
     String room = JOptionPane.showInputDialog(this, "Enter room name");
-    MultiUserChatUI mucui = new MultiUserChatUI(room);
+    MUCChatUI mucui = new MUCChatUI(room);
     
     try
     {
@@ -562,7 +595,11 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     
     mucui.setVisible(true);
     
-}//GEN-LAST:event_jMenuItem3ActionPerformed
+}//GEN-LAST:event_createChatRoomMenuItemActionPerformed
+
+private void minimiseMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minimiseMenuItemActionPerformed
+    setVisible(false);
+}//GEN-LAST:event_minimiseMenuItemActionPerformed
  
     private void setHoverText(java.awt.event.MouseEvent evt)
     {
@@ -667,20 +704,21 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JList contactList;
     private javax.swing.JScrollPane contactListScrollPane;
     private javax.swing.JPanel contentPanel;
+    private javax.swing.JMenuItem createChatRoomMenuItem;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel hoverTextLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem joinChatRoomMenuItem;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem minimiseMenuItem;
     private javax.swing.JTextField nicknameTextField;
-    private javax.swing.JMenu sendFileMenuItem;
+    private javax.swing.JMenuItem sendFileMenuItem;
     private javax.swing.JMenuItem signOutMenuItem;
     private javax.swing.JComboBox statusComboBox;
     private javax.swing.JToolBar toolBar;
+    private javax.swing.JMenu toolsMenu;
     private javax.swing.JButton vCardButton;
     // End of variables declaration//GEN-END:variables
 

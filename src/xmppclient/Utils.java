@@ -33,6 +33,8 @@ import xmppclient.images.Icons;
  */
 public class Utils 
 {
+    private static final String PROPERTIES_DESC = "This file contains properties for the specified account name";
+    
     public static String getExtension(File f) 
     {
         String ext = null;
@@ -274,7 +276,7 @@ public class Utils
         
         try
         {
-            properties.store(new FileOutputStream("connections/" + name + ".properties"), "Connection info for " + name);
+            properties.store(new FileOutputStream("connections/" + name + ".properties"), PROPERTIES_DESC);
         }
         catch(Exception e)
         {
@@ -314,5 +316,29 @@ public class Utils
         String[] split = filename.split("\\.");
 
 	return split[split.length - 1];
+    }
+
+    public static void saveProperty(String accountName, String property, String value)
+    {
+        Properties properties = new Properties();
+        try
+        {
+            properties.load(new FileInputStream("connections/" + accountName + ".properties"));
+            properties.setProperty(property, value);
+            properties.store(new FileOutputStream("connections/" + accountName + ".properties"), PROPERTIES_DESC);
+        }
+        catch (IOException ex) {ex.printStackTrace();}
+    }
+    
+    public static String loadProperty(String accountName, String property)
+    {
+        Properties properties = new Properties();
+        try
+        {
+            properties.load(new FileInputStream("connections/" + accountName + ".properties"));
+        }
+        catch (IOException ex) {ex.printStackTrace();}
+        
+        return properties.getProperty(property, "true");
     }
 }
