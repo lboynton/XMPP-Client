@@ -5,6 +5,8 @@
  */
 package xmppclient.multiuserchat;
 
+import java.awt.event.KeyEvent;
+import javax.swing.text.BadLocationException;
 import xmppclient.*;
 import xmppclient.multiuserchat.MultiUserChatInviteUI;
 import java.awt.Component;
@@ -17,6 +19,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.text.StyledDocument;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
@@ -95,7 +98,7 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
         sendButton = new javax.swing.JButton();
         inviteButton = new javax.swing.JButton();
         splitPane = new javax.swing.JSplitPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        messageScrollPane = new javax.swing.JScrollPane();
         messageTextPane = new javax.swing.JTextPane();
         jScrollPane3 = new javax.swing.JScrollPane();
         memberList = new javax.swing.JList()
@@ -134,6 +137,11 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
         });
 
         sendTextArea.setColumns(20);
+        sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                sendTextAreaKeyReleased(evt);
+            }
+        });
         jScrollPane2.setViewportView(sendTextArea);
 
         sendButton.setText("Send");
@@ -153,9 +161,9 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
         messageTextPane.setBackground(new java.awt.Color(255, 255, 255));
         messageTextPane.setEditable(false);
         messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
-        jScrollPane1.setViewportView(messageTextPane);
+        messageScrollPane.setViewportView(messageTextPane);
 
-        splitPane.setLeftComponent(jScrollPane1);
+        splitPane.setLeftComponent(messageScrollPane);
 
         memberList.setCellRenderer(new MemberListRenderer());
         jScrollPane3.setViewportView(memberList);
@@ -194,16 +202,25 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void send()
+    {
+        String text = sendTextArea.getText().trim();
+        
+        if(text.length() == 0) return;
+        
+        try
+        {
+            muc.sendMessage(text);
+            sendTextArea.setText("");
+        }
+        catch (XMPPException ex)
+        {
+            Logger.getLogger(MUCChatUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
-    try
-    {
-        muc.sendMessage(sendTextArea.getText());
-        sendTextArea.setText("");
-    }
-    catch (XMPPException ex)
-    {
-        Logger.getLogger(MUCChatUI.class.getName()).log(Level.SEVERE, null, ex);
-    }
+    send();
 }//GEN-LAST:event_sendButtonActionPerformed
 
 private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -230,6 +247,19 @@ private void inviteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     muc.invite(values[0], values[1]);
 }//GEN-LAST:event_inviteButtonActionPerformed
 
+private void sendTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sendTextAreaKeyReleased
+    
+    if(evt.getKeyCode() == 10 && evt.getModifiersEx() == 64)
+    {
+        sendTextArea.append("\n");
+        return;
+    }
+    if(evt.getKeyCode() == 10)
+    {
+        send();
+    }
+}//GEN-LAST:event_sendTextAreaKeyReleased
+
     @Override
     public void processPacket(Packet packet)
     {
@@ -237,6 +267,7 @@ private void inviteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         ChatTextPaneStyledDocument doc = (ChatTextPaneStyledDocument) messageTextPane.getStyledDocument();
         doc.insertUser(StringUtils.parseResource(message.getFrom()));
         doc.insertMessage(message.getBody());
+        messageTextPane.setCaretPosition(doc.getLength());
     }
 
     private void updateOccupantList()
@@ -257,10 +288,10 @@ private void inviteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton inviteButton;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JList memberList;
+    private javax.swing.JScrollPane messageScrollPane;
     private javax.swing.JTextPane messageTextPane;
     private javax.swing.JButton sendButton;
     private javax.swing.JTextArea sendTextArea;
@@ -272,6 +303,8 @@ private void inviteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         @Override
         public void processPacket(Packet packet)
         {
+            ChatTextPaneStyledDocument doc = (ChatTextPaneStyledDocument) messageTextPane.getStyledDocument();
+            doc.insertInfo(StringUtils.parseResource(packet.getFrom()) + " joined");
             updateOccupantList();
         }
     }

@@ -5,6 +5,8 @@
 
 package xmppclient;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
@@ -30,7 +32,29 @@ public class ChatTextPaneStyledDocument extends DefaultStyledDocument
         
         // create the nickname style
         Style nickname = super.addStyle("nickname", def);
-        StyleConstants.setBold(nickname, true);        
+        StyleConstants.setBold(nickname, true);
+        
+        Style info = super.addStyle("info", def);
+        StyleConstants.setItalic(info, true);
+        StyleConstants.setFontSize(info, 10);
+    }
+    
+    public void insertTime(String style)
+    {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        
+        String time = sdf.format(cal.getTime());
+        
+        try
+        {
+
+            super.insertString(super.getLength(), "(" + time + ") ", super.getStyle(style));
+        }
+        catch (BadLocationException ex)
+        {
+            Logger.getLogger(ChatTextPaneStyledDocument.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void insertUser(String nickname)
@@ -39,6 +63,7 @@ public class ChatTextPaneStyledDocument extends DefaultStyledDocument
         
         try
         {
+            insertTime("default");
             super.insertString(super.getLength(), nickname + ": ", super.getStyle("nickname"));
             lastUser = nickname;
         }
@@ -53,6 +78,19 @@ public class ChatTextPaneStyledDocument extends DefaultStyledDocument
         try
         {
             super.insertString(super.getLength(), message + "\n", super.getStyle("default"));
+        }
+        catch (BadLocationException ex)
+        {
+            Logger.getLogger(ChatTextPaneStyledDocument.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void insertInfo(String message)
+    {
+        try
+        {
+            insertTime("info");
+            super.insertString(super.getLength(), message + "\n", super.getStyle("info"));
         }
         catch (BadLocationException ex)
         {
