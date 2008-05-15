@@ -23,25 +23,25 @@ public class ContactListListener implements org.jivesoftware.smack.RosterListene
     
     public void entriesAdded(Collection<String> arg0)
     {
-        clientUI.updateContactList();
+        clientUI.updateContacts();
         System.out.println("Entries added");
     }
 
     public void entriesUpdated(Collection<String> arg0)
     {
-        clientUI.updateContactList();
+        clientUI.updateContacts();
         System.out.println("Entries updated");
     }
 
     public void entriesDeleted(Collection<String> arg0)
     {
-        clientUI.updateContactList();
+        clientUI.updateContacts();
         System.out.println("Entries deleted");
     }
 
     public void presenceChanged(Presence arg0)
     {
-        clientUI.updateContactList();
+        clientUI.updateContacts();
         System.out.println("Presence changed");
     }
 

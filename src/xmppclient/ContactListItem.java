@@ -25,6 +25,12 @@ public class ContactListItem extends javax.swing.JPanel
         this.presence = presence;
         initComponents();
     }
+
+    ContactListItem(RosterEntry entry)
+    {
+        this.rosterEntry = entry;
+        presence = XMPPClientUI.connection.getRoster().getPresence(entry.getUser());
+    }
     
     /** This method is called from within the constructor to
      * initialize the form.
