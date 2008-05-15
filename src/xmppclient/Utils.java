@@ -341,4 +341,18 @@ public class Utils
         
         return properties.getProperty(property, "true");
     }
+    
+    public static Presence.Mode[] getPresenceModes()
+    {
+        Presence.Mode modes[] = {Presence.Mode.available, Presence.Mode.away, Presence.Mode.chat, Presence.Mode.dnd, Presence.Mode.xa};
+        
+        return modes;
+    }
+    
+    public static Presence.Type[] getPresenceTypes()
+    {
+        Presence.Type types[] = {Presence.Type.available, Presence.Type.unavailable};
+        
+        return types;
+    }
 }

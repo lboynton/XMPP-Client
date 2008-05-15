@@ -292,9 +292,20 @@
           </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="statusComboBox">
+          <Properties>
+            <Property name="maximumRowCount" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="12" type="code"/>
+            </Property>
+            <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new xmppclient.StatusComboBoxRenderer()" type="code"/>
+            </Property>
+          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="statusComboBoxActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox()&#xa;{&#xa;    public void setSelectedIndex(int index)&#xa;    {&#xa;        if(statusComboBox.getItemAt(index) instanceof JSeparator)&#xa;        return;&#xa;&#xa;        super.setSelectedIndex(index);&#xa;    }&#xa;};//)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="avatarLabel">
           <Properties>

@@ -23,6 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.Roster;
@@ -39,6 +40,7 @@ import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.packet.VCard;
+import xmppclient.images.Icons;
 import xmppclient.images.tango.TangoIcons;
 import xmppclient.multiuserchat.InvitationReceivedUI;
 
@@ -90,9 +92,32 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     private void initStatusComboBox()
     {
         statusComboBox.removeAllItems();
-        statusComboBox.addItem(new OnlinePresence());
-        statusComboBox.addItem(new AwayPresence());
-        statusComboBox.addItem(new BusyPresence());
+        
+        // add default statuses
+        statusComboBox.addItem(new xmppclient.Presence(
+                Presence.Type.available, 
+                Presence.Mode.available, 
+                "Online"));
+        statusComboBox.addItem(new xmppclient.Presence(
+                Presence.Type.available, 
+                Presence.Mode.away, 
+                "Away"));
+        statusComboBox.addItem(new xmppclient.Presence(
+                Presence.Type.available, 
+                Presence.Mode.xa, 
+                "Extended away"));
+        statusComboBox.addItem(new xmppclient.Presence(
+                Presence.Type.available, 
+                Presence.Mode.dnd, 
+                "Busy"));
+        statusComboBox.addItem(new xmppclient.Presence(
+                Presence.Type.available, 
+                Presence.Mode.chat, 
+                "Free to chat"));
+        statusComboBox.addItem(new xmppclient.Presence());
+        statusComboBox.addItem(new JSeparator());
+        statusComboBox.addItem(new CustomStatusDialog(this, true));
+        statusComboBox.addItem(new JSeparator());
         statusComboBox.setSelectedIndex(0);
     }
     
@@ -185,7 +210,16 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         jButton1 = new javax.swing.JButton();
         hoverTextLabel = new javax.swing.JLabel();
         nicknameTextField = new javax.swing.JTextField();
-        statusComboBox = new javax.swing.JComboBox();
+        statusComboBox = new javax.swing.JComboBox()
+        {
+            public void setSelectedIndex(int index)
+            {
+                if(statusComboBox.getItemAt(index) instanceof JSeparator)
+                return;
+
+                super.setSelectedIndex(index);
+            }
+        };//);
         avatarLabel = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -311,6 +345,8 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
             }
         });
 
+        statusComboBox.setMaximumRowCount(12);
+        statusComboBox.setRenderer(new xmppclient.StatusComboBoxRenderer());
         statusComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 statusComboBoxActionPerformed(evt);
@@ -503,9 +539,16 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     }//GEN-LAST:event_formWindowClosing
 
     private void statusComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusComboBoxActionPerformed
-        // check the connection has been made
-        if(connection != null && connection.isConnected())
-            connection.sendPacket((Presence)statusComboBox.getSelectedItem());
+        if(statusComboBox.getSelectedItem() instanceof CustomStatusDialog)
+        {
+            CustomStatusDialog dialog = (CustomStatusDialog)statusComboBox.getSelectedItem();
+            Presence presence = dialog.showDialog();
+            if(presence == null) return;
+            initStatusComboBox();
+            statusComboBox.addItem(presence);
+            return;
+        }
+        connection.sendPacket((Presence)statusComboBox.getSelectedItem());
     }//GEN-LAST:event_statusComboBoxActionPerformed
 
 private void avatarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_avatarButtonActionPerformed
