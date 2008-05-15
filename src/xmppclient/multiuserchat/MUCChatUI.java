@@ -5,8 +5,6 @@
  */
 package xmppclient.multiuserchat;
 
-import java.awt.event.KeyEvent;
-import javax.swing.text.BadLocationException;
 import xmppclient.*;
 import xmppclient.multiuserchat.MultiUserChatInviteUI;
 import java.awt.Component;
@@ -19,7 +17,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.text.StyledDocument;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
@@ -28,6 +25,7 @@ import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.Form;
 import org.jivesoftware.smackx.muc.InvitationRejectionListener;
 import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.jivesoftware.smackx.muc.SubjectUpdatedListener;
 
 /**
  *
@@ -35,7 +33,6 @@ import org.jivesoftware.smackx.muc.MultiUserChat;
  */
 public class MUCChatUI extends javax.swing.JFrame implements PacketListener
 {
-
     private MultiUserChat muc;
 
     /** Creates new form MultiUserChatUI */
@@ -57,13 +54,14 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
         muc.join(nickname);
         initialise();
     }
-    
+
     @Override
     public void setVisible(boolean b)
     {
         super.setVisible(b);
         pack();
-        splitPane.setDividerLocation(0.8);
+        horizontalSplitPane.setDividerLocation(0.82);
+        verticalSplitPane.setDividerLocation(0.75);
     }
 
     private void initialise()
@@ -71,15 +69,27 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
         updateOccupantList();
         muc.addMessageListener(this);
         muc.addParticipantListener(new ParticipantListener());
-        muc.addInvitationRejectionListener(new InvitationRejectionListener() 
+        muc.addInvitationRejectionListener(new InvitationRejectionListener()
         {
             @Override
             public void invitationDeclined(String invitee, String reason)
             {
-                JOptionPane.showMessageDialog(MUCChatUI.this, 
-                        invitee + " rejected your invitation.\nReason: " + reason, 
-                        "Invitation rejected", 
+                JOptionPane.showMessageDialog(MUCChatUI.this,
+                        invitee + " rejected your invitation.\nReason: " + reason,
+                        "Invitation rejected",
                         JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        muc.addSubjectUpdatedListener(new SubjectUpdatedListener()
+        {
+            @Override
+            public void subjectUpdated(String subject, String from)
+            {
+                ChatTextPaneStyledDocument doc = (ChatTextPaneStyledDocument) messageTextPane.getStyledDocument();
+                doc.insertInfo("Room subject was changed by " + 
+                        StringUtils.parseResource(from) + 
+                        ". The subject is now " + 
+                        subject + ".");
             }
         });
     }
@@ -93,11 +103,11 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane2 = new javax.swing.JScrollPane();
-        sendTextArea = new javax.swing.JTextArea();
-        sendButton = new javax.swing.JButton();
+        jToolBar1 = new javax.swing.JToolBar();
         inviteButton = new javax.swing.JButton();
-        splitPane = new javax.swing.JSplitPane();
+        subjectButton = new javax.swing.JButton();
+        verticalSplitPane = new javax.swing.JSplitPane();
+        horizontalSplitPane = new javax.swing.JSplitPane();
         messageScrollPane = new javax.swing.JScrollPane();
         messageTextPane = new javax.swing.JTextPane();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -126,6 +136,10 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
                 return text.toString();
             }
         };//);
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        sendTextArea = new javax.swing.JTextArea();
+        sendButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(muc.getRoom() + " - Conference");
@@ -135,6 +149,46 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
                 formWindowClosing(evt);
             }
         });
+
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+
+        inviteButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/user_add.png"))); // NOI18N
+        inviteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inviteButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(inviteButton);
+
+        subjectButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/page_white_text_width.png"))); // NOI18N
+        subjectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subjectButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(subjectButton);
+
+        verticalSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+
+        horizontalSplitPane.setOneTouchExpandable(true);
+
+        messageTextPane.setBackground(new java.awt.Color(255, 255, 255));
+        messageTextPane.setEditable(false);
+        messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
+        messageScrollPane.setViewportView(messageTextPane);
+
+        horizontalSplitPane.setLeftComponent(messageScrollPane);
+
+        memberList.setCellRenderer(new MemberListRenderer());
+        memberList.setMinimumSize(new java.awt.Dimension(85, 0));
+        jScrollPane3.setViewportView(memberList);
+
+        horizontalSplitPane.setRightComponent(jScrollPane3);
+
+        verticalSplitPane.setLeftComponent(horizontalSplitPane);
+
+        jPanel1.setMinimumSize(new java.awt.Dimension(0, 30));
 
         sendTextArea.setColumns(20);
         sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -151,24 +205,22 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
             }
         });
 
-        inviteButton.setText("Invite");
-        inviteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inviteButtonActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+            .addComponent(sendButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+        );
 
-        messageTextPane.setBackground(new java.awt.Color(255, 255, 255));
-        messageTextPane.setEditable(false);
-        messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
-        messageScrollPane.setViewportView(messageTextPane);
-
-        splitPane.setLeftComponent(messageScrollPane);
-
-        memberList.setCellRenderer(new MemberListRenderer());
-        jScrollPane3.setViewportView(memberList);
-
-        splitPane.setRightComponent(jScrollPane3);
+        verticalSplitPane.setRightComponent(jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -177,25 +229,17 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(inviteButton)
-                    .addComponent(splitPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE))
+                    .addComponent(verticalSplitPane, javax.swing.GroupLayout.PREFERRED_SIZE, 467, Short.MAX_VALUE)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(inviteButton)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(sendButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(verticalSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -205,9 +249,11 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
     private void send()
     {
         String text = sendTextArea.getText().trim();
-        
-        if(text.length() == 0) return;
-        
+
+        if (text.length() == 0)
+        {
+            return;
+        }
         try
         {
             muc.sendMessage(text);
@@ -224,13 +270,13 @@ private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 }//GEN-LAST:event_sendButtonActionPerformed
 
 private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-    int option = JOptionPane.showConfirmDialog(this, 
-            "Do you wish to leave the conference?", 
-            "Leaving Conference", 
-            JOptionPane.YES_NO_OPTION, 
+    int option = JOptionPane.showConfirmDialog(this,
+            "Do you wish to leave the conference?",
+            "Leaving Conference",
+            JOptionPane.YES_NO_OPTION,
             JOptionPane.QUESTION_MESSAGE);
-    
-    if(option == JOptionPane.YES_OPTION)
+
+    if (option == JOptionPane.YES_OPTION)
     {
         muc.leave();
         dispose();
@@ -238,27 +284,49 @@ private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:even
 }//GEN-LAST:event_formWindowClosing
 
 private void inviteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inviteButtonActionPerformed
-    
+
     MultiUserChatInviteUI invite = new MultiUserChatInviteUI(this, true);
     String values[] = invite.showDialog();
-    
-    if(values[0] == null) return;
 
+    if (values[0] == null)
+    {
+        return;
+    }
     muc.invite(values[0], values[1]);
 }//GEN-LAST:event_inviteButtonActionPerformed
 
 private void sendTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sendTextAreaKeyReleased
-    
-    if(evt.getKeyCode() == 10 && evt.getModifiersEx() == 64)
+
+    if (evt.getKeyCode() == 10 && evt.getModifiersEx() == 64)
     {
         sendTextArea.append("\n");
         return;
     }
-    if(evt.getKeyCode() == 10)
+    if (evt.getKeyCode() == 10)
     {
         send();
     }
 }//GEN-LAST:event_sendTextAreaKeyReleased
+
+private void subjectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subjectButtonActionPerformed
+    String subject = JOptionPane.showInputDialog(this, "Enter new subject");
+    
+    if(subject == null) return;
+    if(subject.equals("")) return;
+    
+    try
+    {
+//GEN-LAST:event_subjectButtonActionPerformed
+        muc.changeSubject(subject);
+    }
+    catch (XMPPException ex)
+    {
+        JOptionPane.showMessageDialog(this, 
+                "You are not allowed to change the subject", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+    }
+}
 
     @Override
     public void processPacket(Packet packet)
@@ -287,15 +355,19 @@ private void sendTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JSplitPane horizontalSplitPane;
     private javax.swing.JButton inviteButton;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JList memberList;
     private javax.swing.JScrollPane messageScrollPane;
     private javax.swing.JTextPane messageTextPane;
     private javax.swing.JButton sendButton;
     private javax.swing.JTextArea sendTextArea;
-    private javax.swing.JSplitPane splitPane;
+    private javax.swing.JButton subjectButton;
+    private javax.swing.JSplitPane verticalSplitPane;
     // End of variables declaration//GEN-END:variables
 
     private class ParticipantListener implements PacketListener
