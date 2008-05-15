@@ -6,11 +6,15 @@
 
 package xmppclient;
 
+import java.awt.Component;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.SwingConstants;
+import org.jivesoftware.smackx.packet.VCard;
 import xmppclient.images.tango.TangoIcons;
 import xmppclient.tabs.VerticalRenderer;
 
@@ -20,6 +24,8 @@ import xmppclient.tabs.VerticalRenderer;
  */
 public class VCardEditor extends javax.swing.JFrame 
 {
+    private VCard vCard;
+    
     /** Creates new form VCardEditor */
     public VCardEditor() 
     {
@@ -28,6 +34,56 @@ public class VCardEditor extends javax.swing.JFrame
         workPanel.setVisible(false);
         homePanel.setVisible(false);
         pack();
+    }
+    
+    public VCardEditor(boolean editable) 
+    {
+        initComponents();
+        itemsList.setSelectedIndex(0);
+        workPanel.setVisible(false);
+        homePanel.setVisible(false);
+        pack();
+        setEditable(editable);
+    }
+    
+    public VCardEditor(VCard vCard, boolean editable) 
+    {
+        this.vCard = vCard;
+        initComponents();
+        itemsList.setSelectedIndex(0);
+        workPanel.setVisible(false);
+        homePanel.setVisible(false);
+        pack();
+        setEditable(editable);
+        if(!editable) saveButton.setText("Close");
+    }
+    
+    private void setEditable(boolean editable)
+    {
+        for(Component c:homePanel.getComponents())
+        {
+            if(c instanceof JTextField)
+            {
+                JTextField textfield = (JTextField) c;
+                textfield.setEditable(editable);
+            }
+        }
+        for(Component c:workPanel.getComponents())
+        {
+            if(c instanceof JTextField)
+            {
+                JTextField textfield = (JTextField) c;
+                textfield.setEditable(editable);
+            }
+        }
+        for(Component c:personalPanel.getComponents())
+        {
+            if(c instanceof JTextField)
+            {
+                JTextField textfield = (JTextField) c;
+                textfield.setEditable(editable);
+            }
+        }
     }
 
     private ListModel getModel()
@@ -59,6 +115,12 @@ public class VCardEditor extends javax.swing.JFrame
 
         personalPanel = new javax.swing.JPanel();
         avatarLabel = new javax.swing.JLabel();
+        if(vCard.getAvatar() != null)
+        {
+            avatarLabel.setIcon(new ImageIcon(vCard.getAvatar()));
+            avatarLabel.setVisible(true);
+        }
+        else avatarLabel.setVisible(false);
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -106,18 +168,29 @@ public class VCardEditor extends javax.swing.JFrame
         setLocationByPlatform(true);
         setResizable(false);
 
-        avatarLabel.setIcon(Utils.getAvatar(148));
         avatarLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel1.setText("First name");
 
-        jLabel2.setText("Second name");
+        jLabel2.setText("Last name");
 
         jLabel3.setText("Nickname");
 
         jLabel4.setText("Middle name");
 
         jLabel5.setText("Email");
+
+        firstNameTextField.setText(vCard.getFirstName());
+
+        middleNameTextField.setText(vCard.getMiddleName());
+
+        secondNameTextField.setText(vCard.getLastName());
+
+        nicknameTextField.setText(vCard.getNickName());
+
+        emailTextField.setText(vCard.getEmailHome());
+
+        jTextField1.setText(vCard.getField("TITLE"));
 
         jLabel9.setText("Title");
 
@@ -158,7 +231,6 @@ public class VCardEditor extends javax.swing.JFrame
         personalPanelLayout.setVerticalGroup(
             personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(personalPanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(personalPanelLayout.createSequentialGroup()
                         .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -185,7 +257,7 @@ public class VCardEditor extends javax.swing.JFrame
                             .addComponent(jLabel5)
                             .addComponent(emailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(avatarLabel))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         jLabel11.setText("Company");
@@ -245,7 +317,6 @@ public class VCardEditor extends javax.swing.JFrame
         workPanelLayout.setVerticalGroup(
             workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(workPanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -269,7 +340,7 @@ public class VCardEditor extends javax.swing.JFrame
                 .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
                     .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         jLabel6.setText("Street");
@@ -324,7 +395,6 @@ public class VCardEditor extends javax.swing.JFrame
         homePanelLayout.setVerticalGroup(
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(homePanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(homeStreetTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -348,7 +418,7 @@ public class VCardEditor extends javax.swing.JFrame
                 .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18)
                     .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -379,29 +449,33 @@ public class VCardEditor extends javax.swing.JFrame
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(saveButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(saveButton, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(personalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(homePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(workPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jScrollPane1, saveButton});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(workPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(homePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(personalPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(saveButton)
-                .addContainerGap())
+                    .addComponent(homePanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(personalPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(saveButton)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();

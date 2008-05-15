@@ -5,10 +5,13 @@
  */
 package xmppclient;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import xmppclient.multiuserchat.MUCChatUI;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;
+import java.awt.Point;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
@@ -20,7 +23,9 @@ import java.io.File;
 import java.util.Collection;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -195,7 +200,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         Collection<RosterGroup> groups = connection.getRoster().getGroups();
         DefaultMutableTreeNode groupNode;
 
-        
+
         // get defined groups
         for (RosterGroup group : groups)
         {
@@ -207,20 +212,20 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
                 groupNode.add(new DefaultMutableTreeNode(entry));
             }
         }
-        
+
         // get unfiled contacts
-        if(connection.getRoster().getUnfiledEntryCount() > 0)
+        if (connection.getRoster().getUnfiledEntryCount() > 0)
         {
             DefaultMutableTreeNode unfiled = new DefaultMutableTreeNode("Unfiled");
             root.add(unfiled);
-            for(RosterEntry entry : connection.getRoster().getUnfiledEntries())
+            for (RosterEntry entry : connection.getRoster().getUnfiledEntries())
             {
                 unfiled.add(new DefaultMutableTreeNode(entry));
             }
         }
-        
+
         contactTree.setModel(model);
-        
+
         int row = 0;
         while (row < contactTree.getRowCount())
         {
@@ -432,6 +437,12 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         contactTree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 contactTreeMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                contactTreeMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                contactTreeMouseReleased(evt);
             }
         });
         jScrollPane1.setViewportView(contactTree);
@@ -744,15 +755,23 @@ private void minimiseMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
 }//GEN-LAST:event_minimiseMenuItemActionPerformed
 
 private void contactTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactTreeMouseClicked
-    if (evt.getClickCount() == 2)
+
+    DefaultMutableTreeNode node = (DefaultMutableTreeNode) contactTree.getLastSelectedPathComponent();
+    if (node == null)
     {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) contactTree.getLastSelectedPathComponent();
-        if (node == null)
+        return;
+    }
+
+    if (node.getUserObject() instanceof RosterEntry)
+    {
+        if (evt.isPopupTrigger())
         {
+            JPopupMenu popup = new JPopupMenu();
+            popup.add(new JMenuItem("Fef"));
+            popup.show(evt.getComponent(), evt.getX(), evt.getY());
             return;
         }
-
-        if (node.getUserObject() instanceof RosterEntry)
+        if (evt.getClickCount() == 2)
         {
             RosterEntry rosterEntry = (RosterEntry) node.getUserObject();
             connection.getChatManager().createChat(rosterEntry.getUser(), chatUI);
@@ -769,6 +788,62 @@ private void jRadioButtonMenuItem1ActionPerformed(java.awt.event.ActionEvent evt
     sortMethod = SORT_BY_STATUS;
     updateContacts();
 }//GEN-LAST:event_jRadioButtonMenuItem1ActionPerformed
+
+private void contactTreeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactTreeMouseReleased
+    showContactPopup(evt);
+}//GEN-LAST:event_contactTreeMouseReleased
+
+private void contactTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactTreeMousePressed
+    showContactPopup(evt);
+}//GEN-LAST:event_contactTreeMousePressed
+
+    private void showContactPopup(java.awt.event.MouseEvent evt)
+    {
+        if (!evt.isPopupTrigger())
+        {
+            return;
+        }
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) contactTree.getClosestPathForLocation(evt.getX(), evt.getY()).getLastPathComponent();
+
+        if (node.getUserObject() instanceof RosterEntry)
+        {
+            final RosterEntry entry = (RosterEntry) node.getUserObject();
+            JPopupMenu menu = new JPopupMenu();
+            JMenuItem nickname = new JMenuItem(Utils.getNickname(entry));
+            nickname.setEnabled(false);
+            menu.add(nickname);
+            JMenuItem chat = new JMenuItem("Open chat");
+            menu.add(chat);
+            chat.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    connection.getChatManager().createChat(entry.getUser(), chatUI);
+                }
+            });
+            JMenuItem details = new JMenuItem("View details");
+            details.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    VCard vCard = new VCard();
+                    try
+                    {
+                        vCard.load(connection, entry.getUser());
+                    }
+                    catch (XMPPException ex)
+                    {
+                        Logger.getLogger(XMPPClientUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    new VCardEditor(vCard, false).setVisible(true);
+                }
+            });
+            menu.add(details);
+            menu.show(evt.getComponent(), evt.getX(), evt.getY());
+        }
+    }
 
     private void setHoverText(java.awt.event.MouseEvent evt)
     {
