@@ -709,7 +709,13 @@ private void jButton1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
 }//GEN-LAST:event_jButton1MouseExited
 
 private void vCardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vCardButtonActionPerformed
-    new VCardEditor().setVisible(true);
+    VCard vCard = new VCard();
+    try
+    {
+        vCard.load(connection);
+    }
+    catch (XMPPException ex) {}
+    new VCardEditor(vCard, true).setVisible(true);
 }//GEN-LAST:event_vCardButtonActionPerformed
 
 private void addContactButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addContactButtonActionPerformed
@@ -809,8 +815,7 @@ private void contactTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST
         {
             final RosterEntry entry = (RosterEntry) node.getUserObject();
             JPopupMenu menu = new JPopupMenu();
-            JMenuItem nickname = new JMenuItem(Utils.getNickname(entry));
-            nickname.setEnabled(false);
+            JMenuItem nickname = new JMenuItem(Utils.getNickname(entry), Utils.getAvatar(entry, 50));
             menu.add(nickname);
             JMenuItem chat = new JMenuItem("Open chat");
             menu.add(chat);
@@ -822,8 +827,8 @@ private void contactTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST
                     connection.getChatManager().createChat(entry.getUser(), chatUI);
                 }
             });
-            JMenuItem details = new JMenuItem("View details");
-            details.addActionListener(new ActionListener()
+            JMenuItem vcard = new JMenuItem("View VCard");
+            vcard.addActionListener(new ActionListener()
             {
                 @Override
                 public void actionPerformed(ActionEvent e)
@@ -833,14 +838,11 @@ private void contactTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST
                     {
                         vCard.load(connection, entry.getUser());
                     }
-                    catch (XMPPException ex)
-                    {
-                        Logger.getLogger(XMPPClientUI.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    catch (XMPPException ex) {}
                     new VCardEditor(vCard, false).setVisible(true);
                 }
             });
-            menu.add(details);
+            menu.add(vcard);
             menu.show(evt.getComponent(), evt.getX(), evt.getY());
         }
     }
