@@ -21,6 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.filechooser.FileSystemView;
 import org.jivesoftware.smack.RosterEntry;
+import org.jivesoftware.smack.RosterGroup;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.util.StringUtils;
@@ -354,5 +355,23 @@ public class Utils
         Presence.Type types[] = {Presence.Type.available, Presence.Type.unavailable};
         
         return types;
+    }
+    
+    /**
+     * Gets the specified user's group names separated by commas
+     * @param entry The user
+     * @return The groups separated by commas
+     */
+    public static String getGroupsCSV(RosterEntry entry)
+    {
+        String csvGroups = "";
+        
+        for(RosterGroup group:entry.getGroups())
+        {
+            csvGroups += group.getName();
+            csvGroups += ", ";
+        }
+        
+        return csvGroups;
     }
 }

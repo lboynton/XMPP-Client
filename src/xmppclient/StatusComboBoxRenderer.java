@@ -33,12 +33,14 @@ public class StatusComboBoxRenderer extends BasicComboBoxRenderer
             return (Component) value;
         }
         
-        JLabel lbl = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, isSelected);
+        JLabel lbl = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
         
         if(value instanceof Presence)
         {
             Presence presence = (Presence) value;
             lbl.setIcon(presence.getIcon());
+            if(isSelected || cellHasFocus)lbl.setOpaque(true);
+            else lbl.setOpaque(false);
         }
         else lbl.setIcon(null);
         

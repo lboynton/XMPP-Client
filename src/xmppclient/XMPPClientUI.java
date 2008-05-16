@@ -11,7 +11,6 @@ import xmppclient.multiuserchat.MUCChatUI;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;
-import java.awt.Point;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
@@ -57,6 +56,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
 {
     public static XMPPConnection connection;
     private TrayIcon trayIcon;
+    private SystemTray tray;
     private Image appIcon = new ImageIcon(this.getClass().getResource(
             "/xmppclient/images/user.png")).getImage();
     public static ChatUI chatUI;
@@ -132,7 +132,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     {
         if (SystemTray.isSupported())
         {
-            SystemTray tray = SystemTray.getSystemTray();
+            tray = SystemTray.getSystemTray();
             //Image image = Toolkit.getDefaultToolkit().getImage("images/user.png");
 
             PopupMenu popup = new PopupMenu();
@@ -199,7 +199,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
 
         Collection<RosterGroup> groups = connection.getRoster().getGroups();
         DefaultMutableTreeNode groupNode;
-
 
         // get defined groups
         for (RosterGroup group : groups)
@@ -327,7 +326,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         setTitle("XMPPClient");
         setIconImage(appIcon);
         setLocationByPlatform(true);
-        setMinimumSize(new java.awt.Dimension(300, 400));
+        setMinimumSize(new java.awt.Dimension(200, 300));
         setName("XMPPClient"); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -457,14 +456,14 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
                     .addGroup(contentPanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(statusComboBox, 0, 217, Short.MAX_VALUE)
+                            .addComponent(statusComboBox, 0, 192, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contentPanelLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)))
+                                .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(avatarLabel))
-                    .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE))
+                    .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))
                 .addContainerGap())
         );
         contentPanelLayout.setVerticalGroup(
@@ -480,7 +479,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -714,7 +713,9 @@ private void vCardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     {
         vCard.load(connection);
     }
-    catch (XMPPException ex) {}
+    catch (XMPPException ex)
+    {
+    }
     new VCardEditor(vCard, true).setVisible(true);
 }//GEN-LAST:event_vCardButtonActionPerformed
 
@@ -814,8 +815,9 @@ private void contactTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST
         if (node.getUserObject() instanceof RosterEntry)
         {
             final RosterEntry entry = (RosterEntry) node.getUserObject();
-            JPopupMenu menu = new JPopupMenu();
+            final JPopupMenu menu = new JPopupMenu();
             JMenuItem nickname = new JMenuItem(Utils.getNickname(entry), Utils.getAvatar(entry, 50));
+            nickname.setEnabled(false);
             menu.add(nickname);
             JMenuItem chat = new JMenuItem("Open chat");
             menu.add(chat);
@@ -838,11 +840,69 @@ private void contactTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST
                     {
                         vCard.load(connection, entry.getUser());
                     }
-                    catch (XMPPException ex) {}
+                    catch (XMPPException ex)
+                    {
+                    }
                     new VCardEditor(vCard, false).setVisible(true);
                 }
             });
             menu.add(vcard);
+            JMenuItem groupMenuItem = new JMenuItem("Change group");
+            groupMenuItem.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    String groups = 
+                            JOptionPane.showInputDialog(XMPPClientUI.this, 
+                            "Insert group names, separated by commas",
+                            Utils.getGroupsCSV(entry));
+                    if(groups == null) return;
+                    
+                    // remove user from all groups
+                    for(RosterGroup r:entry.getGroups())
+                    {
+                        try
+                        {
+                            r.removeEntry(entry);
+                        }
+                        catch (XMPPException ex)
+                        {
+                            JOptionPane.showMessageDialog(XMPPClientUI.this, 
+                                    "Could not remove user from group" +
+                                    ex.getMessage(), 
+                                    "Error removing user from group", 
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                    
+                    String groupsArray[] = groups.split(",");
+                    
+                    RosterGroup rosterGroup;
+                    for(String group:groupsArray)
+                    {
+                        if(connection.getRoster().getGroup(group.trim()) == null)
+                            rosterGroup = connection.getRoster().createGroup(group.trim());
+                        else rosterGroup = connection.getRoster().getGroup(group.trim());
+                        
+                        try
+                        {
+                            rosterGroup.addEntry(entry);
+                        }
+                        catch (XMPPException ex)
+                        {
+                            JOptionPane.showMessageDialog(XMPPClientUI.this, 
+                                    "Could not add user to group" +
+                                    ex.getMessage(), 
+                                    "Error adding user to group", 
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        
+                        updateContacts();
+                    }
+                }
+            });
+            menu.add(groupMenuItem);
             menu.show(evt.getComponent(), evt.getX(), evt.getY());
         }
     }
@@ -962,6 +1022,10 @@ private void contactTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST
         signOutMenuItem.setEnabled(false);
         contentPanel.setVisible(false);
         new XMPPClient().setVisible(true);
+        if (tray != null)
+        {
+            tray.remove(trayIcon);
+        }
         this.dispose();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
