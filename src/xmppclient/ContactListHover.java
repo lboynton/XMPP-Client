@@ -6,24 +6,36 @@
 
 package xmppclient;
 
+import java.awt.Point;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.packet.Presence;
 
 /**
  *
- * @author  Lee
+ * @author Lee Boynton (323326)
  */
-public class ContactListHover extends javax.swing.JFrame 
+public class ContactListHover extends javax.swing.JDialog 
 {
     private RosterEntry rosterEntry;
     private Presence presence;
     
     /** Creates new form ContactListHover */
-    public ContactListHover(RosterEntry rosterEntry, Presence presence) 
+    public ContactListHover() 
+    {
+        initComponents();
+    }
+
+    public void show(RosterEntry rosterEntry, int x, int y)
     {
         this.rosterEntry = rosterEntry;
-        this.presence = presence;
-        initComponents();
+        presence = XMPPClientUI.connection.getRoster().getPresence(rosterEntry.getUser());
+        
+        nameLabel.setText(Utils.getNickname(rosterEntry));
+        statusLabel.setText(Utils.getStatus(presence));
+        JIDLabel.setText(rosterEntry.getUser());
+        avatarLabel.setIcon(Utils.getAvatar(rosterEntry, 48));
+        setVisible(true);
+        setLocation(x, y - (getHeight() / 2));
     }
 
     /** This method is called from within the constructor to
@@ -40,16 +52,19 @@ public class ContactListHover extends javax.swing.JFrame
         JIDLabel = new javax.swing.JLabel();
         avatarLabel = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAlwaysOnTop(true);
+        setResizable(false);
         setUndecorated(true);
 
-        nameLabel.setText("jLabel1");
+        nameLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        nameLabel.setText("Nickname");
 
-        statusLabel.setText("jLabel2");
+        statusLabel.setText("Status");
 
-        JIDLabel.setText("jLabel3");
+        JIDLabel.setText("JID");
 
-        avatarLabel.setText("jLabel4");
+        avatarLabel.setIcon(Utils.getAvatar(rosterEntry, 50));
+        avatarLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -58,26 +73,26 @@ public class ContactListHover extends javax.swing.JFrame
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(nameLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 312, Short.MAX_VALUE)
-                        .addComponent(avatarLabel))
+                    .addComponent(nameLabel)
                     .addComponent(statusLabel)
                     .addComponent(JIDLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                .addComponent(avatarLabel)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nameLabel)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(nameLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(statusLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(JIDLabel))
                     .addComponent(avatarLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(statusLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(JIDLabel)
-                .addContainerGap(235, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();

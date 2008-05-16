@@ -5,8 +5,6 @@
  */
 package xmppclient;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import xmppclient.multiuserchat.MUCChatUI;
 import java.awt.AWTException;
 import java.awt.Image;
@@ -29,6 +27,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
@@ -65,6 +64,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     private final int SORT_BY_STATUS = 0;
     private final int SORT_BY_GROUP = 1;
     private int sortMethod = SORT_BY_STATUS;
+    private ContactListHover contactListHover = new ContactListHover();
 
     /** Creates new form XMPPClientUI */
     public XMPPClientUI(XMPPConnection connection, String accountName)
@@ -445,6 +445,11 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
                 contactTreeMouseReleased(evt);
             }
         });
+        contactTree.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                contactTreeMouseMoved(evt);
+            }
+        });
         jScrollPane1.setViewportView(contactTree);
 
         javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
@@ -804,6 +809,22 @@ private void contactTreeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRS
 private void contactTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactTreeMousePressed
     showContactPopup(evt);
 }//GEN-LAST:event_contactTreeMousePressed
+
+private void contactTreeMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactTreeMouseMoved
+
+    if(contactTree.getPathForLocation(evt.getX(), evt.getY()) instanceof TreePath)
+    {
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) contactTree.getPathForLocation(evt.getX(), evt.getY()).getLastPathComponent();
+        
+        if(node.getUserObject() instanceof RosterEntry)
+        {
+            RosterEntry entry = (RosterEntry) node.getUserObject();
+            contactListHover.show(entry, getX() + getWidth(), evt.getYOnScreen());
+        }
+        else contactListHover.setVisible(false);
+    }
+    else contactListHover.setVisible(false);
+}//GEN-LAST:event_contactTreeMouseMoved
 
     private void showContactPopup(java.awt.event.MouseEvent evt)
     {
