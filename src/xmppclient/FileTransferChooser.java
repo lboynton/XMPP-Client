@@ -6,8 +6,8 @@
 
 package xmppclient;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
@@ -18,13 +18,13 @@ import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
  */
 public class FileTransferChooser extends javax.swing.JDialog 
 {
-    private String JID;
+    private RosterEntry entry;
     
     /** Creates new form FileTransferChooser */
-    public FileTransferChooser(java.awt.Frame parent, boolean modal, String JID) 
+    public FileTransferChooser(java.awt.Frame parent, boolean modal, RosterEntry entry) 
     {
         super(parent, modal);
-        this.JID = JID;
+        this.entry = entry;
         initComponents();
     }
     
@@ -47,10 +47,16 @@ public class FileTransferChooser extends javax.swing.JDialog
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Select file");
 
-        fileChooser.setApproveButtonText("Send to " + JID);
+        fileChooser.setAccessory(new FileTransferChooserAccessory());
+        fileChooser.setApproveButtonText("Send to " + Utils.getNickname(entry));
         fileChooser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fileChooserActionPerformed(evt);
+            }
+        });
+        fileChooser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                fileChooserPropertyChange(evt);
             }
         });
 
@@ -70,7 +76,41 @@ public class FileTransferChooser extends javax.swing.JDialog
 
 private void fileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileChooserActionPerformed
 
+    if(evt.getActionCommand().equals(JFileChooser.CANCEL_SELECTION)) 
+    {
+        dispose();
+        return;
+    }
+    
+    FileTransferManager manager = new FileTransferManager(XMPPClientUI.connection);
+    OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(XMPPClientUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
+
+    try
+    {
+        transfer.sendFile(fileChooser.getSelectedFile(), ((FileTransferChooserAccessory)fileChooser.getAccessory()).getFileDescription());
+        new FileTransferUI(transfer);
+    }
+    catch (InterruptedException ex)
+    {
+        ex.printStackTrace();
+    }        
+    catch (XMPPException ex)
+    {
+        ex.printStackTrace();
+    }
+    dispose();
 }//GEN-LAST:event_fileChooserActionPerformed
+
+private void fileChooserPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_fileChooserPropertyChange
+    if(evt.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY))
+    {
+        try
+        {
+            ((FileTransferChooserAccessory)fileChooser.getAccessory()).setFilename(fileChooser.getSelectedFile().getName());  
+        }
+        catch(Exception e) {}
+    }
+}//GEN-LAST:event_fileChooserPropertyChange
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser fileChooser;

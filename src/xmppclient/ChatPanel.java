@@ -335,49 +335,7 @@ public class ChatPanel extends javax.swing.JPanel
     }
     
 private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFileButtonActionPerformed
-
-    final JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setAccessory(new FileTransferChooserAccessory());
-    fileChooser.addPropertyChangeListener(new PropertyChangeListener() 
-    {
-        @Override
-        public void propertyChange(PropertyChangeEvent evt)
-        {
-            if(evt.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY))
-            {
-                JFileChooser chooser = (JFileChooser)evt.getSource();
-                try
-                {
-                    ((FileTransferChooserAccessory)fileChooser.getAccessory()).setFilename(chooser.getSelectedFile().getName());  
-                }
-                catch(Exception e) {}
-            }
-        }
-    });
-    
-    int selection = fileChooser.showDialog(frame, "Send file to " + getName());
-    
-    if(selection == JFileChooser.APPROVE_OPTION)
-    {
-        FileTransferManager manager = new FileTransferManager(XMPPClientUI.connection);
-        OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(XMPPClientUI.connection.getRoster().getPresence(getRosterEntry().getUser()).getFrom());
-        
-        try
-        {
-            transfer.sendFile(fileChooser.getSelectedFile(), ((FileTransferChooserAccessory)fileChooser.getAccessory()).getFileDescription());
-            new FileTransferUI(transfer);
-        }
-        catch (InterruptedException ex)
-        {
-            ex.printStackTrace();
-            Logger.getLogger(FileTransferChooser.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-        catch (XMPPException ex)
-        {
-            ex.printStackTrace();
-            Logger.getLogger(FileTransferChooser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+    new FileTransferChooser(frame, true, getRosterEntry());
 }//GEN-LAST:event_sendFileButtonActionPerformed
 
 private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formatButtonActionPerformed

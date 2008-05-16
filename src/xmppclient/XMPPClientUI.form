@@ -57,7 +57,7 @@
           <SubComponents>
             <Menu class="javax.swing.JMenu" name="jMenu1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Sort"/>
+                <Property name="text" type="java.lang.String" value="Sort by"/>
               </Properties>
               <SubComponents>
                 <MenuItem class="javax.swing.JRadioButtonMenuItem" name="jRadioButtonMenuItem1">

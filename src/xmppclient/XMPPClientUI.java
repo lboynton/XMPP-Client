@@ -45,6 +45,7 @@ import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.packet.VCard;
+import xmppclient.images.Icons;
 import xmppclient.images.tango.TangoIcons;
 import xmppclient.multiuserchat.InvitationReceivedUI;
 
@@ -518,7 +519,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
 
         contactsMenu.setText("Contacts");
 
-        jMenu1.setText("Sort");
+        jMenu1.setText("Sort by");
 
         sortContactsButtonGroup.add(jRadioButtonMenuItem1);
         jRadioButtonMenuItem1.setSelected(true);
@@ -816,10 +817,10 @@ private void contactTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST
         {
             final RosterEntry entry = (RosterEntry) node.getUserObject();
             final JPopupMenu menu = new JPopupMenu();
-            JMenuItem nickname = new JMenuItem(Utils.getNickname(entry), Utils.getAvatar(entry, 50));
+            JMenuItem nickname = new JMenuItem(Utils.getNickname(entry));
             nickname.setEnabled(false);
             menu.add(nickname);
-            JMenuItem chat = new JMenuItem("Open chat");
+            JMenuItem chat = new JMenuItem("Open chat", Icons.userComment);
             menu.add(chat);
             chat.addActionListener(new ActionListener()
             {
@@ -829,7 +830,7 @@ private void contactTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST
                     connection.getChatManager().createChat(entry.getUser(), chatUI);
                 }
             });
-            JMenuItem vcard = new JMenuItem("View VCard");
+            JMenuItem vcard = new JMenuItem("View VCard", Icons.vcard);
             vcard.addActionListener(new ActionListener()
             {
                 @Override
@@ -853,14 +854,16 @@ private void contactTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
-                    String groups = 
-                            JOptionPane.showInputDialog(XMPPClientUI.this, 
+                    String groups =
+                            JOptionPane.showInputDialog(XMPPClientUI.this,
                             "Insert group names, separated by commas",
                             Utils.getGroupsCSV(entry));
-                    if(groups == null) return;
-                    
+                    if (groups == null)
+                    {
+                        return;
                     // remove user from all groups
-                    for(RosterGroup r:entry.getGroups())
+                    }
+                    for (RosterGroup r : entry.getGroups())
                     {
                         try
                         {
@@ -868,41 +871,73 @@ private void contactTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST
                         }
                         catch (XMPPException ex)
                         {
-                            JOptionPane.showMessageDialog(XMPPClientUI.this, 
+                            JOptionPane.showMessageDialog(XMPPClientUI.this,
                                     "Could not remove user from group" +
-                                    ex.getMessage(), 
-                                    "Error removing user from group", 
+                                    ex.getMessage(),
+                                    "Error removing user from group",
                                     JOptionPane.ERROR_MESSAGE);
                         }
                     }
-                    
-                    String groupsArray[] = groups.split(",");
-                    
-                    RosterGroup rosterGroup;
-                    for(String group:groupsArray)
+
+                    if (groups.equals(""))
                     {
-                        if(connection.getRoster().getGroup(group.trim()) == null)
+                        return;
+                    }
+                    String groupsArray[] = groups.split(",");
+
+                    RosterGroup rosterGroup;
+                    for (String group : groupsArray)
+                    {
+                        if (connection.getRoster().getGroup(group.trim()) == null)
+                        {
                             rosterGroup = connection.getRoster().createGroup(group.trim());
-                        else rosterGroup = connection.getRoster().getGroup(group.trim());
-                        
+                        }
+                        else
+                        {
+                            rosterGroup = connection.getRoster().getGroup(group.trim());
+                        }
                         try
                         {
                             rosterGroup.addEntry(entry);
                         }
                         catch (XMPPException ex)
                         {
-                            JOptionPane.showMessageDialog(XMPPClientUI.this, 
+                            JOptionPane.showMessageDialog(XMPPClientUI.this,
                                     "Could not add user to group" +
-                                    ex.getMessage(), 
-                                    "Error adding user to group", 
+                                    ex.getMessage(),
+                                    "Error adding user to group",
                                     JOptionPane.ERROR_MESSAGE);
                         }
-                        
+
                         updateContacts();
                     }
                 }
             });
             menu.add(groupMenuItem);
+            JMenuItem sendFileMenuItem = new JMenuItem("Send file");
+            sendFileMenuItem.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    new FileTransferChooser(XMPPClientUI.this, true, entry).setVisible(true);
+                }
+            });
+            menu.add(sendFileMenuItem);
+            JMenuItem setNameMenuItem = new JMenuItem("Set name");
+            setNameMenuItem.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    String name = JOptionPane.showInputDialog(XMPPClientUI.this, 
+                            "Enter a name for this user, or leave blank to remove");
+                    if(name==null) return;
+                    entry.setName(name);
+                    updateContacts();
+                }
+            });
+            menu.add(setNameMenuItem);
             menu.show(evt.getComponent(), evt.getX(), evt.getY());
         }
     }
