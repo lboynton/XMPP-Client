@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 
 /**
  *
- * @author Lee
+ * @author Lee Boynton (323326)
  */
 public class Icons
 {
@@ -21,4 +21,5 @@ public class Icons
     public static final ImageIcon success = new javax.swing.ImageIcon(Icons.class.getResource("accept.png"), "Success icon");
     public static final ImageIcon vcard = new javax.swing.ImageIcon(Icons.class.getResource("vcard.png"), "VCard icon");
     public static final ImageIcon userComment = new javax.swing.ImageIcon(Icons.class.getResource("user_comment.png"), "User comment icon");
+    public static final ImageIcon add = new javax.swing.ImageIcon(Icons.class.getResource("add.png"), "Add icon");
 }

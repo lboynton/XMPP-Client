@@ -3,10 +3,17 @@
  *
  * Created on 30 April 2008, 19:02
  */
-
 package xmppclient;
 
-import java.awt.Point;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.geom.RoundRectangle2D;
+import javax.swing.JToolTip;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.packet.Presence;
 
@@ -14,13 +21,13 @@ import org.jivesoftware.smack.packet.Presence;
  *
  * @author Lee Boynton (323326)
  */
-public class ContactListHover extends javax.swing.JDialog 
+public class ContactListHover extends JToolTip
 {
     private RosterEntry rosterEntry;
     private Presence presence;
-    
+
     /** Creates new form ContactListHover */
-    public ContactListHover() 
+    public ContactListHover(String JID)
     {
         initComponents();
     }
@@ -29,13 +36,12 @@ public class ContactListHover extends javax.swing.JDialog
     {
         this.rosterEntry = rosterEntry;
         presence = XMPPClientUI.connection.getRoster().getPresence(rosterEntry.getUser());
-        
+
         nameLabel.setText(Utils.getNickname(rosterEntry));
         statusLabel.setText(Utils.getStatus(presence));
         JIDLabel.setText(rosterEntry.getUser());
         avatarLabel.setIcon(Utils.getAvatar(rosterEntry, 48));
         setVisible(true);
-        setLocation(x, y - (getHeight() / 2));
     }
 
     /** This method is called from within the constructor to
@@ -52,11 +58,7 @@ public class ContactListHover extends javax.swing.JDialog
         JIDLabel = new javax.swing.JLabel();
         avatarLabel = new javax.swing.JLabel();
 
-        setAlwaysOnTop(true);
-        setResizable(false);
-        setUndecorated(true);
-
-        nameLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        nameLabel.setFont(new java.awt.Font("Tahoma", 1, 14));
         nameLabel.setText("Nickname");
 
         statusLabel.setText("Status");
@@ -66,8 +68,8 @@ public class ContactListHover extends javax.swing.JDialog
         avatarLabel.setIcon(Utils.getAvatar(rosterEntry, 50));
         avatarLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -76,7 +78,7 @@ public class ContactListHover extends javax.swing.JDialog
                     .addComponent(nameLabel)
                     .addComponent(statusLabel)
                     .addComponent(JIDLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
                 .addComponent(avatarLabel)
                 .addContainerGap())
         );
@@ -94,8 +96,6 @@ public class ContactListHover extends javax.swing.JDialog
                     .addComponent(avatarLabel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -104,5 +104,4 @@ public class ContactListHover extends javax.swing.JDialog
     private javax.swing.JLabel nameLabel;
     private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables
-
 }

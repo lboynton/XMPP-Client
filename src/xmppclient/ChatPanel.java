@@ -10,12 +10,9 @@ import java.awt.Cursor;
 import java.awt.Point;
 import javax.swing.text.BadLocationException;
 import xmppclient.formatter.FormatterUI;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.text.SimpleAttributeSet;
@@ -26,8 +23,6 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smackx.filetransfer.FileTransferManager;
-import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 import org.jivesoftware.smackx.packet.VCard;
 import xmppclient.emoticons.Emoticon;
 import xmppclient.emoticons.Emoticons;
@@ -137,16 +132,15 @@ public class ChatPanel extends javax.swing.JPanel
             doc.insertString(doc.getLength(), name + ": ", doc.getStyle("nickname"));
             int start = doc.getLength();
             doc.insertString(doc.getLength(), message.getBody(), doc.getStyle("newStyle"));
-            int end = doc.getLength();
             
             SimpleAttributeSet smi;
             
-            for(int i = start; i < end; i++)
+            for(int i = start; i < doc.getLength(); i++)
             {
                 for(Emoticon e: Emoticons.getEmoticons())
                 {
-                    if((i + e.getSequence().length()) > end) continue;
-                    String newString = doc.getText(i, e.getSequence().length()).toUpperCase();
+                    if((i + e.getSequence().length()) > doc.getLength()) continue;
+                    String newString = doc.getText(i, e.getSequence().length());
                 
                     if(newString.equals(e.getSequence()))
                     {
@@ -155,14 +149,7 @@ public class ChatPanel extends javax.swing.JPanel
                         StyleConstants.setIcon(smi, e.getIcon());
                         doc.insertString(i, e.getSequence(), smi);
 
-                        // can't seem to have two icons next to each other
-                        // therefore a space will be added after the icon
-                        doc.insertString(i+e.getSequence().length(), " ", null);
-                        i+=e.getSequence().length() + 1;
-
-                        // increment the end of the document to take into account
-                        // the space that was added
-                        end++;
+                        i+=e.getSequence().length() - 1;
                     }
                 }       
             }

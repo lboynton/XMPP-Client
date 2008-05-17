@@ -5,13 +5,14 @@
 
 package xmppclient.emoticons;
 
+import java.io.Serializable;
 import javax.swing.ImageIcon;
 
 /**
  *
  * @author Lee Boynton (323326)
  */
-public class Emoticon 
+public class Emoticon implements Serializable
 {
     private String name;
     private ImageIcon icon;

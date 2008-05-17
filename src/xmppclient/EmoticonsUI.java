@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -18,6 +19,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import xmppclient.emoticons.Emoticon;
 import xmppclient.emoticons.Emoticons;
+import xmppclient.images.Icons;
 
 /**
  *
@@ -26,6 +28,8 @@ import xmppclient.emoticons.Emoticons;
 public class EmoticonsUI extends javax.swing.JDialog
 {
     private JTextPane textPane;
+    private CustomEmoticonDialog customEmoticonDialog = new CustomEmoticonDialog((JFrame)null, true);
+    
     /** Creates new form EmoticonsUI */
     public EmoticonsUI(JFrame owner, JTextPane textPane, Point location)
     {
@@ -35,6 +39,20 @@ public class EmoticonsUI extends javax.swing.JDialog
         setVisible(true);
         setLocation(location);
         pack();
+    }
+    
+    public void updateEmoticons()
+    {
+        DefaultListModel model = new DefaultListModel();
+        
+        model.addElement(new Emoticon("Add emoticon", Icons.add, ""));
+        
+        for(Emoticon e:Emoticons.getEmoticons())
+        {
+            model.addElement(e);
+        }
+        
+        emoticonsList.setModel(model);
     }
 
     /** This method is called from within the constructor to
@@ -47,10 +65,13 @@ public class EmoticonsUI extends javax.swing.JDialog
     private void initComponents() {
 
         emoticonsScrollPane = new javax.swing.JScrollPane();
-        emoticonsList = new javax.swing.JList(Emoticons.getEmoticons().toArray());
+        emoticonsList = new javax.swing.JList();
 
         setUndecorated(true);
 
+        emoticonsScrollPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        updateEmoticons();
         emoticonsList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         emoticonsList.setCellRenderer(new EmoticonsListRenderer());
         emoticonsList.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
@@ -75,18 +96,18 @@ public class EmoticonsUI extends javax.swing.JDialog
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(emoticonsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
+            .addComponent(emoticonsScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(emoticonsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+            .addComponent(emoticonsScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 private void emoticonsListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emoticonsListFocusLost
-    dispose();
+    if(!customEmoticonDialog.isVisible()) dispose();
 }//GEN-LAST:event_emoticonsListFocusLost
 
 private void emoticonsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_emoticonsListValueChanged
@@ -94,12 +115,20 @@ private void emoticonsListValueChanged(javax.swing.event.ListSelectionEvent evt)
 }//GEN-LAST:event_emoticonsListValueChanged
 
 private void emoticonsListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_emoticonsListMouseClicked
+    
+    Emoticon emoticon = (Emoticon) emoticonsList.getSelectedValue();
+    
+    if(emoticon.getName().equals("Add emoticon"))
+    {
+        customEmoticonDialog.setVisible(true);
+        updateEmoticons();
+        return;
+    }
+    
     try
     {
         StyledDocument doc = textPane.getStyledDocument();
-        doc.insertString(doc.getLength(), ((Emoticon) emoticonsList.getSelectedValue()).getSequence(), null);
-        textPane.requestFocus();
-        dispose();
+        doc.insertString(doc.getLength(), emoticon.getSequence(), null);
     }
     catch (BadLocationException ex)
     {

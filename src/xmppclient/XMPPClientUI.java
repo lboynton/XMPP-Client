@@ -24,7 +24,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
+import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -64,7 +66,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     private final int SORT_BY_STATUS = 0;
     private final int SORT_BY_GROUP = 1;
     private int sortMethod = SORT_BY_STATUS;
-    private ContactListHover contactListHover = new ContactListHover();
 
     /** Creates new form XMPPClientUI */
     public XMPPClientUI(XMPPConnection connection, String accountName)
@@ -308,7 +309,32 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         };//);
         avatarLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        contactTree = new javax.swing.JTree();
+        contactTree = new javax.swing.JTree()
+        {
+            public JToolTip createToolTip()
+            {
+                JToolTip tip = super.createToolTip();
+                String text = tip.getTipText();
+                return new JToolTip();
+            }
+
+            public String getToolTipText(MouseEvent evt)
+            {
+                TreePath path = getPathForLocation(evt.getX(), evt.getY());
+                if(path == null) return null;
+                if(path.getLastPathComponent() instanceof DefaultMutableTreeNode)
+                {
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+                    if(node.getUserObject() instanceof RosterEntry)
+                    {
+                        RosterEntry entry = (RosterEntry) node.getUserObject();
+                        return entry.getUser();
+                    }
+                }
+
+                return null;
+            }
+        };//);
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         signOutMenuItem = new javax.swing.JMenuItem();
@@ -431,6 +457,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
 
         avatarLabel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(160, 160, 160), 1, true));
 
+        ToolTipManager.sharedInstance().registerComponent(contactTree);
         contactTree.setCellRenderer(new ContactTreeRenderer());
         contactTree.setModel(null);
         contactTree.setRootVisible(false);
@@ -443,11 +470,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 contactTreeMouseReleased(evt);
-            }
-        });
-        contactTree.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                contactTreeMouseMoved(evt);
             }
         });
         jScrollPane1.setViewportView(contactTree);
@@ -809,22 +831,6 @@ private void contactTreeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRS
 private void contactTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactTreeMousePressed
     showContactPopup(evt);
 }//GEN-LAST:event_contactTreeMousePressed
-
-private void contactTreeMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactTreeMouseMoved
-
-    if(contactTree.getPathForLocation(evt.getX(), evt.getY()) instanceof TreePath)
-    {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) contactTree.getPathForLocation(evt.getX(), evt.getY()).getLastPathComponent();
-        
-        if(node.getUserObject() instanceof RosterEntry)
-        {
-            RosterEntry entry = (RosterEntry) node.getUserObject();
-            contactListHover.show(entry, getX() + getWidth(), evt.getYOnScreen());
-        }
-        else contactListHover.setVisible(false);
-    }
-    else contactListHover.setVisible(false);
-}//GEN-LAST:event_contactTreeMouseMoved
 
     private void showContactPopup(java.awt.event.MouseEvent evt)
     {

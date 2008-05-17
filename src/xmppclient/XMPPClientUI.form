@@ -340,6 +340,7 @@
           <SubComponents>
             <Component class="javax.swing.JTree" name="contactTree">
               <Properties>
+                <Property name="toolTipText" postCode="ToolTipManager.sharedInstance().registerComponent(contactTree);"/>
                 <Property name="cellRenderer" type="javax.swing.tree.TreeCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new ContactTreeRenderer()" type="code"/>
                 </Property>
@@ -352,8 +353,10 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="contactTreeMouseClicked"/>
                 <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="contactTreeMousePressed"/>
                 <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="contactTreeMouseReleased"/>
-                <EventHandler event="mouseMoved" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="contactTreeMouseMoved"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTree()&#xa;{&#xa;    public JToolTip createToolTip()&#xa;    {&#xa;        JToolTip tip = super.createToolTip();&#xa;        String text = tip.getTipText();&#xa;        return new JToolTip();&#xa;    }&#xa;&#xa;    public String getToolTipText(MouseEvent evt)&#xa;    {&#xa;        TreePath path = getPathForLocation(evt.getX(), evt.getY());&#xa;        if(path == null) return null;&#xa;        if(path.getLastPathComponent() instanceof DefaultMutableTreeNode)&#xa;        {&#xa;            DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();&#xa;            if(node.getUserObject() instanceof RosterEntry)&#xa;            {&#xa;                RosterEntry entry = (RosterEntry) node.getUserObject();&#xa;                return entry.getUser();&#xa;            }&#xa;        }&#xa;&#xa;        return null;&#xa;    }&#xa;};//)"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>

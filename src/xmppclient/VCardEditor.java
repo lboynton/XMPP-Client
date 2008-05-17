@@ -660,7 +660,11 @@ private void itemsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//
 
 private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
 
-    if(!editable) dispose();
+    if(!editable) 
+    {
+        dispose();
+        return;
+    }
     
     vCard.setField("TITLE", titleTextField.getText());
     vCard.setFirstName(firstNameTextField.getText());
