@@ -8,6 +8,8 @@ package xmppclient;
 
 import java.awt.Cursor;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.swing.text.BadLocationException;
 import xmppclient.formatter.FormatterUI;
@@ -47,7 +49,6 @@ public class ChatPanel extends javax.swing.JPanel
         initTextPane();
         if(!XMPPClientUI.connection.getRoster().getPresence(chat.getParticipant()).isAvailable()) sendFileButton.setEnabled(false);
     }
-    
     
     /**
      * Gets the chat instance associated with this chat panel
@@ -134,16 +135,16 @@ public class ChatPanel extends javax.swing.JPanel
             int start = doc.getLength();
             doc.insertString(doc.getLength(), message.getBody(), doc.getStyle("newStyle"));
             
-            List<Emoticon> emoticons;
+            List<Emoticon> emoticons = Emoticons.getEmoticons();
             
-            if(message.getProperty("emoticons") != null) emoticons = (List<Emoticon>) message.getProperty("emoticons");
-            else emoticons = Emoticons.getEmoticons();
+            if(message.getProperty("emoticons") != null &&
+                    message.getProperty("emoticons") instanceof List) emoticons.addAll((Collection<? extends Emoticon>) message.getProperty("emoticons"));
             
             SimpleAttributeSet smi;
             
             for(int i = start; i < doc.getLength(); i++)
             {
-                for(Emoticon e: emoticons)
+                for(Emoticon e: Emoticons.getEmoticons())
                 {
                     if((i + e.getSequence().length()) > doc.getLength()) continue;
                     String newString = doc.getText(i, e.getSequence().length());
@@ -155,7 +156,8 @@ public class ChatPanel extends javax.swing.JPanel
                         StyleConstants.setIcon(smi, e.getIcon());
                         doc.insertString(i, e.getSequence(), smi);
 
-                        i+=e.getSequence().length() - 1;
+                        i+=e.getSequence().length() -1;
+                        break;
                     }
                 }       
             }
@@ -317,7 +319,7 @@ public class ChatPanel extends javax.swing.JPanel
             Message message = new Message();
             message.setBody(sendTextPane.getText().trim());
             message.setProperty("format", format);
-            message.setProperty("emoticons", Emoticons.getEmoticons());
+            message.setProperty("emoticons", getCustomEmoticons());
             chat.sendMessage(message);
             addMessage(Utils.getAvatar(50), "Me", message);
             sendTextPane.setText("");
@@ -326,6 +328,31 @@ public class ChatPanel extends javax.swing.JPanel
         {
             Logger.getLogger(ChatPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private List<Emoticon> getCustomEmoticons()
+    {
+        List<Emoticon> emoticons = new ArrayList<Emoticon>();
+        
+        try
+        {
+            for(int i = 0; i < sendTextPane.getText().length(); i++)
+            {
+                for(Emoticon e: Emoticons.getEmoticons())
+                {
+                    if((i + e.getSequence().length()) > sendTextPane.getText().length()) continue;
+                    String newString = sendTextPane.getText(i, e.getSequence().length());
+
+                    if(newString.equals(e.getSequence()))
+                    {
+                        if(!emoticons.contains(e)) emoticons.add(e);
+                    }
+                }       
+            }
+        }
+        catch(BadLocationException ex) { ex.printStackTrace(); }
+        
+        return emoticons;
     }
     
 private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFileButtonActionPerformed
