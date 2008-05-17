@@ -8,6 +8,7 @@ package xmppclient;
 
 import java.awt.Cursor;
 import java.awt.Point;
+import java.util.List;
 import javax.swing.text.BadLocationException;
 import xmppclient.formatter.FormatterUI;
 import java.util.logging.Level;
@@ -133,11 +134,16 @@ public class ChatPanel extends javax.swing.JPanel
             int start = doc.getLength();
             doc.insertString(doc.getLength(), message.getBody(), doc.getStyle("newStyle"));
             
+            List<Emoticon> emoticons;
+            
+            if(message.getProperty("emoticons") != null) emoticons = (List<Emoticon>) message.getProperty("emoticons");
+            else emoticons = Emoticons.getEmoticons();
+            
             SimpleAttributeSet smi;
             
             for(int i = start; i < doc.getLength(); i++)
             {
-                for(Emoticon e: Emoticons.getEmoticons())
+                for(Emoticon e: emoticons)
                 {
                     if((i + e.getSequence().length()) > doc.getLength()) continue;
                     String newString = doc.getText(i, e.getSequence().length());
@@ -311,6 +317,7 @@ public class ChatPanel extends javax.swing.JPanel
             Message message = new Message();
             message.setBody(sendTextPane.getText().trim());
             message.setProperty("format", format);
+            message.setProperty("emoticons", Emoticons.getEmoticons());
             chat.sendMessage(message);
             addMessage(Utils.getAvatar(50), "Me", message);
             sendTextPane.setText("");
