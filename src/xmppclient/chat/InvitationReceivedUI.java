@@ -3,7 +3,7 @@
  *
  * Created on 12 May 2008, 13:31
  */
-package xmppclient.multiuserchat;
+package xmppclient.chat;
 
 import javax.swing.JOptionPane;
 import org.jivesoftware.smack.XMPPConnection;
@@ -12,7 +12,7 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.muc.InvitationListener;
 import org.jivesoftware.smackx.muc.MultiUserChat;
-import xmppclient.multiuserchat.MUCChatUI;
+import xmppclient.chat.MultiUserChatUI;
 import xmppclient.Utils;
 import xmppclient.XMPPClientUI;
 
@@ -194,7 +194,7 @@ private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     if(acceptRadioButton.isSelected())
     {
         System.out.println(room);
-        MUCChatUI mucui = new MUCChatUI(StringUtils.parseName(room));
+        MultiUserChatUI mucui = new MultiUserChatUI(StringUtils.parseName(room));
         try
         {
             System.out.println("Using nick: " + Utils.getNickname());

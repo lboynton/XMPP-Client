@@ -3,10 +3,10 @@
  *
  * Created on 09 May 2008, 15:22
  */
-package xmppclient.multiuserchat;
+package xmppclient.chat;
 
 import xmppclient.*;
-import xmppclient.multiuserchat.MultiUserChatInviteUI;
+import xmppclient.chat.MultiUserChatInviteUI;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
@@ -31,12 +31,12 @@ import org.jivesoftware.smackx.muc.SubjectUpdatedListener;
  *
  * @author  Lee Boynton (323326)
  */
-public class MUCChatUI extends javax.swing.JFrame implements PacketListener
+public class MultiUserChatUI extends javax.swing.JFrame implements PacketListener
 {
     private MultiUserChat muc;
 
     /** Creates new form MultiUserChatUI */
-    public MUCChatUI(String room)
+    public MultiUserChatUI(String room)
     {
         muc = new MultiUserChat(XMPPClientUI.connection, room + "@conference.192.168.0.8");
         initComponents();
@@ -74,7 +74,7 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
             @Override
             public void invitationDeclined(String invitee, String reason)
             {
-                JOptionPane.showMessageDialog(MUCChatUI.this,
+                JOptionPane.showMessageDialog(MultiUserChatUI.this,
                         invitee + " rejected your invitation.\nReason: " + reason,
                         "Invitation rejected",
                         JOptionPane.INFORMATION_MESSAGE);
@@ -173,7 +173,6 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
 
         horizontalSplitPane.setOneTouchExpandable(true);
 
-        messageTextPane.setBackground(new java.awt.Color(255, 255, 255));
         messageTextPane.setEditable(false);
         messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
         messageScrollPane.setViewportView(messageTextPane);
@@ -210,14 +209,14 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-            .addComponent(sendButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+            .addComponent(sendButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
         );
 
         verticalSplitPane.setRightComponent(jPanel1);
@@ -261,7 +260,7 @@ public class MUCChatUI extends javax.swing.JFrame implements PacketListener
         }
         catch (XMPPException ex)
         {
-            Logger.getLogger(MUCChatUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MultiUserChatUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

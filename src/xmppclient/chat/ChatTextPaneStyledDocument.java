@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package xmppclient;
+package xmppclient.chat;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

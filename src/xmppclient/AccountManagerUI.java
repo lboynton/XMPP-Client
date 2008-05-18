@@ -3,7 +3,6 @@
  *
  * Created on 04 May 2008, 21:19
  */
-
 package xmppclient;
 
 import java.awt.Color;
@@ -13,27 +12,27 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 /**
- *
+ * Displays a window for managing accounts
  * @author  Lee Boynton (323326)
  */
-public class AccountManagerUI extends javax.swing.JFrame 
+public class AccountManagerUI extends javax.swing.JFrame
 {
-
     /** Creates new form AccountManager */
-    public AccountManagerUI() 
+    public AccountManagerUI()
     {
         initComponents();
         initTable();
         initColumnSizes();
     }
-    
-    public void initTable()
+
+    private void initTable()
     {
         Connection[] connections = Utils.getConnections();
-        
-        for(int i = 0; i < connections.length; i++)
+
+        for (int i = 0; i < connections.length; i++)
         {
-            Object[] row = new Object[] {
+            Object[] row = new Object[]
+            {
                 connections[i].getName(),
                 connections[i].getUsername(),
                 connections[i].getResource(),
@@ -41,31 +40,31 @@ public class AccountManagerUI extends javax.swing.JFrame
                 connections[i].getPort(),
                 new Boolean(false)
             };
-            
-            ((DefaultTableModel)accountsTable.getModel()).addRow(row);
+
+            ((DefaultTableModel) accountsTable.getModel()).addRow(row);
         }
-        
+
         // change the background colour of the table
         scrollPane.getViewport().setBackground(Color.white);
     }
-    
-    private void initColumnSizes() 
+
+    private void initColumnSizes()
     {
-        DefaultTableModel model = (DefaultTableModel)accountsTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) accountsTable.getModel();
         TableColumn column = null;
         Component comp = null;
         int headerWidth = 0;
         int cellWidth = 0;
-        
+
         Object[] longValues = new Object[model.getColumnCount()];
-        
-        for(int row = 0; row < model.getRowCount(); row++)
-        {           
-            for(int col = 0; col < model.getColumnCount(); col++)
+
+        for (int row = 0; row < model.getRowCount(); row++)
+        {
+            for (int col = 0; col < model.getColumnCount(); col++)
             {
-                if(model.getValueAt(row, col) instanceof String)
-                {       
-                    if(longValues[col] == null || ((String)model.getValueAt(row, col)).length() > ((String)longValues[col]).length())
+                if (model.getValueAt(row, col) instanceof String)
+                {
+                    if (longValues[col] == null || ((String) model.getValueAt(row, col)).length() > ((String) longValues[col]).length())
                     {
                         longValues[col] = model.getValueAt(row, col);
                     }
@@ -76,21 +75,22 @@ public class AccountManagerUI extends javax.swing.JFrame
                 }
             }
         }
-        
+
         TableCellRenderer headerRenderer = accountsTable.getTableHeader().getDefaultRenderer();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++)
+        {
             column = accountsTable.getColumnModel().getColumn(i);
 
             comp = headerRenderer.getTableCellRendererComponent(
-                                 null, column.getHeaderValue(),
-                                 false, false, 0, 0);
+                    null, column.getHeaderValue(),
+                    false, false, 0, 0);
             headerWidth = comp.getPreferredSize().width;
 
             comp = accountsTable.getDefaultRenderer(model.getColumnClass(i)).
-                             getTableCellRendererComponent(
-                                 accountsTable, longValues[i],
-                                 false, false, 0, i);
+                    getTableCellRendererComponent(
+                    accountsTable, longValues[i],
+                    false, false, 0, i);
             cellWidth = comp.getPreferredSize().width;
 
             column.setPreferredWidth(Math.max(headerWidth, cellWidth));
@@ -111,8 +111,8 @@ public class AccountManagerUI extends javax.swing.JFrame
         accountsTable = new javax.swing.JTable();
         cancelButton = new javax.swing.JButton();
         applyButton = new javax.swing.JButton();
-        jSeparator2 = new javax.swing.JSeparator();
-        jLabel1 = new javax.swing.JLabel();
+        separator = new javax.swing.JSeparator();
+        titleLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Account Manager");
@@ -166,8 +166,8 @@ public class AccountManagerUI extends javax.swing.JFrame
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14));
-        jLabel1.setText("Accounts");
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        titleLabel.setText("Accounts");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -176,24 +176,24 @@ public class AccountManagerUI extends javax.swing.JFrame
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
-                    .addComponent(jLabel1)
+                    .addComponent(scrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
+                    .addComponent(titleLabel)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 411, Short.MAX_VALUE)
                         .addComponent(applyButton))
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
+                    .addComponent(separator, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(titleLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(applyButton)
@@ -210,10 +210,10 @@ private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 
 private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
     DefaultTableModel model = (DefaultTableModel) accountsTable.getModel();
-    
-    for(int row = 0; row < model.getRowCount(); row++)
+
+    for (int row = 0; row < model.getRowCount(); row++)
     {
-        if(((Boolean)model.getValueAt(row, 5)) == true)
+        if (((Boolean) model.getValueAt(row, 5)) == true)
         {
             Utils.deleteConnection((String) model.getValueAt(row, 0));
         }
@@ -224,10 +224,9 @@ private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private javax.swing.JTable accountsTable;
     private javax.swing.JButton applyButton;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JScrollPane scrollPane;
+    private javax.swing.JSeparator separator;
+    private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
-
 }

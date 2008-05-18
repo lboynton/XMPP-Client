@@ -3,7 +3,7 @@
  *
  * Created on 12 May 2008, 12:46
  */
-package xmppclient.multiuserchat;
+package xmppclient.chat;
 
 import xmppclient.*;
 

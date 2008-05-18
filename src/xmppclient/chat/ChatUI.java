@@ -3,8 +3,9 @@
  *
  * Created on 14 April 2008, 23:40
  */
-package xmppclient;
+package xmppclient.chat;
 
+import xmppclient.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

@@ -17,7 +17,6 @@
                   <Image iconType="3" name="/xmppclient/images/tango/log-out-22x22.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Sign out"/>
-                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="signOutMenuItemActionPerformed"/>
@@ -27,6 +26,9 @@
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Ctrl+M"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/xmppclient/images/tango/go-down-22x22.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Minimise"/>
               </Properties>
@@ -97,7 +99,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="createChatRoomMenuItem">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Create chat room"/>
+                <Property name="text" type="java.lang.String" value="Create conference"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createChatRoomMenuItemActionPerformed"/>
@@ -105,17 +107,11 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="joinChatRoomMenuItem">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Join chat room"/>
+                <Property name="text" type="java.lang.String" value="Join conference"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="joinChatRoomMenuItemActionPerformed"/>
               </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="sendFileMenuItem">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Send file..."/>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -186,7 +182,7 @@
                           <Component id="avatarLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="toolBar" alignment="0" pref="198" max="32767" attributes="0"/>
-                      <Component id="jScrollPane1" alignment="1" pref="198" max="32767" attributes="0"/>
+                      <Component id="contactTreeScrollPane" alignment="1" pref="198" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -207,7 +203,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="toolBar" min="-2" pref="25" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="210" max="32767" attributes="0"/>
+                  <Component id="contactTreeScrollPane" pref="210" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -238,10 +234,26 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addContactButtonActionPerformed"/>
               </Events>
             </Component>
+            <Component class="javax.swing.JButton" name="joinConferenceButton">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/xmppclient/images/tango/internet-group-chat.png"/>
+                </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Join conference"/>
+                <Property name="focusable" type="boolean" value="false"/>
+                <Property name="horizontalTextPosition" type="int" value="0"/>
+                <Property name="verticalTextPosition" type="int" value="3"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="joinConferenceButtonMouseEntered"/>
+                <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="joinConferenceButtonMouseExited"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="joinConferenceButtonActionPerformed"/>
+              </Events>
+            </Component>
             <Component class="javax.swing.JButton" name="vCardButton">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/xmppclient/images/vcard_edit.png"/>
+                  <Image iconType="3" name="/xmppclient/images/vcard.png"/>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Edit VCard"/>
                 <Property name="focusable" type="boolean" value="false"/>
@@ -257,7 +269,7 @@
             <Component class="javax.swing.JButton" name="avatarButton">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/xmppclient/images/image.png"/>
+                  <Image iconType="3" name="/xmppclient/images/tango/image-x-generic.png"/>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Change avatar"/>
               </Properties>
@@ -267,10 +279,10 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="avatarButtonActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton1">
+            <Component class="javax.swing.JButton" name="preferencesButton">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/xmppclient/images/cog.png"/>
+                  <Image iconType="3" name="/xmppclient/images/tango/preferences-desktop.png"/>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Edit preferences"/>
                 <Property name="focusable" type="boolean" value="false"/>
@@ -278,8 +290,8 @@
                 <Property name="verticalTextPosition" type="int" value="3"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton1MouseEntered"/>
-                <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton1MouseExited"/>
+                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="preferencesButtonMouseEntered"/>
+                <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="preferencesButtonMouseExited"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="hoverTextLabel">
@@ -298,16 +310,31 @@
         </Container>
         <Component class="javax.swing.JTextField" name="nicknameTextField">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="14" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="Utils.getNickname()" type="code"/>
+            </Property>
             <Property name="toolTipText" type="java.lang.String" value="Press enter to set the nickname"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="null"/>
+            </Property>
+            <Property name="opaque" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nicknameTextFieldActionPerformed"/>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="nicknameTextFieldFocusGained"/>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="nicknameTextFieldFocusLost"/>
           </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="statusComboBox">
           <Properties>
             <Property name="maximumRowCount" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="12" type="code"/>
+            </Property>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="null"/>
             </Property>
             <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new xmppclient.StatusComboBoxRenderer()" type="code"/>
@@ -330,8 +357,11 @@
               </Border>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="setAvatar();"/>
+          </AuxValues>
         </Component>
-        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+        <Container class="javax.swing.JScrollPane" name="contactTreeScrollPane">
           <AuxValues>
             <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
           </AuxValues>

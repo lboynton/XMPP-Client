@@ -21,12 +21,12 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel11" linkSize="5" min="-2" pref="71" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="companyTextField" linkSize="6" min="-2" pref="112" max="-2" attributes="0"/>
+                      <Component id="companyTextField" linkSize="6" min="-2" pref="113" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel13" linkSize="5" min="-2" pref="71" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="streetWorkTextField" linkSize="6" min="-2" max="-2" attributes="0"/>
+                      <Component id="streetWorkTextField" linkSize="6" min="-2" pref="112" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel14" linkSize="5" min="-2" pref="71" max="-2" attributes="0"/>
@@ -41,18 +41,18 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="postCodeWorkTextField" alignment="1" pref="112" max="32767" attributes="1"/>
-                          <Component id="countyWorkTextField" linkSize="6" alignment="1" pref="112" max="32767" attributes="1"/>
-                          <Component id="countryWorkTextField" alignment="1" pref="112" max="32767" attributes="1"/>
+                          <Component id="postCodeWorkTextField" alignment="1" pref="113" max="32767" attributes="1"/>
+                          <Component id="countyWorkTextField" linkSize="6" alignment="1" pref="113" max="32767" attributes="1"/>
+                          <Component id="countryWorkTextField" alignment="1" pref="113" max="32767" attributes="1"/>
                       </Group>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel16" linkSize="5" min="-2" pref="71" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="departmentTextField" min="-2" pref="112" max="-2" attributes="1"/>
+                      <Component id="departmentTextField" linkSize="11" min="-2" pref="113" max="-2" attributes="1"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -66,7 +66,7 @@
                           <Component id="telephoneWorkTextField" linkSize="11" alignment="0" min="-2" pref="112" max="-2" attributes="0"/>
                           <Component id="faxWorkTextField" linkSize="11" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="pagerWorkTextField" max="32767" attributes="1"/>
+                              <Component id="pagerWorkTextField" linkSize="11" max="32767" attributes="1"/>
                               <Component id="mobileWorkTextField" linkSize="11" alignment="0" min="-2" max="-2" attributes="1"/>
                           </Group>
                       </Group>
@@ -74,10 +74,10 @@
                   <Group type="102" alignment="0" attributes="1">
                       <Component id="jLabel19" linkSize="5" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="emailWorkTextField" max="32767" attributes="1"/>
+                      <Component id="emailWorkTextField" linkSize="11" max="32767" attributes="1"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -93,7 +93,7 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="streetWorkTextField" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -111,12 +111,12 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel26" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel29" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="postCodeWorkTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -151,7 +151,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="14" max="32767" attributes="0"/>
+              <EmptySpace pref="21" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

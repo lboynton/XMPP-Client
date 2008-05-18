@@ -33,7 +33,7 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="secondNameTextField" linkSize="2" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="secondNameTextField" linkSize="2" alignment="0" pref="113" max="32767" attributes="1"/>
                                   <Component id="firstNameTextField" linkSize="2" alignment="0" max="32767" attributes="1"/>
                                   <Component id="middleNameTextField" linkSize="2" alignment="0" min="-2" max="-2" attributes="1"/>
                               </Group>
@@ -45,9 +45,9 @@
                               <Component id="jLabel3" linkSize="1" pref="71" max="32767" attributes="1"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="nicknameTextField" linkSize="2" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="nicknameTextField" linkSize="2" alignment="0" pref="112" max="32767" attributes="1"/>
                                   <Component id="websiteTextField" linkSize="2" alignment="0" min="-2" pref="112" max="-2" attributes="0"/>
-                                  <Component id="jabberIDTextField" linkSize="2" alignment="0" min="-2" pref="112" max="-2" attributes="0"/>
+                                  <Component id="jabberIDTextField" linkSize="2" alignment="0" min="-2" pref="113" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="jLabel27" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -103,7 +103,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="7" max="32767" attributes="0"/>
+              <EmptySpace pref="14" max="32767" attributes="0"/>
               <Component id="avatarLabel" min="-2" pref="48" max="-2" attributes="1"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>

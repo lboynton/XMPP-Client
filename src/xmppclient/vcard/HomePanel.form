@@ -45,7 +45,7 @@
                   <Group type="102" attributes="0">
                       <Component id="jLabel8" linkSize="3" min="-2" pref="71" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="countryHomeTextField" min="-2" pref="112" max="-2" attributes="1"/>
+                      <Component id="countryHomeTextField" min="-2" pref="113" max="-2" attributes="1"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -53,7 +53,7 @@
                   <Group type="102" attributes="0">
                       <Component id="jLabel5" linkSize="8" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="emailHomeTextField" min="-2" pref="112" max="-2" attributes="1"/>
+                      <Component id="emailHomeTextField" linkSize="9" min="-2" pref="112" max="-2" attributes="1"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel22" linkSize="8" min="-2" max="-2" attributes="0"/>
@@ -72,12 +72,12 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="pagerHomeTextField" max="32767" attributes="1"/>
+                          <Component id="pagerHomeTextField" linkSize="9" pref="113" max="32767" attributes="1"/>
                           <Component id="mobileHomeTextField" linkSize="9" alignment="0" min="-2" pref="103" max="-2" attributes="1"/>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="12" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -149,7 +149,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="40" max="32767" attributes="0"/>
+              <EmptySpace pref="47" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
