@@ -49,6 +49,7 @@ import org.jivesoftware.smackx.packet.VCard;
 import xmppclient.images.Icons;
 import xmppclient.images.tango.TangoIcons;
 import xmppclient.multiuserchat.InvitationReceivedUI;
+import xmppclient.vcard.VCardEditor;
 
 /**
  *

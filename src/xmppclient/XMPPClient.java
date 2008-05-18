@@ -162,6 +162,7 @@ public class XMPPClient extends javax.swing.JFrame
             }
         });
 
+        passwordTextField.setText("password");
         passwordTextField.setToolTipText("Enter your password for the XMPP connection");
         passwordTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -339,6 +340,7 @@ private void storedConnectionComboBoxActionPerformed(java.awt.event.ActionEvent 
     hostTextField.setText(connection.getHost());
     portTextField.setText(connection.getPort());
     nameTextField.setText(connection.getName());
+    validateInputs();
 }//GEN-LAST:event_storedConnectionComboBoxActionPerformed
 
 private void usernameTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameTextFieldKeyReleased

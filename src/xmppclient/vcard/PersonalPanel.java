@@ -5,6 +5,7 @@
  */
 package xmppclient.vcard;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.jivesoftware.smackx.packet.VCard;
 
@@ -19,6 +20,20 @@ public class PersonalPanel extends javax.swing.JPanel
     public PersonalPanel(VCard vCard)
     {
         this.vCard = vCard;
+        initComponents();
+        setAvatar();
+    }
+    
+    private void setAvatar()
+    {
+        if(vCard.getAvatar() != null)
+        {
+            avatarLabel.setIcon(xmppclient.Utils.resizeImage(new ImageIcon(vCard.getAvatar()), 48));
+        }
+        else
+        {
+            avatarLabel.setVisible(false);
+        }
     }
     
     /** This method is called from within the constructor to
@@ -80,7 +95,6 @@ public class PersonalPanel extends javax.swing.JPanel
 
         jabberIDTextField.setText(vCard.getJabberId());
 
-        avatarLabel.setIcon(new ImageIcon(vCard.getAvatar()));
         avatarLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -93,7 +107,7 @@ public class PersonalPanel extends javax.swing.JPanel
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(titleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
@@ -109,12 +123,12 @@ public class PersonalPanel extends javax.swing.JPanel
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(nicknameTextField)
                                     .addComponent(websiteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jabberIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jabberIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel27)
                             .addComponent(jLabel20)))
                     .addComponent(avatarLabel, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -128,6 +142,7 @@ public class PersonalPanel extends javax.swing.JPanel
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -157,14 +172,15 @@ public class PersonalPanel extends javax.swing.JPanel
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel27)
                             .addComponent(jabberIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(avatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addComponent(avatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel avatarLabel;
-    private javax.swing.JTextField firstNameTextField;
+    public javax.swing.JTextField firstNameTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -172,11 +188,11 @@ public class PersonalPanel extends javax.swing.JPanel
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField jabberIDTextField;
-    private javax.swing.JTextField middleNameTextField;
-    private javax.swing.JTextField nicknameTextField;
-    private javax.swing.JTextField secondNameTextField;
-    private javax.swing.JTextField titleTextField;
-    private javax.swing.JTextField websiteTextField;
+    public javax.swing.JTextField jabberIDTextField;
+    public javax.swing.JTextField middleNameTextField;
+    public javax.swing.JTextField nicknameTextField;
+    public javax.swing.JTextField secondNameTextField;
+    public javax.swing.JTextField titleTextField;
+    public javax.swing.JTextField websiteTextField;
     // End of variables declaration//GEN-END:variables
 }

@@ -279,6 +279,7 @@
         </Component>
         <Component class="javax.swing.JPasswordField" name="passwordTextField">
           <Properties>
+            <Property name="text" type="java.lang.String" value="password"/>
             <Property name="toolTipText" type="java.lang.String" value="Enter your password for the XMPP connection"/>
           </Properties>
           <Events>

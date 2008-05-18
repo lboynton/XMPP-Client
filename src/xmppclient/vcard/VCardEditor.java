@@ -8,7 +8,6 @@ package xmppclient.vcard;
 import xmppclient.*;
 import java.awt.Component;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,24 +28,29 @@ public class VCardEditor extends javax.swing.JFrame
     private VCard vCard;
     private boolean editable;
     private PersonalPanel personal;
+    private HomePanel home;
+    private WorkPanel work;
 
+    /**
+     * Creates a new VCard viewer/editor
+     * @param vCard The VCard to view/edit
+     * @param editable If the VCard infomation should be editable, i.e if it's the local user
+     */
     public VCardEditor(VCard vCard, boolean editable)
     {
         this.vCard = vCard;
         this.editable = editable;
+        personal = new PersonalPanel(vCard);
+        home = new HomePanel(vCard);
+        work = new WorkPanel(vCard);
         initComponents();
         itemsList.setSelectedIndex(0);
-        workPanel.setVisible(false);
-        homePanel.setVisible(false);
-        personal = new PersonalPanel(vCard);
-        
         setEditable(editable);
-        pack();
     }
 
     private void setEditable(boolean editable)
     {
-        for (Component c : homePanel.getComponents())
+        for (Component c : home.getComponents())
         {
             if (c instanceof JTextField)
             {
@@ -54,7 +58,7 @@ public class VCardEditor extends javax.swing.JFrame
                 textfield.setEditable(editable);
             }
         }
-        for (Component c : workPanel.getComponents())
+        for (Component c : work.getComponents())
         {
             if (c instanceof JTextField)
             {
@@ -62,7 +66,7 @@ public class VCardEditor extends javax.swing.JFrame
                 textfield.setEditable(editable);
             }
         }
-        for (Component c : personalPanel.getComponents())
+        for (Component c : personal.getComponents())
         {
             if (c instanceof JTextField)
             {
@@ -85,10 +89,11 @@ public class VCardEditor extends javax.swing.JFrame
 
     private void showPanel(JPanel panel)
     {
-        personalPanel.setVisible(false);
-        workPanel.setVisible(false);
-        homePanel.setVisible(false);
+        home.setVisible(false);
+        work.setVisible(false);
+        personal.setVisible(false);
         panel.setVisible(true);
+        centrePanel.revalidate();
     }
 
     /** This method is called from within the constructor to
@@ -100,518 +105,66 @@ public class VCardEditor extends javax.swing.JFrame
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        personalPanel = new javax.swing.JPanel();
-        avatarLabel = new javax.swing.JLabel();
-        if(vCard.getAvatar() != null)
-        {
-            avatarLabel.setIcon(new ImageIcon(vCard.getAvatar()));
-            avatarLabel.setVisible(true);
-        }
-        else avatarLabel.setVisible(false);
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        firstNameTextField = new javax.swing.JTextField();
-        middleNameTextField = new javax.swing.JTextField();
-        secondNameTextField = new javax.swing.JTextField();
-        nicknameTextField = new javax.swing.JTextField();
-        titleTextField = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
-        websiteTextField = new javax.swing.JTextField();
-        jLabel27 = new javax.swing.JLabel();
-        jabberIDTextField = new javax.swing.JTextField();
-        workPanel = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        companyTextField = new javax.swing.JTextField();
-        streetWorkTextField = new javax.swing.JTextField();
-        cityWorkTextField = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
-        departmentTextField = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
-        countyWorkTextField = new javax.swing.JTextField();
-        jLabel19 = new javax.swing.JLabel();
-        emailWorkTextField = new javax.swing.JTextField();
-        jLabel24 = new javax.swing.JLabel();
-        jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
-        telephoneWorkTextField = new javax.swing.JTextField();
-        faxWorkTextField = new javax.swing.JTextField();
-        mobileWorkTextField = new javax.swing.JTextField();
-        jLabel18 = new javax.swing.JLabel();
-        postCodeWorkTextField = new javax.swing.JTextField();
-        jLabel29 = new javax.swing.JLabel();
-        pagerWorkTextField = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
-        countryWorkTextField = new javax.swing.JTextField();
-        homePanel = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        streetHomeTextField = new javax.swing.JTextField();
-        cityHomeTextField = new javax.swing.JTextField();
-        countryHomeTextField = new javax.swing.JTextField();
-        jLabel17 = new javax.swing.JLabel();
-        countyHomeTextField = new javax.swing.JTextField();
-        postCodeHomeTextField = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        emailHomeTextField = new javax.swing.JTextField();
-        jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        telephoneHomeTextField = new javax.swing.JTextField();
-        faxHomeTextField = new javax.swing.JTextField();
-        mobileHomeTextField = new javax.swing.JTextField();
-        jLabel28 = new javax.swing.JLabel();
-        pagerHomeTextField = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        itemsList = new javax.swing.JList();
+        bottomPanel = new javax.swing.JPanel();
         saveButton = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
-        jButton1 = new javax.swing.JButton();
+        separator = new javax.swing.JSeparator();
+        cancelButton = new javax.swing.JButton();
+        leftPanel = new javax.swing.JPanel();
+        itemsScrollPane = new javax.swing.JScrollPane();
+        itemsList = new javax.swing.JList();
+        centrePanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("VCard Information");
         setLocationByPlatform(true);
         setResizable(false);
 
-        avatarLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        saveButton.setText("Save");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
 
-        jLabel1.setText("First name");
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setText("Last name");
-
-        jLabel3.setText("Nickname");
-
-        jLabel4.setText("Middle name");
-
-        firstNameTextField.setText(vCard.getFirstName());
-
-        middleNameTextField.setText(vCard.getMiddleName());
-
-        secondNameTextField.setText(vCard.getLastName());
-
-        nicknameTextField.setText(vCard.getNickName());
-
-        titleTextField.setText(vCard.getField("TITLE"));
-
-        jLabel9.setText("Title");
-
-        jLabel20.setText("Website");
-
-        websiteTextField.setText(vCard.getField("URL"));
-
-        jLabel27.setText("Jabber ID");
-
-        jabberIDTextField.setText(vCard.getJabberId());
-
-        javax.swing.GroupLayout personalPanelLayout = new javax.swing.GroupLayout(personalPanel);
-        personalPanel.setLayout(personalPanelLayout);
-        personalPanelLayout.setHorizontalGroup(
-            personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(personalPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout bottomPanelLayout = new javax.swing.GroupLayout(bottomPanel);
+        bottomPanel.setLayout(bottomPanelLayout);
+        bottomPanelLayout.setHorizontalGroup(
+            bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(bottomPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(personalPanelLayout.createSequentialGroup()
-                        .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(personalPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(titleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(personalPanelLayout.createSequentialGroup()
-                                .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(secondNameTextField)
-                                    .addComponent(firstNameTextField)
-                                    .addComponent(middleNameTextField))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(personalPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
-                                    .addComponent(websiteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jabberIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel27)
-                            .addComponent(jLabel20)))
-                    .addComponent(avatarLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bottomPanelLayout.createSequentialGroup()
+                        .addComponent(cancelButton)
+                        .addGap(333, 333, 333)
+                        .addComponent(saveButton, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE))
+                    .addComponent(separator, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        bottomPanelLayout.setVerticalGroup(
+            bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(bottomPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(saveButton)
+                    .addComponent(cancelButton))
                 .addContainerGap())
         );
 
-        personalPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel4, jLabel9});
+        getContentPane().add(bottomPanel, java.awt.BorderLayout.PAGE_END);
 
-        personalPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {firstNameTextField, jabberIDTextField, middleNameTextField, nicknameTextField, secondNameTextField, websiteTextField});
-
-        personalPanelLayout.setVerticalGroup(
-            personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(personalPanelLayout.createSequentialGroup()
-                .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(personalPanelLayout.createSequentialGroup()
-                        .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(titleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(firstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(middleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(secondNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)))
-                    .addGroup(personalPanelLayout.createSequentialGroup()
-                        .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel20)
-                            .addComponent(websiteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(personalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel27)
-                            .addComponent(jabberIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                .addComponent(avatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        jLabel11.setText("Company");
-
-        jLabel13.setText("Street");
-
-        jLabel14.setText("Town/city");
-
-        companyTextField.setText(vCard.getOrganization());
-
-        streetWorkTextField.setText(vCard.getAddressFieldWork("STREET"));
-
-        cityWorkTextField.setText(vCard.getAddressFieldWork("TOWN"));
-
-        jLabel15.setText("County");
-
-        departmentTextField.setText(vCard.getOrganizationUnit());
-
-        jLabel16.setText("Department");
-
-        countyWorkTextField.setText(vCard.getAddressFieldWork("REGION"));
-
-        jLabel19.setText("Email");
-
-        emailWorkTextField.setText(vCard.getEmailWork());
-
-        jLabel24.setText("Telephone");
-
-        jLabel25.setText("Fax");
-
-        jLabel26.setText("Mobile");
-
-        telephoneWorkTextField.setText(vCard.getPhoneWork("VOICE"));
-
-        faxWorkTextField.setText(vCard.getPhoneWork("FAX"));
-
-        mobileWorkTextField.setText(vCard.getPhoneWork("CELL"));
-
-        jLabel18.setText("Post Code");
-
-        postCodeWorkTextField.setText(vCard.getAddressFieldWork("PCODE"));
-
-        jLabel29.setText("Pager");
-
-        pagerWorkTextField.setText(vCard.getPhoneWork("PAGER"));
-
-        jLabel12.setText("Country");
-
-        countryWorkTextField.setText(vCard.getAddressFieldWork("CTRY"));
-
-        javax.swing.GroupLayout workPanelLayout = new javax.swing.GroupLayout(workPanel);
-        workPanel.setLayout(workPanelLayout);
-        workPanelLayout.setHorizontalGroup(
-            workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(workPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(workPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(companyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(workPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(streetWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(workPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cityWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(workPanelLayout.createSequentialGroup()
-                        .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel18)
-                            .addComponent(jLabel12))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(countryWorkTextField)
-                            .addComponent(postCodeWorkTextField)
-                            .addComponent(countyWorkTextField))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(workPanelLayout.createSequentialGroup()
-                            .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(telephoneWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(workPanelLayout.createSequentialGroup()
-                            .addComponent(jLabel25)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(faxWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(workPanelLayout.createSequentialGroup()
-                            .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel26)
-                                .addComponent(jLabel29))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(pagerWorkTextField)
-                                .addComponent(mobileWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, workPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel19)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(emailWorkTextField))
-                    .addGroup(workPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(departmentTextField)))
-                .addContainerGap())
-        );
-
-        workPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel11, jLabel13, jLabel14, jLabel15, jLabel16, jLabel19});
-
-        workPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cityWorkTextField, companyTextField, countyWorkTextField, departmentTextField, streetWorkTextField});
-
-        workPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel24, jLabel25, jLabel26, jLabel29});
-
-        workPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {faxWorkTextField, mobileWorkTextField, telephoneWorkTextField});
-
-        workPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel12, jLabel18});
-
-        workPanelLayout.setVerticalGroup(
-            workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(workPanelLayout.createSequentialGroup()
-                .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(workPanelLayout.createSequentialGroup()
-                        .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(companyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel16)
-                            .addComponent(departmentTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13)
-                            .addComponent(streetWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel14)
-                            .addComponent(cityWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel15)
-                            .addComponent(countyWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel18)
-                            .addComponent(postCodeWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel12)
-                            .addComponent(countryWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(workPanelLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(workPanelLayout.createSequentialGroup()
-                                .addGap(104, 104, 104)
-                                .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel29)
-                                    .addComponent(pagerWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(workPanelLayout.createSequentialGroup()
-                                .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(emailWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel19))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(telephoneWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel24))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel25)
-                                    .addComponent(faxWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(workPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel26)
-                                    .addComponent(mobileWorkTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(33, Short.MAX_VALUE))
-        );
-
-        jLabel6.setText("Street");
-
-        jLabel7.setText("Town/city");
-
-        jLabel8.setText("Country");
-
-        jLabel10.setText("Post code");
-
-        streetHomeTextField.setText(vCard.getAddressFieldHome("STREET"));
-
-        cityHomeTextField.setText(vCard.getAddressFieldHome("TOWN"));
-
-        countryHomeTextField.setText(vCard.getAddressFieldHome("CTRY"));
-
-        jLabel17.setText("County");
-
-        countyHomeTextField.setText(vCard.getAddressFieldHome("REGION"));
-
-        postCodeHomeTextField.setText(vCard.getAddressFieldHome("PCODE"));
-
-        jLabel5.setText("Email");
-
-        emailHomeTextField.setText(vCard.getEmailHome());
-
-        jLabel21.setText("Telephone");
-
-        jLabel22.setText("Fax");
-
-        jLabel23.setText("Mobile");
-
-        telephoneHomeTextField.setText(vCard.getPhoneHome("VOICE"));
-
-        faxHomeTextField.setText(vCard.getPhoneHome("FAX"));
-
-        mobileHomeTextField.setText(vCard.getPhoneHome("CELL"));
-
-        jLabel28.setText("Pager");
-
-        pagerHomeTextField.setText(vCard.getPhoneHome("PAGER"));
-
-        javax.swing.GroupLayout homePanelLayout = new javax.swing.GroupLayout(homePanel);
-        homePanel.setLayout(homePanelLayout);
-        homePanelLayout.setHorizontalGroup(
-            homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(homePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(homePanelLayout.createSequentialGroup()
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(streetHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(homePanelLayout.createSequentialGroup()
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cityHomeTextField)))
-                        .addGroup(homePanelLayout.createSequentialGroup()
-                            .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(countyHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(homePanelLayout.createSequentialGroup()
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(postCodeHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(homePanelLayout.createSequentialGroup()
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(countryHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(homePanelLayout.createSequentialGroup()
-                        .addComponent(jLabel22)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(faxHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(homePanelLayout.createSequentialGroup()
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(emailHomeTextField)
-                            .addComponent(telephoneHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(homePanelLayout.createSequentialGroup()
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel23)
-                            .addComponent(jLabel28))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(pagerHomeTextField)
-                            .addComponent(mobileHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        homePanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel10, jLabel6, jLabel7, jLabel8});
-
-        homePanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cityHomeTextField, countryHomeTextField, countyHomeTextField, postCodeHomeTextField, streetHomeTextField});
-
-        homePanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel21, jLabel22, jLabel23, jLabel28, jLabel5});
-
-        homePanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {faxHomeTextField, mobileHomeTextField, telephoneHomeTextField});
-
-        homePanelLayout.setVerticalGroup(
-            homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(homePanelLayout.createSequentialGroup()
-                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(homePanelLayout.createSequentialGroup()
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(streetHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(cityHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel17)
-                            .addComponent(countyHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(33, 33, 33)
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel28)
-                            .addComponent(jLabel8)
-                            .addComponent(countryHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(homePanelLayout.createSequentialGroup()
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(emailHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel21)
-                            .addComponent(telephoneHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel22)
-                            .addComponent(faxHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel23)
-                            .addComponent(mobileHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10)
-                            .addComponent(postCodeHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pagerHomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(58, Short.MAX_VALUE))
-        );
-
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(75, 180));
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(75, 180));
+        itemsScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        itemsScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        itemsScrollPane.setMaximumSize(new java.awt.Dimension(75, 180));
+        itemsScrollPane.setPreferredSize(new java.awt.Dimension(75, 180));
 
         itemsList.setModel(getModel());
         itemsList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -626,121 +179,91 @@ public class VCardEditor extends javax.swing.JFrame
                 itemsListValueChanged(evt);
             }
         });
-        jScrollPane1.setViewportView(itemsList);
+        itemsScrollPane.setViewportView(itemsList);
 
-        saveButton.setText("Save");
-        saveButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveButtonActionPerformed(evt);
-            }
-        });
-
-        jButton1.setText("Cancel");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(333, 333, 333)
-                        .addComponent(saveButton, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 0, 0)
-                            .addComponent(personalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 0, 0)
-                .addComponent(homePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(workPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+        javax.swing.GroupLayout leftPanelLayout = new javax.swing.GroupLayout(leftPanel);
+        leftPanel.setLayout(leftPanelLayout);
+        leftPanelLayout.setHorizontalGroup(
+            leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+            .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(leftPanelLayout.createSequentialGroup()
+                    .addGap(12, 12, 12)
+                    .addComponent(itemsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)))
+        );
+        leftPanelLayout.setVerticalGroup(
+            leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 193, Short.MAX_VALUE)
+            .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(leftPanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(itemsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jScrollPane1, saveButton});
+        getContentPane().add(leftPanel, java.awt.BorderLayout.LINE_START);
 
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(workPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(personalPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                    .addComponent(homePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(8, 8, 8)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(saveButton)
-                    .addComponent(jButton1))
-                .addContainerGap())
-        );
+        showPanel(personal);
+        centrePanel.add(personal);
+        centrePanel.add(work);
+        centrePanel.add(home);
+        getContentPane().add(centrePanel, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 private void itemsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_itemsListValueChanged
     JLabel lbl = (JLabel) itemsList.getSelectedValue();
-
+    
     if (lbl.getText().equals("Personal"))
     {
-        showPanel(personalPanel);
+        showPanel(personal);
     }
     if (lbl.getText().equals("Work"))
     {
-        showPanel(workPanel);
+        showPanel(work);
     }
     if (lbl.getText().equals("Home"))
     {
-        showPanel(homePanel);
+        showPanel(home);
     }
 }//GEN-LAST:event_itemsListValueChanged
 
 private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
 
     //personal
-    vCard.setField("TITLE", titleTextField.getText());
-    vCard.setFirstName(firstNameTextField.getText());
-    vCard.setLastName(secondNameTextField.getText());
-    vCard.setMiddleName(middleNameTextField.getText());
-    vCard.setNickName(nicknameTextField.getText());
-    vCard.setField("URL", websiteTextField.getText());
+    vCard.setField("TITLE", personal.titleTextField.getText());
+    vCard.setFirstName(personal.firstNameTextField.getText());
+    vCard.setLastName(personal.secondNameTextField.getText());
+    vCard.setMiddleName(personal.middleNameTextField.getText());
+    vCard.setNickName(personal.nicknameTextField.getText());
+    vCard.setField("URL", personal.websiteTextField.getText());
+    vCard.setJabberId(personal.jabberIDTextField.getText());
     
     //home
-    vCard.setAddressFieldHome("STREET", streetHomeTextField.getText());
-    vCard.setAddressFieldHome("TOWN", cityHomeTextField.getText());
-    vCard.setAddressFieldHome("REGION", countyHomeTextField.getText());
-    vCard.setAddressFieldHome("CTRY", countryHomeTextField.getText());
-    vCard.setAddressFieldHome("PCODE", postCodeHomeTextField.getText());
-    vCard.setEmailHome(emailHomeTextField.getText());
-    vCard.setPhoneHome("VOICE", telephoneHomeTextField.getText());
-    vCard.setPhoneHome("FAX", faxHomeTextField.getText());
-    vCard.setPhoneHome("CELL", mobileHomeTextField.getText());
-    vCard.setPhoneHome("PAGER", pagerHomeTextField.getText());
+    vCard.setAddressFieldHome("STREET", home.streetHomeTextField.getText());
+    vCard.setAddressFieldHome("TOWN", home.cityHomeTextField.getText());
+    vCard.setAddressFieldHome("REGION", home.countyHomeTextField.getText());
+    vCard.setAddressFieldHome("CTRY", home.countryHomeTextField.getText());
+    vCard.setAddressFieldHome("PCODE", home.postCodeHomeTextField.getText());
+    vCard.setEmailHome(home.emailHomeTextField.getText());
+    vCard.setPhoneHome("VOICE", home.telephoneHomeTextField.getText());
+    vCard.setPhoneHome("FAX", home.faxHomeTextField.getText());
+    vCard.setPhoneHome("CELL", home.mobileHomeTextField.getText());
+    vCard.setPhoneHome("PAGER", home.pagerHomeTextField.getText());
     
     //work
-    vCard.setOrganization(companyTextField.getText());
-    vCard.setOrganizationUnit(departmentTextField.getText());
-    vCard.setAddressFieldWork("STREET", streetWorkTextField.getText());
-    vCard.setAddressFieldWork("TOWN", cityWorkTextField.getText());
-    vCard.setAddressFieldWork("REGION", countyWorkTextField.getText());
-    vCard.setAddressFieldWork("CTRY", countryWorkTextField.getText());
-    vCard.setAddressFieldWork("PCODE", postCodeWorkTextField.getText());
-    vCard.setEmailWork(emailWorkTextField.getText());
-    vCard.setPhoneWork("VOICE", telephoneWorkTextField.getText());
-    vCard.setPhoneWork("FAX", faxWorkTextField.getText());
-    vCard.setPhoneWork("CELL", mobileWorkTextField.getText());
-    vCard.setPhoneWork("PAGER", pagerWorkTextField.getText());
+    vCard.setOrganization(work.companyTextField.getText());
+    vCard.setOrganizationUnit(work.departmentTextField.getText());
+    vCard.setAddressFieldWork("STREET", work.streetWorkTextField.getText());
+    vCard.setAddressFieldWork("TOWN", work.cityWorkTextField.getText());
+    vCard.setAddressFieldWork("REGION", work.countyWorkTextField.getText());
+    vCard.setAddressFieldWork("CTRY", work.countryWorkTextField.getText());
+    vCard.setAddressFieldWork("PCODE", work.postCodeWorkTextField.getText());
+    vCard.setEmailWork(work.emailWorkTextField.getText());
+    vCard.setPhoneWork("VOICE", work.telephoneWorkTextField.getText());
+    vCard.setPhoneWork("FAX", work.faxWorkTextField.getText());
+    vCard.setPhoneWork("CELL", work.mobileWorkTextField.getText());
+    vCard.setPhoneWork("PAGER", work.pagerWorkTextField.getText());
 
     try
     {
@@ -757,76 +280,17 @@ private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     dispose();
 }//GEN-LAST:event_saveButtonActionPerformed
 
-private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
     dispose();
-}//GEN-LAST:event_jButton1ActionPerformed
+}//GEN-LAST:event_cancelButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel avatarLabel;
-    private javax.swing.JTextField cityHomeTextField;
-    private javax.swing.JTextField cityWorkTextField;
-    private javax.swing.JTextField companyTextField;
-    private javax.swing.JTextField countryHomeTextField;
-    private javax.swing.JTextField countryWorkTextField;
-    private javax.swing.JTextField countyHomeTextField;
-    private javax.swing.JTextField countyWorkTextField;
-    private javax.swing.JTextField departmentTextField;
-    private javax.swing.JTextField emailHomeTextField;
-    private javax.swing.JTextField emailWorkTextField;
-    private javax.swing.JTextField faxHomeTextField;
-    private javax.swing.JTextField faxWorkTextField;
-    private javax.swing.JTextField firstNameTextField;
-    private javax.swing.JPanel homePanel;
+    private javax.swing.JPanel bottomPanel;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JPanel centrePanel;
     private javax.swing.JList itemsList;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jabberIDTextField;
-    private javax.swing.JTextField middleNameTextField;
-    private javax.swing.JTextField mobileHomeTextField;
-    private javax.swing.JTextField mobileWorkTextField;
-    private javax.swing.JTextField nicknameTextField;
-    private javax.swing.JTextField pagerHomeTextField;
-    private javax.swing.JTextField pagerWorkTextField;
-    private javax.swing.JPanel personalPanel;
-    private javax.swing.JTextField postCodeHomeTextField;
-    private javax.swing.JTextField postCodeWorkTextField;
+    private javax.swing.JScrollPane itemsScrollPane;
+    private javax.swing.JPanel leftPanel;
     private javax.swing.JButton saveButton;
-    private javax.swing.JTextField secondNameTextField;
-    private javax.swing.JTextField streetHomeTextField;
-    private javax.swing.JTextField streetWorkTextField;
-    private javax.swing.JTextField telephoneHomeTextField;
-    private javax.swing.JTextField telephoneWorkTextField;
-    private javax.swing.JTextField titleTextField;
-    private javax.swing.JTextField websiteTextField;
-    private javax.swing.JPanel workPanel;
+    private javax.swing.JSeparator separator;
     // End of variables declaration//GEN-END:variables
 }
