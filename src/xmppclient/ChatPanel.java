@@ -3,11 +3,13 @@
  *
  * Created on 14 April 2008, 23:30
  */
-
 package xmppclient;
 
 import java.awt.Cursor;
 import java.awt.Point;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +20,10 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
+import javax.swing.text.ElementIterator;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -35,21 +41,24 @@ import xmppclient.formatter.Format;
  *
  * @author  Lee Boynton (323326)
  */
-public class ChatPanel extends javax.swing.JPanel 
+public class ChatPanel extends javax.swing.JPanel
 {
     private Chat chat;
     private JFrame frame;
     private Format format = new Format();
-    
+
     public ChatPanel(Chat chat, JFrame frame)
     {
         this.frame = frame;
         this.chat = chat;
         initComponents();
         initTextPane();
-        if(!XMPPClientUI.connection.getRoster().getPresence(chat.getParticipant()).isAvailable()) sendFileButton.setEnabled(false);
+        if (!XMPPClientUI.connection.getRoster().getPresence(chat.getParticipant()).isAvailable())
+        {
+            sendFileButton.setEnabled(false);
+        }
     }
-    
+
     /**
      * Gets the chat instance associated with this chat panel
      * @return The chat
@@ -58,7 +67,7 @@ public class ChatPanel extends javax.swing.JPanel
     {
         return chat;
     }
-    
+
     /**
      * Gets the name of the user. If the local user has given the contact a name
      * then that name is used. If not, the contact's nickname is returned. If there
@@ -69,22 +78,30 @@ public class ChatPanel extends javax.swing.JPanel
     public String getName()
     {
         VCard vCard = new VCard();
-        
-        if(chat == null) return "Unnamed";
-        
-        if(getRosterEntry() != null && getRosterEntry().getName() != null && !getRosterEntry().getName().equals(""))
+
+        if (chat == null)
+        {
+            return "Unnamed";
+        }
+        if (getRosterEntry() != null && getRosterEntry().getName() != null && !getRosterEntry().getName().equals(""))
+        {
             return getRosterEntry().getName();
-        
+        }
         try
         {
             vCard.load(XMPPClientUI.connection, chat.getParticipant());
-            if(vCard.getNickName() != null) return vCard.getNickName();
+            if (vCard.getNickName() != null)
+            {
+                return vCard.getNickName();
+            }
         }
-        catch (XMPPException ex) {}
-        
+        catch (XMPPException ex)
+        {
+        }
+
         return chat.getParticipant();
     }
-    
+
     /**
      * Creates some initial text styles
      * Sets the cursor of the text pane
@@ -94,10 +111,10 @@ public class ChatPanel extends javax.swing.JPanel
         StyledDocument doc = messageTextPane.getStyledDocument();
         // create the default style
         Style def = doc.addStyle("default", null);
-        
+
         // create the nickname style
         Style nickname = doc.addStyle("nickname", def);
-        StyleConstants.setBold(nickname, true);      
+        StyleConstants.setBold(nickname, true);
 
         messageTextPane.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
     }
@@ -114,15 +131,15 @@ public class ChatPanel extends javax.swing.JPanel
         try
         {
             StyledDocument doc = messageTextPane.getStyledDocument();
-            
+
             // get the formatted text
             Format newFormat = (Format) message.getProperty("format");
-            
+
             // create a new style for the formatted text
             Style newStyle = doc.addStyle("newStyle", null);
-            
+
             // the format property will only be set by this client
-            if(newFormat != null)
+            if (newFormat != null)
             {
                 StyleConstants.setFontFamily(newStyle, newFormat.getFont().getFamily());
                 StyleConstants.setFontSize(newStyle, newFormat.getFont().getSize());
@@ -134,32 +151,37 @@ public class ChatPanel extends javax.swing.JPanel
             doc.insertString(doc.getLength(), name + ": ", doc.getStyle("nickname"));
             int start = doc.getLength();
             doc.insertString(doc.getLength(), message.getBody(), doc.getStyle("newStyle"));
-            
+
             List<Emoticon> emoticons = Emoticons.getEmoticons();
-            
-            if(message.getProperty("emoticons") != null &&
-                    message.getProperty("emoticons") instanceof List) emoticons.addAll((Collection<? extends Emoticon>) message.getProperty("emoticons"));
-            
-            SimpleAttributeSet smi;
-            
-            for(int i = start; i < doc.getLength(); i++)
+
+            if (message.getProperty("emoticons") != null &&
+                    message.getProperty("emoticons") instanceof List)
             {
-                for(Emoticon e: Emoticons.getEmoticons())
+                emoticons.addAll((Collection<? extends Emoticon>) message.getProperty("emoticons"));
+            }
+            SimpleAttributeSet smi;
+
+            for (int i = start; i < doc.getLength(); i++)
+            {
+                for (Emoticon e : Emoticons.getEmoticons())
                 {
-                    if((i + e.getSequence().length()) > doc.getLength()) continue;
+                    if ((i + e.getSequence().length()) > doc.getLength())
+                    {
+                        continue;
+                    }
                     String newString = doc.getText(i, e.getSequence().length());
-                
-                    if(newString.equals(e.getSequence()))
+
+                    if (newString.equals(e.getSequence()))
                     {
                         doc.remove(i, e.getSequence().length());
-                        smi=new SimpleAttributeSet();
+                        smi = new SimpleAttributeSet();
                         StyleConstants.setIcon(smi, e.getIcon());
                         doc.insertString(i, e.getSequence(), smi);
 
-                        i+=e.getSequence().length() -1;
+                        i += e.getSequence().length() - 1;
                         break;
                     }
-                }       
+                }
             }
 
             doc.insertString(doc.getLength(), "\n", doc.getStyle("default"));
@@ -171,7 +193,37 @@ public class ChatPanel extends javax.swing.JPanel
             Logger.getLogger(ChatPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    public void saveChat()
+    {
+        try
+        {
+            //new File("logs").mkdir();
+
+            // Create file 
+            //FileWriter fstream = new FileWriter("logs/log.txt");
+            //BufferedWriter out = new BufferedWriter(fstream);
+
+            DefaultStyledDocument doc = (DefaultStyledDocument) messageTextPane.getStyledDocument();
+
+            //out.write(doc.getText(0, doc.getLength()));
+
+            ElementIterator eIter = new ElementIterator(doc);
+            Element holder;
+            while ((holder = eIter.next()) != null)
+            {
+                System.out.println(doc.getText(holder.getStartOffset(), holder.getEndOffset() - holder.getStartOffset()));
+            }
+
+            //Close the output stream
+            //out.close();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
     /**
      * Gets the roster entry of the chat participant from the contact list.
      * @return The roster entry, or null if not in roster
@@ -185,7 +237,7 @@ public class ChatPanel extends javax.swing.JPanel
          */
         return XMPPClientUI.connection.getRoster().getEntry(chat.getParticipant());
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -308,12 +360,14 @@ public class ChatPanel extends javax.swing.JPanel
     }// </editor-fold>//GEN-END:initComponents
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
-    send();
+        send();
 }//GEN-LAST:event_sendButtonActionPerformed
     private void send()
     {
-        if(sendTextPane.getText().trim().equals("")) return;
-        
+        if (sendTextPane.getText().trim().equals(""))
+        {
+            return;
+        }
         try
         {
             Message message = new Message();
@@ -329,32 +383,41 @@ public class ChatPanel extends javax.swing.JPanel
             Logger.getLogger(ChatPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private List<Emoticon> getCustomEmoticons()
     {
         List<Emoticon> emoticons = new ArrayList<Emoticon>();
-        
+
         try
         {
-            for(int i = 0; i < sendTextPane.getText().length(); i++)
+            for (int i = 0; i < sendTextPane.getText().length(); i++)
             {
-                for(Emoticon e: Emoticons.getEmoticons())
+                for (Emoticon e : Emoticons.getEmoticons())
                 {
-                    if((i + e.getSequence().length()) > sendTextPane.getText().length()) continue;
+                    if ((i + e.getSequence().length()) > sendTextPane.getText().length())
+                    {
+                        continue;
+                    }
                     String newString = sendTextPane.getText(i, e.getSequence().length());
 
-                    if(newString.equals(e.getSequence()))
+                    if (newString.equals(e.getSequence()))
                     {
-                        if(!emoticons.contains(e)) emoticons.add(e);
+                        if (!emoticons.contains(e))
+                        {
+                            emoticons.add(e);
+                        }
                     }
-                }       
+                }
             }
         }
-        catch(BadLocationException ex) { ex.printStackTrace(); }
-        
+        catch (BadLocationException ex)
+        {
+            ex.printStackTrace();
+        }
+
         return emoticons;
     }
-    
+
 private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFileButtonActionPerformed
     new FileTransferChooser(frame, true, getRosterEntry());
 }//GEN-LAST:event_sendFileButtonActionPerformed
@@ -367,11 +430,17 @@ private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 }//GEN-LAST:event_formatButtonActionPerformed
 
 private void sendTextPaneKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sendTextPaneKeyPressed
-    if(evt.getKeyCode() == 10) send();
+    if (evt.getKeyCode() == 10)
+    {
+        send();
+    }
 }//GEN-LAST:event_sendTextPaneKeyPressed
 
 private void sendTextPaneKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sendTextPaneKeyReleased
-    if(evt.getKeyCode() == 10) sendTextPane.setText("");
+    if (evt.getKeyCode() == 10)
+    {
+        sendTextPane.setText("");
+    }
 }//GEN-LAST:event_sendTextPaneKeyReleased
 
 private void emoticonsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emoticonsButtonActionPerformed
@@ -379,7 +448,6 @@ private void emoticonsButtonActionPerformed(java.awt.event.ActionEvent evt) {//G
     SwingUtilities.convertPointToScreen(point, emoticonsButton);
     new EmoticonsUI(null, sendTextPane, point).setVisible(true);
 }//GEN-LAST:event_emoticonsButtonActionPerformed
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel contactLabel;
     private javax.swing.JButton emoticonsButton;
