@@ -84,8 +84,7 @@ public abstract class Session
         
         try
         {
-            
-            InetAddress addr = InetAddress.g;
+            InetAddress addr = InetAddress.getLocalHost();
             address = addr.getHostAddress();
         }
         catch (UnknownHostException ex)
