@@ -47,16 +47,21 @@ import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.packet.VCard;
+import xmppclient.audio.StreamUI;
 import xmppclient.images.Icons;
 import xmppclient.images.tango.TangoIcons;
 import xmppclient.chat.InvitationReceivedUI;
+import xmppclient.jingle.JingleSessionRequest;
 import xmppclient.vcard.VCardEditor;
+import xmppclient.jingle.JingleManager;
+import xmppclient.jingle.JingleSessionRequestListener;
+import xmppclient.jingle.packet.Jingle;
 
 /**
  *
  * @author Lee Boynton (323326)
  */
-public class XMPPClientUI extends javax.swing.JFrame implements FileTransferListener
+public class XMPPClientUI extends javax.swing.JFrame implements FileTransferListener, JingleSessionRequestListener
 {
     /** The XMPP connection to the server */
     public static XMPPConnection connection;
@@ -69,6 +74,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     private final int SORT_BY_STATUS = 0;
     private final int SORT_BY_GROUP = 1;
     private int sortMethod = SORT_BY_STATUS;
+    private JingleManager jingleManager;
 
     /**
      * Creates the main user interface which displays the contacts etc
@@ -79,7 +85,8 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     public XMPPClientUI(XMPPConnection connection, String accountName)
     {
         XMPPClientUI.connection = connection;
-        this.accountName = accountName;      
+        this.accountName = accountName;
+        jingleManager = new JingleManager(connection);
         chatUI = new ChatUI();
         initComponents();
         initSystemTray();
@@ -87,7 +94,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         updateContacts();
         addListeners();
     }
-    
+
     private void addListeners()
     {
         MultiUserChat.addInvitationListener(connection, new InvitationReceivedUI(this, true));
@@ -97,6 +104,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         FileTransferManager manager = new FileTransferManager(connection);
         manager.addFileTransferListener(this);
         connection.getRoster().addRosterListener(new ContactListListener(this));
+        jingleManager.addSessionRequestListener(this);
     }
 
     private void initStatusComboBox()
@@ -690,7 +698,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         {
             nicknameTextField.setText(connection.getUser());
         }
-        
+
         contactTree.requestFocus();
     }//GEN-LAST:event_nicknameTextFieldActionPerformed
 
@@ -878,7 +886,10 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
     private void joinConference()
     {
         String room = JOptionPane.showInputDialog(this, "Enter room name");
-        if(room == null) return;
+        if (room == null)
+        {
+            return;
+        }
         MultiUserChatUI mucui = new MultiUserChatUI(room);
         try
         {
@@ -1017,14 +1028,27 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
-                    String name = JOptionPane.showInputDialog(XMPPClientUI.this, 
+                    String name = JOptionPane.showInputDialog(XMPPClientUI.this,
                             "Enter a name for this user, or leave blank to remove");
-                    if(name==null) return;
+                    if (name == null)
+                    {
+                        return;
+                    }
                     entry.setName(name);
                     updateContacts();
                 }
             });
             menu.add(setNameMenuItem);
+            JMenuItem streamMenuItem = new JMenuItem("Stream...");
+            streamMenuItem.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    new StreamUI(XMPPClientUI.this, entry, jingleManager).setVisible(true);
+                }
+            });
+            menu.add(streamMenuItem);
             menu.show(evt.getComponent(), evt.getX(), evt.getY());
         }
     }
@@ -1266,5 +1290,13 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
                 connection.sendPacket(auth);
             }
         }
+    }
+
+    @Override
+    public void sessionRequested(JingleSessionRequest request)
+    {
+        System.out.println("Jingle session request received");
+        //Jingle jingle = request.getJingle();
+        request.accept();
     }
 }
