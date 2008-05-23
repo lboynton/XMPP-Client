@@ -77,22 +77,22 @@ public abstract class Session
         }
         return port;
     }
-
+    
     public String getHostAddress()
     {
         String address = null;
-
+        
         try
         {
-            ServerSocket socket = new ServerSocket(0);
-            address = socket.getInetAddress().getHostAddress();
-            socket.close();
+            
+            InetAddress addr = InetAddress.g;
+            address = addr.getHostAddress();
         }
-        catch (IOException ex)
+        catch (UnknownHostException ex)
         {
             Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         return address;
     }
 }
