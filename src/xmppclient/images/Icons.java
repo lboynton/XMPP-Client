@@ -22,4 +22,5 @@ public class Icons
     public static final ImageIcon vcard = new javax.swing.ImageIcon(Icons.class.getResource("vcard.png"), "VCard icon");
     public static final ImageIcon userComment = new javax.swing.ImageIcon(Icons.class.getResource("user_comment.png"), "User comment icon");
     public static final ImageIcon add = new javax.swing.ImageIcon(Icons.class.getResource("add.png"), "Add icon");
+    public static final ImageIcon delete = new javax.swing.ImageIcon(Icons.class.getResource("delete.png"), "Delete icon");
 }

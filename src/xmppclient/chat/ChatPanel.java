@@ -34,6 +34,7 @@ import org.jivesoftware.smackx.packet.VCard;
 import xmppclient.emoticons.Emoticon;
 import xmppclient.emoticons.Emoticons;
 import xmppclient.formatter.Format;
+import xmppclient.log.Log;
 
 /**
  * A JPanel which is displayed in the tabs in the chat window. Represents a 
@@ -204,32 +205,7 @@ public class ChatPanel extends javax.swing.JPanel
 
     public void saveChat()
     {
-        try
-        {
-            //new File("logs").mkdir();
-
-            // Create file 
-            //FileWriter fstream = new FileWriter("logs/log.txt");
-            //BufferedWriter out = new BufferedWriter(fstream);
-
-            DefaultStyledDocument doc = (DefaultStyledDocument) messageTextPane.getStyledDocument();
-
-            //out.write(doc.getText(0, doc.getLength()));
-
-            ElementIterator eIter = new ElementIterator(doc);
-            Element holder;
-            while ((holder = eIter.next()) != null)
-            {
-                System.out.println(doc.getText(holder.getStartOffset(), holder.getEndOffset() - holder.getStartOffset()));
-            }
-
-            //Close the output stream
-            //out.close();
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
+        Log.log(messageTextPane, chat.getParticipant());
     }
 
     /**

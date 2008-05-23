@@ -5,6 +5,8 @@
  */
 package xmppclient;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import xmppclient.chat.ChatUI;
 import xmppclient.chat.MultiUserChatUI;
 import java.awt.AWTException;
@@ -21,6 +23,7 @@ import java.io.File;
 import java.util.Collection;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -469,7 +472,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         hoverTextLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 0));
         toolBar.add(hoverTextLabel);
 
-        nicknameTextField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        nicknameTextField.setFont(new java.awt.Font("Tahoma", 1, 14));
         nicknameTextField.setText(Utils.getNickname());
         nicknameTextField.setToolTipText("Press enter to set the nickname");
         nicknameTextField.setBorder(null);
@@ -918,6 +921,7 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
             JMenuItem nickname = new JMenuItem(Utils.getNickname(entry));
             nickname.setEnabled(false);
             menu.add(nickname);
+            menu.add(new JSeparator());
             JMenuItem chat = new JMenuItem("Open chat", Icons.userComment);
             menu.add(chat);
             chat.addActionListener(new ActionListener()
@@ -946,7 +950,17 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
                 }
             });
             menu.add(vcard);
-            JMenuItem groupMenuItem = new JMenuItem("Change group");
+            JMenuItem sendFileMenuItem = new JMenuItem("Send file");
+            sendFileMenuItem.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    new FileTransferChooser(XMPPClientUI.this, true, entry).setVisible(true);
+                }
+            });
+            menu.add(sendFileMenuItem);
+            JMenuItem groupMenuItem = new JMenuItem("Set groups");
             groupMenuItem.addActionListener(new ActionListener()
             {
                 @Override
@@ -1012,16 +1026,6 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
                 }
             });
             menu.add(groupMenuItem);
-            JMenuItem sendFileMenuItem = new JMenuItem("Send file");
-            sendFileMenuItem.addActionListener(new ActionListener()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    new FileTransferChooser(XMPPClientUI.this, true, entry).setVisible(true);
-                }
-            });
-            menu.add(sendFileMenuItem);
             JMenuItem setNameMenuItem = new JMenuItem("Set name");
             setNameMenuItem.addActionListener(new ActionListener()
             {
@@ -1049,6 +1053,40 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
                 }
             });
             menu.add(streamMenuItem);
+            JMenuItem removeMenuItem = new JMenuItem("Delete", Icons.delete);
+            removeMenuItem.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    // confirm removal
+                    if (JOptionPane.showConfirmDialog(XMPPClientUI.this,
+                            "Remove this user from the roster? This user will\n" +
+                            "be removed from all groups and will no longer be\n" +
+                            "able to communicate with you.",
+                            "Confirm Removal",
+                            JOptionPane.YES_NO_CANCEL_OPTION,
+                            JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION)
+                    {
+                        return;
+                    }
+
+                    // try to remove contact
+                    try
+                    {
+                        connection.getRoster().removeEntry(entry);
+                    }
+                    catch (XMPPException ex)
+                    {
+                        JOptionPane.showMessageDialog(XMPPClientUI.this,
+                                "Error deleting contact: " + entry.getUser() +
+                                "\n" + ex.getMessage(),
+                                "Error Removing Contact",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
+            menu.add(removeMenuItem);
             menu.show(evt.getComponent(), evt.getX(), evt.getY());
         }
     }

@@ -6,9 +6,6 @@
 package xmppclient.chat;
 
 import xmppclient.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManagerListener;
 import org.jivesoftware.smack.MessageListener;
