@@ -172,17 +172,17 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="statusComboBox" pref="192" max="32767" attributes="2"/>
+                              <Component id="statusComboBox" pref="174" max="32767" attributes="2"/>
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Component id="nicknameTextField" pref="192" max="32767" attributes="2"/>
+                                  <Component id="nicknameTextField" pref="174" max="32767" attributes="2"/>
                               </Group>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="avatarLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="toolBar" alignment="0" pref="198" max="32767" attributes="0"/>
-                      <Component id="contactTreeScrollPane" alignment="1" pref="198" max="32767" attributes="0"/>
+                      <Component id="contactTreeScrollPane" alignment="1" pref="180" max="32767" attributes="0"/>
+                      <Component id="toolBar" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -203,7 +203,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="toolBar" min="-2" pref="25" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="contactTreeScrollPane" pref="210" max="32767" attributes="0"/>
+                  <Component id="contactTreeScrollPane" pref="231" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>

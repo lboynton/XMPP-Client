@@ -126,6 +126,7 @@ public class XMPPClient extends javax.swing.JFrame
 
         storedConnectionComboBox.setFont(storedConnectionComboBox.getFont());
         storedConnectionComboBox.setToolTipText("Select a previously stored connection, or select new connection to create a new connection");
+        storedConnectionComboBox.setBorder(null);
         storedConnectionComboBox.setFocusable(false);
         storedConnectionComboBox.setOpaque(false);
         storedConnectionComboBox.addActionListener(new java.awt.event.ActionListener() {

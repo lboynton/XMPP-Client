@@ -25,6 +25,9 @@ public class AccountManagerUI extends javax.swing.JFrame
         initColumnSizes();
     }
 
+    /**
+     * Loads values into the table
+     */
     private void initTable()
     {
         Connection[] connections = Utils.getConnections();
@@ -48,6 +51,9 @@ public class AccountManagerUI extends javax.swing.JFrame
         scrollPane.getViewport().setBackground(Color.white);
     }
 
+    /**
+     * Resizes table column widths to accomodate contents
+     */
     private void initColumnSizes()
     {
         DefaultTableModel model = (DefaultTableModel) accountsTable.getModel();
@@ -208,6 +214,9 @@ private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     dispose();
 }//GEN-LAST:event_cancelButtonActionPerformed
 
+/**
+ * Gets any rows which should be deleted, and deletes them
+ */
 private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
     DefaultTableModel model = (DefaultTableModel) accountsTable.getModel();
 

@@ -14,6 +14,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
@@ -27,14 +28,14 @@ import xmppclient.images.Icons;
  */
 public class EmoticonsUI extends javax.swing.JDialog
 {
-    private JTextPane textPane;
+    private JTextArea textArea;
     private CustomEmoticonDialog customEmoticonDialog = new CustomEmoticonDialog((JFrame)null, true);
     
     /** Creates new form EmoticonsUI */
-    public EmoticonsUI(JFrame owner, JTextPane textPane, Point location)
+    public EmoticonsUI(JFrame owner, JTextArea textArea, Point location)
     {
         super(owner);
-        this.textPane = textPane;
+        this.textArea = textArea;
         initComponents();
         setVisible(true);
         setLocation(location);
@@ -125,15 +126,7 @@ private void emoticonsListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIR
         return;
     }
     
-    try
-    {
-        StyledDocument doc = textPane.getStyledDocument();
-        doc.insertString(doc.getLength(), emoticon.getSequence(), null);
-    }
-    catch (BadLocationException ex)
-    {
-        Logger.getLogger(EmoticonsUI.class.getName()).log(Level.SEVERE, null, ex);
-    }
+    textArea.append(emoticon.getSequence());
 }//GEN-LAST:event_emoticonsListMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
