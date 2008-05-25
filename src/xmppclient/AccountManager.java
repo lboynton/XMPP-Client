@@ -23,6 +23,7 @@ public class AccountManager
     public static final String LOGS_DIR = "logs";
     public static final String RECEIVED_DIR = "received";
     public static final String ROOT_DIR = "accounts";
+    public static final String AUDIO_DIR = "audio";
     
     /** The JID to store account details under */
     private String JID;

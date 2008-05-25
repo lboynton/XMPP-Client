@@ -22,11 +22,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -55,7 +53,9 @@ import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.packet.VCard;
-import xmppclient.audio.StreamUI;
+import xmppclient.audio.ui.AudioLibraryUI;
+import xmppclient.audio.AudioManager;
+import xmppclient.audio.ui.StreamUI;
 import xmppclient.images.Icons;
 import xmppclient.images.tango.TangoIcons;
 import xmppclient.chat.InvitationReceivedUI;
@@ -82,6 +82,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     private final int SORT_BY_GROUP = 1;
     private int sortMethod = SORT_BY_STATUS;
     private JingleManager jingleManager;
+    private AudioManager audioManager;
     public static AccountManager accountManager;
 
     /**
@@ -96,6 +97,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         this.accountName = accountName;
         jingleManager = new JingleManager(connection);
         accountManager = new AccountManager(connection.getUser());
+        audioManager = new AudioManager(connection, accountManager.createDirectory(AccountManager.AUDIO_DIR).getAbsolutePath());
         chatUI = new ChatUI();
         initComponents();
         initSystemTray();
@@ -322,6 +324,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         avatarButton = new javax.swing.JButton();
         preferencesButton = new javax.swing.JButton();
         viewReceivedFilesButton = new javax.swing.JButton();
+        viewAudioFilesButton = new javax.swing.JButton();
         nicknameTextField = new javax.swing.JTextField();
         statusComboBox = new javax.swing.JComboBox()
         {
@@ -455,6 +458,18 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         });
         toolBar.add(viewReceivedFilesButton);
 
+        viewAudioFilesButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/audio-x-generic.png"))); // NOI18N
+        viewAudioFilesButton.setToolTipText("Open audio folder");
+        viewAudioFilesButton.setFocusable(false);
+        viewAudioFilesButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        viewAudioFilesButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        viewAudioFilesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewAudioFilesButtonActionPerformed(evt);
+            }
+        });
+        toolBar.add(viewAudioFilesButton);
+
         nicknameTextField.setFont(new java.awt.Font("Tahoma", 1, 12));
         nicknameTextField.setText(Utils.getNickname());
         nicknameTextField.setToolTipText("Press enter to set the nickname");
@@ -474,7 +489,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         });
 
         statusComboBox.setMaximumRowCount(12);
-        statusComboBox.setBorder(null);
         statusComboBox.setRenderer(new xmppclient.StatusComboBoxRenderer());
         statusComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -509,14 +523,14 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
-                    .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                    .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                     .addGroup(contentPanelLayout.createSequentialGroup()
                         .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                            .addComponent(statusComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, 145, Short.MAX_VALUE))
+                            .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
+                            .addComponent(statusComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, 174, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(avatarLabel)))
+                        .addComponent(avatarLabel))
+                    .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         contentPanelLayout.setVerticalGroup(
@@ -827,18 +841,28 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
 
 private void viewReceivedFilesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewReceivedFilesButtonActionPerformed
     try
-        {//GEN-LAST:event_viewReceivedFilesButtonActionPerformed
-            Utils.openFileBrowser(accountManager.getRootDir() + File.separator + AccountManager.RECEIVED_DIR, true);
-        }
-        catch (IOException ex)
-        {
-            Logger.getLogger(XMPPClientUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        catch (SecurityException ex)
-        {
-            Logger.getLogger(XMPPClientUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    {
+        Utils.openFileBrowser(accountManager.getRootDir() + File.separator + AccountManager.RECEIVED_DIR, true);
     }
+    catch (IOException ex)
+    {
+        Logger.getLogger(XMPPClientUI.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    catch (SecurityException ex)
+    {
+        Logger.getLogger(XMPPClientUI.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    }//GEN-LAST:event_viewReceivedFilesButtonActionPerformed
+private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAudioFilesButtonActionPerformed
+    try
+    {
+        Utils.openFileBrowser(accountManager.getRootDir() + File.separator + AccountManager.AUDIO_DIR, true);
+    }
+    catch (Exception ex)
+    {
+        Logger.getLogger(XMPPClientUI.class.getName()).log(Level.SEVERE, null, ex);
+    }
+}//GEN-LAST:event_viewAudioFilesButtonActionPerformed
 
     private void joinConference()
     {
@@ -1007,6 +1031,16 @@ private void viewReceivedFilesButtonActionPerformed(java.awt.event.ActionEvent e
                 }
             });
             menu.add(streamMenuItem);
+            JMenuItem viewLibraryMenuItem = new JMenuItem("View library");
+            viewLibraryMenuItem.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    new AudioLibraryUI(audioManager, entry).setVisible(true);
+                }
+            });
+            menu.add(viewLibraryMenuItem);
             JMenuItem blockMenuItem = new JMenuItem("Block");
             blockMenuItem.addActionListener(new ActionListener()
             {
@@ -1202,6 +1236,7 @@ private void viewReceivedFilesButtonActionPerformed(java.awt.event.ActionEvent e
     private javax.swing.JToolBar toolBar;
     private javax.swing.JMenu toolsMenu;
     private javax.swing.JButton vCardButton;
+    private javax.swing.JButton viewAudioFilesButton;
     private javax.swing.JButton viewReceivedFilesButton;
     // End of variables declaration//GEN-END:variables
 

@@ -5,15 +5,9 @@
 package xmppclient.jingle.provider;
 
 import xmppclient.jingle.packet.*;
-import xmppclient.jingle.provider.DescriptionProvider;
-import java.io.StringReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.provider.IQProvider;
-import org.jivesoftware.smack.provider.ProviderManager;
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 /**
  *
