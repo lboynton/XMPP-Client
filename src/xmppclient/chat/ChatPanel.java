@@ -263,6 +263,8 @@ public class ChatPanel extends javax.swing.JPanel
             }
         });
 
+        messageScrollPane.setBackground(new java.awt.Color(255, 255, 255));
+
         messageTextPane.setEditable(false);
         messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
         messageScrollPane.setViewportView(messageTextPane);

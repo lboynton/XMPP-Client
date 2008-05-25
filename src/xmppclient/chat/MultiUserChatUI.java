@@ -175,6 +175,8 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         horizontalSplitPane.setBorder(null);
         horizontalSplitPane.setOneTouchExpandable(true);
 
+        messageScrollPane.setBackground(new java.awt.Color(255, 255, 255));
+
         messageTextPane.setEditable(false);
         messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
         messageScrollPane.setViewportView(messageTextPane);
@@ -217,8 +219,8 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-            .addComponent(sendButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+            .addComponent(sendButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
         );
 
         verticalSplitPane.setRightComponent(jPanel1);
