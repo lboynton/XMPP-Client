@@ -9,8 +9,6 @@ import xmppclient.*;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import javax.swing.text.BadLocationException;
 import xmppclient.formatter.FormatterUI;
@@ -19,13 +17,9 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Element;
-import javax.swing.text.ElementIterator;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
@@ -34,7 +28,6 @@ import org.jivesoftware.smackx.packet.VCard;
 import xmppclient.emoticons.Emoticon;
 import xmppclient.emoticons.Emoticons;
 import xmppclient.formatter.Format;
-import xmppclient.log.Log;
 
 /**
  * A JPanel which is displayed in the tabs in the chat window. Represents a 
@@ -44,7 +37,7 @@ import xmppclient.log.Log;
 public class ChatPanel extends javax.swing.JPanel
 {
     private Chat chat;
-    private JFrame frame;
+    private JFrame parent;
     private Format format = new Format();
 
     /**
@@ -52,9 +45,9 @@ public class ChatPanel extends javax.swing.JPanel
      * @param chat The chat this panel should be associated with
      * @param frame The chat JFrame
      */
-    public ChatPanel(Chat chat, JFrame frame)
+    public ChatPanel(Chat chat, JFrame parent)
     {
-        this.frame = frame;
+        this.parent = parent;
         this.chat = chat;
         initComponents();
         initTextPane();
@@ -113,14 +106,6 @@ public class ChatPanel extends javax.swing.JPanel
      */
     private void initTextPane()
     {
-        StyledDocument doc = messageTextPane.getStyledDocument();
-        // create the default style
-        Style def = doc.addStyle("default", null);
-
-        // create the nickname style
-        Style nickname = doc.addStyle("nickname", def);
-        StyleConstants.setBold(nickname, true);
-
         messageTextPane.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
     }
 
@@ -135,7 +120,7 @@ public class ChatPanel extends javax.swing.JPanel
     {
         try
         {
-            StyledDocument doc = messageTextPane.getStyledDocument();
+            ChatTextPaneStyledDocument doc = (ChatTextPaneStyledDocument) messageTextPane.getStyledDocument();
 
             // get the formatted text
             Format newFormat = (Format) message.getProperty("format");
@@ -153,7 +138,7 @@ public class ChatPanel extends javax.swing.JPanel
                 StyleConstants.setBold(newStyle, newFormat.getFont().isBold());
             }
 
-            doc.insertString(doc.getLength(), name + ": ", doc.getStyle("nickname"));
+            doc.insertUser(name);
             int start = doc.getLength();
             doc.insertString(doc.getLength(), message.getBody(), doc.getStyle("newStyle"));
 
@@ -205,7 +190,7 @@ public class ChatPanel extends javax.swing.JPanel
 
     public void saveChat()
     {
-        Log.log(messageTextPane, chat.getParticipant());
+        XMPPClientUI.accountManager.logConversation(messageTextPane, chat.getParticipant());
     }
 
     /**
@@ -279,9 +264,11 @@ public class ChatPanel extends javax.swing.JPanel
         });
 
         messageTextPane.setEditable(false);
+        messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
         messageScrollPane.setViewportView(messageTextPane);
 
         sendTextArea.setColumns(20);
+        sendTextArea.setFont(sendTextArea.getFont());
         sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 sendTextAreaKeyReleased(evt);
@@ -398,7 +385,7 @@ public class ChatPanel extends javax.swing.JPanel
     }
 
 private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFileButtonActionPerformed
-    new FileTransferChooser(frame, true, getRosterEntry());
+    new FileTransferChooser(parent, true, getRosterEntry()).setVisible(true);
 }//GEN-LAST:event_sendFileButtonActionPerformed
 
 private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formatButtonActionPerformed

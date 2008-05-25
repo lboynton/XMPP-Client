@@ -11,10 +11,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import xmppclient.emoticons.Emoticon;
 
 /**
  *
@@ -95,7 +98,21 @@ public class Emoticons
         try
         {
             ObjectInputStream fileIn = new ObjectInputStream(new FileInputStream("emoticons.db"));
-            emoticons = (ArrayList<Emoticon>) fileIn.readObject();
+            
+            Object obj = fileIn.readObject();
+            emoticons = new ArrayList<Emoticon>();
+            
+            if(obj instanceof List)
+            {
+                List list = (List) obj;
+                for(Object item:list)
+                {
+                    if(item instanceof Emoticon)
+                    {
+                        emoticons.add((Emoticon) item);
+                    }
+                }
+            }
             fileIn.close();
         }
         catch (ClassNotFoundException ex)

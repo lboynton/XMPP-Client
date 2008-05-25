@@ -6,10 +6,8 @@
 
 package xmppclient;
 
-import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
-import javax.swing.filechooser.FileSystemView;
 import org.jivesoftware.smackx.filetransfer.FileTransfer;
 import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 

@@ -3,9 +3,6 @@
 <Form version="1.5" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
-      <Properties>
-        <Property name="borderPainted" type="boolean" value="false"/>
-      </Properties>
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="jMenu1">
           <Properties>
@@ -124,21 +121,21 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="hostTextField" pref="101" max="32767" attributes="0"/>
+                          <Component id="hostTextField" pref="84" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="portTextField" min="-2" pref="56" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="resourceTextField" alignment="0" pref="185" max="32767" attributes="1"/>
-                      <Component id="passwordTextField" alignment="0" pref="185" max="32767" attributes="1"/>
-                      <Component id="usernameTextField" alignment="0" pref="185" max="32767" attributes="3"/>
-                      <Component id="storedConnectionComboBox" alignment="0" pref="185" max="32767" attributes="3"/>
+                      <Component id="resourceTextField" alignment="0" pref="168" max="32767" attributes="1"/>
+                      <Component id="passwordTextField" alignment="0" pref="168" max="32767" attributes="1"/>
+                      <Component id="usernameTextField" alignment="0" pref="168" max="32767" attributes="3"/>
+                      <Component id="storedConnectionComboBox" alignment="0" pref="168" max="32767" attributes="3"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="170" max="32767" attributes="0"/>
+                  <EmptySpace pref="153" max="32767" attributes="0"/>
                   <Component id="signInButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="10" pref="10" max="10" attributes="0"/>
               </Group>
@@ -146,12 +143,12 @@
                   <EmptySpace min="10" pref="10" max="10" attributes="0"/>
                   <Component id="jLabel8" min="-2" pref="43" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="nameTextField" pref="196" max="32767" attributes="0"/>
+                  <Component id="nameTextField" pref="179" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="storeConnectionCheckBox" pref="243" max="32767" attributes="0"/>
+                  <Component id="storeConnectionCheckBox" pref="226" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -159,7 +156,7 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="120" max="32767" attributes="0"/>
+                  <EmptySpace pref="84" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="storedConnectionComboBox" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
@@ -229,9 +226,6 @@
               </FontInfo>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Select a previously stored connection, or select new connection to create a new connection"/>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="null"/>
-            </Property>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="opaque" type="boolean" value="false"/>
           </Properties>

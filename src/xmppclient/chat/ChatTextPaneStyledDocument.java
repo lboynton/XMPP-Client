@@ -42,7 +42,7 @@ public class ChatTextPaneStyledDocument extends DefaultStyledDocument
     public void insertTime(String style)
     {
         Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
         
         String time = sdf.format(cal.getTime());
         

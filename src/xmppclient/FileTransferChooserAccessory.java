@@ -48,7 +48,8 @@ public class FileTransferChooserAccessory extends javax.swing.JPanel
         jLabel2.setText("File description");
 
         descriptionTextArea.setColumns(20);
-        descriptionTextArea.setRows(5);
+        descriptionTextArea.setFont(descriptionTextArea.getFont());
+        descriptionTextArea.setLineWrap(true);
         jScrollPane1.setViewportView(descriptionTextArea);
 
         jLabel1.setText("File");

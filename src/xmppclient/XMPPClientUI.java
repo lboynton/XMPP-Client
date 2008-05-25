@@ -5,6 +5,7 @@
  */
 package xmppclient;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import xmppclient.chat.ChatUI;
@@ -20,10 +21,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -35,6 +38,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.PrivacyListManager;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.RosterGroup;
@@ -43,6 +47,7 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.PrivacyItem;
 import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.filetransfer.FileTransferListener;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
@@ -58,7 +63,6 @@ import xmppclient.jingle.JingleSessionRequest;
 import xmppclient.vcard.VCardEditor;
 import xmppclient.jingle.JingleManager;
 import xmppclient.jingle.JingleSessionRequestListener;
-import xmppclient.jingle.packet.Jingle;
 
 /**
  *
@@ -78,6 +82,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     private final int SORT_BY_GROUP = 1;
     private int sortMethod = SORT_BY_STATUS;
     private JingleManager jingleManager;
+    public static AccountManager accountManager;
 
     /**
      * Creates the main user interface which displays the contacts etc
@@ -90,12 +95,19 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         XMPPClientUI.connection = connection;
         this.accountName = accountName;
         jingleManager = new JingleManager(connection);
+        accountManager = new AccountManager(connection.getUser());
         chatUI = new ChatUI();
         initComponents();
         initSystemTray();
         initStatusComboBox();
         updateContacts();
         addListeners();
+        contactTree.requestFocus();
+    }
+
+    public AccountManager getAccountManager()
+    {
+        return accountManager;
     }
 
     private void addListeners()
@@ -301,6 +313,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
     private void initComponents() {
 
         sortContactsButtonGroup = new javax.swing.ButtonGroup();
+        jButton1 = new javax.swing.JButton();
         contentPanel = new javax.swing.JPanel();
         toolBar = new javax.swing.JToolBar();
         addContactButton = new javax.swing.JButton();
@@ -308,7 +321,7 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         vCardButton = new javax.swing.JButton();
         avatarButton = new javax.swing.JButton();
         preferencesButton = new javax.swing.JButton();
-        hoverTextLabel = new javax.swing.JLabel();
+        viewReceivedFilesButton = new javax.swing.JButton();
         nicknameTextField = new javax.swing.JTextField();
         statusComboBox = new javax.swing.JComboBox()
         {
@@ -361,6 +374,8 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         createChatRoomMenuItem = new javax.swing.JMenuItem();
         joinChatRoomMenuItem = new javax.swing.JMenuItem();
 
+        jButton1.setText("jButton1");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("XMPPClient");
         setIconImage(appIcon);
@@ -381,14 +396,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         addContactButton.setFocusable(false);
         addContactButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         addContactButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        addContactButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                addContactButtonMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                addContactButtonMouseExited(evt);
-            }
-        });
         addContactButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addContactButtonActionPerformed(evt);
@@ -401,14 +408,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         joinConferenceButton.setFocusable(false);
         joinConferenceButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         joinConferenceButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        joinConferenceButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                joinConferenceButtonMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                joinConferenceButtonMouseExited(evt);
-            }
-        });
         joinConferenceButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 joinConferenceButtonActionPerformed(evt);
@@ -421,14 +420,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         vCardButton.setFocusable(false);
         vCardButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         vCardButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        vCardButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                vCardButtonMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                vCardButtonMouseExited(evt);
-            }
-        });
         vCardButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 vCardButtonActionPerformed(evt);
@@ -438,14 +429,6 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
 
         avatarButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/image-x-generic.png"))); // NOI18N
         avatarButton.setToolTipText("Change avatar");
-        avatarButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                avatarButtonMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                avatarButtonMouseExited(evt);
-            }
-        });
         avatarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 avatarButtonActionPerformed(evt);
@@ -458,24 +441,23 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
         preferencesButton.setFocusable(false);
         preferencesButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         preferencesButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        preferencesButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                preferencesButtonMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                preferencesButtonMouseExited(evt);
-            }
-        });
         toolBar.add(preferencesButton);
 
-        hoverTextLabel.setFont(new java.awt.Font("Tahoma", 0, 10));
-        hoverTextLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 0));
-        toolBar.add(hoverTextLabel);
+        viewReceivedFilesButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/document-save-16x16.png"))); // NOI18N
+        viewReceivedFilesButton.setToolTipText("View received files");
+        viewReceivedFilesButton.setFocusable(false);
+        viewReceivedFilesButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        viewReceivedFilesButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        viewReceivedFilesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewReceivedFilesButtonActionPerformed(evt);
+            }
+        });
+        toolBar.add(viewReceivedFilesButton);
 
-        nicknameTextField.setFont(new java.awt.Font("Tahoma", 1, 14));
+        nicknameTextField.setFont(new java.awt.Font("Tahoma", 1, 12));
         nicknameTextField.setText(Utils.getNickname());
         nicknameTextField.setToolTipText("Press enter to set the nickname");
-        nicknameTextField.setBorder(null);
         nicknameTextField.setOpaque(false);
         nicknameTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -527,33 +509,30 @@ public class XMPPClientUI extends javax.swing.JFrame implements FileTransferList
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                    .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
                     .addGroup(contentPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(statusComboBox, 0, 174, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contentPanelLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)))
+                            .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                            .addComponent(statusComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, 145, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(avatarLabel))
-                    .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                    .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(avatarLabel)))
                 .addContainerGap())
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(contentPanelLayout.createSequentialGroup()
-                        .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(avatarLabel))
+                    .addComponent(avatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
+                .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -747,38 +726,6 @@ private void avatarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 private void toolsMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toolsMenuActionPerformed
 }//GEN-LAST:event_toolsMenuActionPerformed
 
-private void avatarButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_avatarButtonMouseEntered
-    setHoverText(evt);
-}//GEN-LAST:event_avatarButtonMouseEntered
-
-private void addContactButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addContactButtonMouseEntered
-    setHoverText(evt);
-}//GEN-LAST:event_addContactButtonMouseEntered
-
-private void vCardButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_vCardButtonMouseEntered
-    setHoverText(evt);
-}//GEN-LAST:event_vCardButtonMouseEntered
-
-private void avatarButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_avatarButtonMouseExited
-    clearHoverText();
-}//GEN-LAST:event_avatarButtonMouseExited
-
-private void addContactButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addContactButtonMouseExited
-    clearHoverText();
-}//GEN-LAST:event_addContactButtonMouseExited
-
-private void vCardButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_vCardButtonMouseExited
-    clearHoverText();
-}//GEN-LAST:event_vCardButtonMouseExited
-
-private void preferencesButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_preferencesButtonMouseEntered
-    setHoverText(evt);
-}//GEN-LAST:event_preferencesButtonMouseEntered
-
-private void preferencesButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_preferencesButtonMouseExited
-    clearHoverText();
-}//GEN-LAST:event_preferencesButtonMouseExited
-
 private void vCardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vCardButtonActionPerformed
     VCard vCard = new VCard();
     try
@@ -864,14 +811,6 @@ private void contactTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST
     showContactPopup(evt);
 }//GEN-LAST:event_contactTreeMousePressed
 
-private void joinConferenceButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_joinConferenceButtonMouseEntered
-    setHoverText(evt);
-}//GEN-LAST:event_joinConferenceButtonMouseEntered
-
-private void joinConferenceButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_joinConferenceButtonMouseExited
-    clearHoverText();
-}//GEN-LAST:event_joinConferenceButtonMouseExited
-
 private void nicknameTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nicknameTextFieldFocusGained
     nicknameTextField.setOpaque(true);
     nicknameTextField.repaint();
@@ -885,6 +824,21 @@ private void nicknameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FI
 private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_joinConferenceButtonActionPerformed
     joinConference();
 }//GEN-LAST:event_joinConferenceButtonActionPerformed
+
+private void viewReceivedFilesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewReceivedFilesButtonActionPerformed
+    try
+        {//GEN-LAST:event_viewReceivedFilesButtonActionPerformed
+            Utils.openFileBrowser(accountManager.getRootDir() + File.separator + AccountManager.RECEIVED_DIR, true);
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(XMPPClientUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (SecurityException ex)
+        {
+            Logger.getLogger(XMPPClientUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     private void joinConference()
     {
@@ -1053,6 +1007,31 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
                 }
             });
             menu.add(streamMenuItem);
+            JMenuItem blockMenuItem = new JMenuItem("Block");
+            blockMenuItem.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    try
+                    {
+                        PrivacyListManager manager = PrivacyListManager.getInstanceFor(connection);
+                        PrivacyItem item = new PrivacyItem("jid", false, 0);
+                        item.setValue(entry.getUser());
+                        List<PrivacyItem> items = new ArrayList<PrivacyItem>();
+                        items.add(item);
+                        manager.createPrivacyList("default", items);
+                        manager.setActiveListName("default");
+                        updateContacts();
+                    }
+                    catch (XMPPException ex)
+                    {
+                        Logger.getLogger(XMPPClientUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+            menu.add(blockMenuItem);
+
             JMenuItem removeMenuItem = new JMenuItem("Delete", Icons.delete);
             removeMenuItem.addActionListener(new ActionListener()
             {
@@ -1089,16 +1068,6 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
             menu.add(removeMenuItem);
             menu.show(evt.getComponent(), evt.getX(), evt.getY());
         }
-    }
-
-    private void setHoverText(java.awt.event.MouseEvent evt)
-    {
-        hoverTextLabel.setText(((JButton) evt.getSource()).getToolTipText());
-    }
-
-    private void clearHoverText()
-    {
-        hoverTextLabel.setText("");
     }
 
     private void showAddContactDialog()
@@ -1217,7 +1186,7 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JMenuItem createChatRoomMenuItem;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JLabel hoverTextLabel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2;
@@ -1233,6 +1202,7 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JToolBar toolBar;
     private javax.swing.JMenu toolsMenu;
     private javax.swing.JButton vCardButton;
+    private javax.swing.JButton viewReceivedFilesButton;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -1265,11 +1235,11 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
         if (option == JOptionPane.YES_OPTION)
         {
             IncomingFileTransfer transfer = request.accept();
-            (new File("received")).mkdir();
+            File dir = accountManager.createDirectory(AccountManager.RECEIVED_DIR);
 
             try
             {
-                transfer.recieveFile(new File("received/" + request.getFileName()));
+                transfer.recieveFile(new File(dir.getAbsolutePath() + File.separator + request.getFileName()));
                 new FileTransferUI(transfer);
             }
             catch (InterruptedException ex)
@@ -1336,5 +1306,25 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
         System.out.println("Jingle session request received");
         //Jingle jingle = request.getJingle();
         request.accept();
+    }
+
+    /**
+     * Used for debugging runtime errors in this class which won't appear
+     * when logging in normally
+     * @param args Not used
+     */
+    public static void main(String args[])
+    {
+        try
+        {
+            XMPPConnection connection2 = new XMPPConnection("192.168.0.8");
+            connection2.connect();
+            connection2.login("lee", "password", "home");
+            new XMPPClientUI(connection2, "Fef");
+        }
+        catch (XMPPException ex)
+        {
+            Logger.getLogger(XMPPClientUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

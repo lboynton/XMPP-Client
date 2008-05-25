@@ -142,6 +142,9 @@
         <Component class="javax.swing.JTextPane" name="messageTextPane">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
+            <Property name="styledDocument" type="javax.swing.text.StyledDocument" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new ChatTextPaneStyledDocument()" type="code"/>
+            </Property>
           </Properties>
         </Component>
       </SubComponents>
@@ -156,6 +159,11 @@
         <Component class="javax.swing.JTextArea" name="sendTextArea">
           <Properties>
             <Property name="columns" type="int" value="20"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="sendTextArea" property="font" relativeSize="true" size="0"/>
+              </FontInfo>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="sendTextAreaKeyReleased"/>
