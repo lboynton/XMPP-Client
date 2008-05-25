@@ -442,7 +442,14 @@ public class Utils
         }
         if(getSystem().equals("linux"))
         {
-            Runtime.getRuntime().exec("konqueror file:///" + path);
+            try
+            {
+                Runtime.getRuntime().exec("konqueror file:///" + path);
+            }
+            catch(IOException ex)
+            {
+                Runtime.getRuntime().exec("nautilus " + path);
+            }
             return;
         }
     }
