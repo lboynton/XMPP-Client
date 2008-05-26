@@ -21,7 +21,9 @@ public class PrivacyUI extends javax.swing.JFrame
     private XMPPConnection connection;
     private PrivacyListManager manager;
 
-    /** Creates new form PrivacyUI */
+    /** Creates new form PrivacyUI
+     * @param connection 
+     */
     public PrivacyUI(XMPPConnection connection)
     {
         this.connection = connection;
@@ -196,7 +198,10 @@ private void privacyListValueChanged(javax.swing.event.ListSelectionEvent evt) {
 }//GEN-LAST:event_privacyListValueChanged
 
     /**
-     * @param args the command line arguments
+     * Used for testing purposes
+     * @param args Not used
+     * @throws XMPPException Throws an XMPP exception if the server is unreachable
+     * or if the username and password is incorrect
      */
     public static void main(String args[]) throws XMPPException
     {

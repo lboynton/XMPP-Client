@@ -18,7 +18,11 @@ import xmppclient.emoticons.Emoticons;
  */
 public class CustomEmoticonDialog extends javax.swing.JDialog
 {
-    /** Creates new form CustomEmoticonDialog */
+    /** 
+     * Creates new form CustomEmoticonDialog
+     * @param parent The parent JFrame for the dialog
+     * @param modal If this dialog should be modal
+     */
     public CustomEmoticonDialog(java.awt.Frame parent, boolean modal)
     {
         super(parent, modal);
@@ -26,6 +30,11 @@ public class CustomEmoticonDialog extends javax.swing.JDialog
         getRootPane().setDefaultButton(okButton);
     }
 
+    /**
+     * Creates new form CustomEmoticonDialog
+     * @param parent The JDialog parent
+     * @param modal If this dialog should be modal
+     */
     public CustomEmoticonDialog(JDialog parent, boolean modal)
     {
         super(parent, modal);

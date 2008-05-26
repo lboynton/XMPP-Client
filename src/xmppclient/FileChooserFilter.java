@@ -19,17 +19,33 @@ public class FileChooserFilter extends FileFilter
     private List<String> extensions = new ArrayList<String>();
     private String description;
 
+    /**
+     * Creates a new file chooser filter with the specified extensions and description
+     * For use with JFileChoosers
+     * @param extensions The extensions to include
+     * @param description The description
+     */
     public FileChooserFilter(String[] extensions, String description)
     {
         this.extensions.addAll(Arrays.asList(extensions));
     }
     
+    /**
+     * Creates a new file chooser filter with the specified extension and description
+     * For use with JFileChoosers
+     * @param extension The extension to include
+     * @param description The description
+     */
     public FileChooserFilter(String extension, String description)
     {
         this.description = description;
         extensions.add(extension);
     }
     
+    /**
+     * Adds an extension to this file filter
+     * @param extension The extension
+     */
     public void addExtension(String extension)
     {
         extensions.add(extension);

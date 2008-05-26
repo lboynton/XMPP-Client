@@ -38,7 +38,7 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
     /** Creates new form MultiUserChatUI */
     public MultiUserChatUI(String room)
     {
-        muc = new MultiUserChat(XMPPClientUI.connection, room + "@conference.192.168.0.8");
+        muc = new MultiUserChat(ContactListUI.connection, room + "@conference.192.168.0.8");
         initComponents();
     }
 

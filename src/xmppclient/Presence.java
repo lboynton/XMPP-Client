@@ -9,11 +9,19 @@ import javax.swing.Icon;
 import xmppclient.images.Icons;
 
 /**
- *
+ * Extends the Presence class in Smack to provide extra information such as 
+ * the status icon
  * @author Lee Boynton (323326)
+ * @see org.jivesoftware.smack.packet.Presence 
  */
 public class Presence extends org.jivesoftware.smack.packet.Presence 
 {   
+    /**
+     * Constructor creates a new presence
+     * @param type The presence type
+     * @param mode The presence mode
+     * @param status The presence status
+     */
     public Presence(Presence.Type type, Presence.Mode mode, String status)
     {
         super(type);
@@ -21,12 +29,20 @@ public class Presence extends org.jivesoftware.smack.packet.Presence
         setStatus(status);
     }
     
+    /**
+     * Default presence is offline
+     */
     public Presence()
     {
         super(Presence.Type.unavailable);
         setStatus("Offline");
     }
 
+    /**
+     * Gets the icon representing this presence depending on the presence type 
+     * and presence mode
+     * @return
+     */
     public Icon getIcon()
     {
         if(getType().equals(Presence.Type.available) && getMode().equals(Presence.Mode.available))
@@ -53,6 +69,10 @@ public class Presence extends org.jivesoftware.smack.packet.Presence
         return Icons.offline;
     }
     
+    /**
+     * The toString() method displays the status message
+     * @return The status message of this presence
+     */
     @Override
     public String toString()
     {

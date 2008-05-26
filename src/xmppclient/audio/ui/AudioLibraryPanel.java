@@ -34,7 +34,7 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
 
     public void refresh()
     {
-        manager.sendRequest(XMPPClientUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
+        manager.sendRequest(ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
     }
 
     /** This method is called from within the constructor to

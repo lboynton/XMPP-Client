@@ -26,16 +26,24 @@ public class ContactListHover extends JToolTip
     private RosterEntry rosterEntry;
     private Presence presence;
 
-    /** Creates new form ContactListHover */
+    /** Creates new form ContactListHover
+     * @param JID 
+     */
     public ContactListHover(String JID)
     {
         initComponents();
     }
 
+    /**
+     * Displays a JToolTip containing information about the given user
+     * @param rosterEntry The user to display information about
+     * @param x The X location on screen
+     * @param y The Y location on screen
+     */
     public void show(RosterEntry rosterEntry, int x, int y)
     {
         this.rosterEntry = rosterEntry;
-        presence = XMPPClientUI.connection.getRoster().getPresence(rosterEntry.getUser());
+        presence = ContactListUI.connection.getRoster().getPresence(rosterEntry.getUser());
 
         nameLabel.setText(Utils.getNickname(rosterEntry));
         statusLabel.setText(Utils.getStatus(presence));

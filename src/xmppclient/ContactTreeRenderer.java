@@ -5,8 +5,6 @@
 package xmppclient;
 
 import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -34,9 +32,9 @@ public class ContactTreeRenderer extends DefaultTreeCellRenderer
         if(node.getUserObject() instanceof RosterEntry)
         {
             final RosterEntry entry = (RosterEntry) node.getUserObject();
-            Presence presence = XMPPClientUI.connection.getRoster().getPresence(entry.getUser());
+            Presence presence = ContactListUI.connection.getRoster().getPresence(entry.getUser());
             JLabel lbl = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-            lbl.setIcon(Utils.getUserIcon(XMPPClientUI.connection.getRoster().getPresence(entry.getUser())));
+            lbl.setIcon(Utils.getUserIcon(ContactListUI.connection.getRoster().getPresence(entry.getUser())));
             lbl.setText(Utils.getNickname(entry));
             if(presence.getStatus() != null) lbl.setText(lbl.getText() + " (" + presence.getStatus() + ")");
             return lbl;

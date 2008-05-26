@@ -7,17 +7,12 @@ package xmppclient;
 
 import java.awt.Component;
 import java.awt.Point;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.StyledDocument;
 import xmppclient.emoticons.Emoticon;
 import xmppclient.emoticons.Emoticons;
 import xmppclient.images.Icons;
@@ -31,7 +26,13 @@ public class EmoticonsUI extends javax.swing.JDialog
     private JTextArea textArea;
     private CustomEmoticonDialog customEmoticonDialog = new CustomEmoticonDialog((JFrame)null, true);
     
-    /** Creates new form EmoticonsUI */
+    /** 
+     * Creates new form EmoticonsUI
+     * @param owner The JFrame owner
+     * @param location The location on screen this dialog should display at
+     * @param textArea The textarea which the emoticon key sequence should be
+     * inserted into.
+     */
     public EmoticonsUI(JFrame owner, JTextArea textArea, Point location)
     {
         super(owner);
@@ -42,6 +43,9 @@ public class EmoticonsUI extends javax.swing.JDialog
         pack();
     }
     
+    /**
+     * Updates the list of emoticons
+     */
     public void updateEmoticons()
     {
         DefaultListModel model = new DefaultListModel();
@@ -134,7 +138,7 @@ private void emoticonsListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIR
     private javax.swing.JScrollPane emoticonsScrollPane;
     // End of variables declaration//GEN-END:variables
     
-    public class EmoticonsListRenderer extends DefaultListCellRenderer
+    private class EmoticonsListRenderer extends DefaultListCellRenderer
     {
         @Override
         public Component getListCellRendererComponent(JList list, 

@@ -470,7 +470,7 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         {
             try
             {
-                new XMPPClientUI(get(), nameTextField.getText()).setVisible(true);
+                new ContactListUI(get(), nameTextField.getText()).setVisible(true);
                 XMPPClient.this.dispose();
             }
             catch(Exception ex)

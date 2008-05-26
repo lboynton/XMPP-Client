@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import org.jivesoftware.smack.RosterEntry;
 import xmppclient.FileChooserFilter;
 import xmppclient.Utils;
-import xmppclient.XMPPClientUI;
+import xmppclient.ContactListUI;
 import xmppclient.jingle.JingleManager;
 
 /**
@@ -143,7 +143,7 @@ private void streamButtonActionPerformed(java.awt.event.ActionEvent evt) {
     try
     {
         jingleManager.createOutgoingSession(
-                XMPPClientUI.connection.getRoster().getPresence(entry.getUser()).getFrom(),
+                ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom(),
                 fileTextField.getText());
     }
     catch (Exception ex)

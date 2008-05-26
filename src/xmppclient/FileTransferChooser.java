@@ -20,7 +20,12 @@ public class FileTransferChooser extends javax.swing.JDialog
 {
     private RosterEntry entry;
     
-    /** Creates new form FileTransferChooser */
+    /** 
+     * Creates new form FileTransferChooser
+     * @param parent The JFrame parent of this dialog
+     * @param entry The user who should receive the file
+     * @param modal If this dialog should be modal
+     */
     public FileTransferChooser(java.awt.Frame parent, boolean modal, RosterEntry entry) 
     {
         super(parent, modal);
@@ -28,6 +33,10 @@ public class FileTransferChooser extends javax.swing.JDialog
         initComponents();
     }
     
+    /**
+     * Displays the file chooser
+     * @return The return value from the file chooser
+     */
     public int showFileChooser()
     {
         return fileChooser.showDialog(this, "Send file");
@@ -82,8 +91,8 @@ private void fileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         return;
     }
     
-    FileTransferManager manager = new FileTransferManager(XMPPClientUI.connection);
-    OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(XMPPClientUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
+    FileTransferManager manager = new FileTransferManager(ContactListUI.connection);
+    OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
 
     try
     {

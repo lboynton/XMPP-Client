@@ -5,8 +5,6 @@
  */
 package xmppclient;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.jivesoftware.smack.AccountManager;
@@ -14,7 +12,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
 /**
- *
+ * Displays a JFrame for registering a new XMPP account on an XMPP server
  * @author  Lee Boynton (323326)
  */
 public class RegistrationUI extends javax.swing.JDialog
@@ -22,7 +20,10 @@ public class RegistrationUI extends javax.swing.JDialog
     private XMPPConnection connection;
     private AccountManager accountManager;
             
-    /** Creates new form RegistrationUI */
+    /** 
+     * Creates new form RegistrationUI
+     * @param owner The JFrame owner of this dialog
+     */
     public RegistrationUI(JFrame owner)
     {
         super(owner, "Register", true);

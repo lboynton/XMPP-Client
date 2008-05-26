@@ -51,7 +51,7 @@ public class ChatPanel extends javax.swing.JPanel
         this.chat = chat;
         initComponents();
         initTextPane();
-        if (!XMPPClientUI.connection.getRoster().getPresence(chat.getParticipant()).isAvailable())
+        if (!ContactListUI.connection.getRoster().getPresence(chat.getParticipant()).isAvailable())
         {
             sendFileButton.setEnabled(false);
         }
@@ -87,7 +87,7 @@ public class ChatPanel extends javax.swing.JPanel
         }
         try
         {
-            vCard.load(XMPPClientUI.connection, chat.getParticipant());
+            vCard.load(ContactListUI.connection, chat.getParticipant());
             if (vCard.getNickName() != null)
             {
                 return vCard.getNickName();
@@ -190,7 +190,7 @@ public class ChatPanel extends javax.swing.JPanel
 
     public void saveChat()
     {
-        XMPPClientUI.accountManager.logConversation(messageTextPane, chat.getParticipant());
+        ContactListUI.accountManager.logConversation(messageTextPane, chat.getParticipant());
     }
 
     /**
@@ -204,7 +204,7 @@ public class ChatPanel extends javax.swing.JPanel
          * chat.getParticipant() returns the JID with the resource
          * The roster JID does not have the resource
          */
-        return XMPPClientUI.connection.getRoster().getEntry(chat.getParticipant());
+        return ContactListUI.connection.getRoster().getEntry(chat.getParticipant());
     }
 
     /** This method is called from within the constructor to
@@ -247,7 +247,7 @@ public class ChatPanel extends javax.swing.JPanel
         });
 
         statusLabel.setFont(new java.awt.Font("Tahoma", 0, 10));
-        statusLabel.setText("(" + Utils.getStatus(XMPPClientUI.connection.getRoster().getPresence(chat.getParticipant())) + ")");
+        statusLabel.setText("(" + Utils.getStatus(ContactListUI.connection.getRoster().getPresence(chat.getParticipant())) + ")");
 
         emoticonsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/emoticons/face-smile.png"))); // NOI18N
         emoticonsButton.addActionListener(new java.awt.event.ActionListener() {

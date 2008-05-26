@@ -12,14 +12,18 @@ import org.jivesoftware.smackx.filetransfer.FileTransfer;
 import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 
 /**
- *
- * @author  Lee
+ * A JFrame for displaying the progress of a file transfer
+ * @author Lee Boynton (323326)
  */
 public class FileTransferUI extends javax.swing.JFrame
 {
     private FileTransfer transfer;
             
-    /** Creates new form FileTransferUI */
+    /** 
+     * Creates new form FileTransferUI
+     * @param transfer The file transfer
+     * @throws InterruptedException 
+     */
     public FileTransferUI(final FileTransfer transfer) throws InterruptedException 
     {
         this.transfer = transfer;
@@ -64,6 +68,9 @@ public class FileTransferUI extends javax.swing.JFrame
         sw.execute();
     }
     
+    /**
+     * Called when the file transfer is complete
+     */
     public void finish()
     {
         statusLabel.setText("Complete");

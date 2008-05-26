@@ -20,7 +20,12 @@ public class PrivacyListUI extends javax.swing.JDialog
 {
     private XMPPConnection connection;
     
-    /** Creates new form PrivacyListUI */
+    /**
+     * Creates new form PrivacyListUI
+     * @param parent The parent JFrame
+     * @param connection The XMPP connection to the server which the privacy
+     * lists will be retrieved from
+     */
     public PrivacyListUI(JFrame parent, XMPPConnection connection)
     {
         super(parent, "New Privacy List", true);

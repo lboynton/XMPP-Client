@@ -6,25 +6,34 @@
 
 package xmppclient;
 
-import javax.swing.JTextArea;
-
 /**
- *
- * @author  Lee
+ * A JPanel to be used as a JFileChooser accessory for the file transfer
+ * @author Lee Boynton (323326)
  */
 public class FileTransferChooserAccessory extends javax.swing.JPanel 
 { 
-    /** Creates new form FileTransferChooserAccessory */
+    /**
+     * Creates new form FileTransferChooserAccessory 
+     */
     public FileTransferChooserAccessory() 
     {
         initComponents();
     }
     
+    /**
+     * For setting the name of the selected file in the JFileChooser
+     * @param name
+     */
     public void setFilename(String name)
     {
         filenameTextField.setText(name);
     }
     
+    /**
+     * Gets the user entered description, or null if they didn't enter a 
+     * description
+     * @return
+     */
     public String getFileDescription()
     {
         return descriptionTextArea.getText();

@@ -39,7 +39,7 @@ public class MultiUserChatInviteUI extends javax.swing.JDialog
 
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        userComboBox = new javax.swing.JComboBox(XMPPClientUI.connection.getRoster().getEntries().toArray());
+        userComboBox = new javax.swing.JComboBox(ContactListUI.connection.getRoster().getEntries().toArray());
         jScrollPane1 = new javax.swing.JScrollPane();
         reasonTextArea = new javax.swing.JTextArea();
         jSeparator1 = new javax.swing.JSeparator();

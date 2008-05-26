@@ -30,13 +30,17 @@ import org.jivesoftware.smackx.packet.VCard;
  */
 public class AvatarChooser extends javax.swing.JDialog
 {
-    private XMPPClientUI clientUI;
+    private ContactListUI clientUI;
 
-    /** Creates new form AvatarChooser */
+    /*
+     * Creates new form AvatarChooser 
+     * @param owner The JFrame owner of the dialog
+     * @param model If the dialog should be modal
+     */
     public AvatarChooser(JFrame owner, boolean modal)
     {
         super(owner, "Choose Avatar", modal);
-        clientUI = (XMPPClientUI) owner;
+        clientUI = (ContactListUI) owner;
         initComponents();
         setVisible(true);
     }
@@ -271,7 +275,7 @@ private void avatarFileChooserActionPerformed(java.awt.event.ActionEvent evt) {/
             try
             {
                 VCard vCard = new VCard();
-                vCard.load(XMPPClientUI.connection);
+                vCard.load(ContactListUI.connection);
                 ImageIcon image = new ImageIcon(avatarFileChooser.getSelectedFile().toURI().toURL());
                 image = (ImageIcon) Utils.resizeImage(image, 48);
                 clientUI.setAvatar(image);
@@ -282,7 +286,7 @@ private void avatarFileChooserActionPerformed(java.awt.event.ActionEvent evt) {/
                 SmackConfiguration.setPacketReplyTimeout(15000);
 
                 // save vcard
-                vCard.save(XMPPClientUI.connection);
+                vCard.save(ContactListUI.connection);
 
                 // reset packet reply timeout
                 SmackConfiguration.setPacketReplyTimeout(oldTimeout);
