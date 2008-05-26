@@ -8,6 +8,7 @@ package xmppclient.chat;
 import xmppclient.*;
 import xmppclient.chat.MultiUserChatInviteUI;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -25,21 +26,24 @@ import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.Form;
 import org.jivesoftware.smackx.muc.InvitationRejectionListener;
 import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.jivesoftware.smackx.muc.ParticipantStatusListener;
 import org.jivesoftware.smackx.muc.SubjectUpdatedListener;
 
 /**
- *
+ * A JFrame for conducting conferences in
  * @author  Lee Boynton (323326)
  */
 public class MultiUserChatUI extends javax.swing.JFrame implements PacketListener
 {
     private MultiUserChat muc;
+    private ChatTextPaneStyledDocument doc;
 
     /** Creates new form MultiUserChatUI */
     public MultiUserChatUI(String room)
     {
         muc = new MultiUserChat(ContactListUI.connection, room + "@conference.192.168.0.8");
         initComponents();
+        doc = (ChatTextPaneStyledDocument) messageTextPane.getStyledDocument();
     }
 
     public void create(String nickname) throws XMPPException
@@ -68,7 +72,101 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
     {
         updateOccupantList();
         muc.addMessageListener(this);
-        muc.addParticipantListener(new ParticipantListener());
+        muc.addParticipantStatusListener(new ParticipantStatusListener()
+        {
+            @Override
+            public void joined(String participant)
+            {
+                doc.insertInfo(StringUtils.parseResource(participant) + " joined");
+                updateOccupantList();
+            }
+
+            @Override
+            public void left(String participant)
+            {
+                doc.insertInfo(StringUtils.parseResource(participant) + " left");
+                updateOccupantList();
+            }
+
+            @Override
+            public void kicked(String participant, String actor, String reason)
+            {
+                doc.insertInfo(StringUtils.parseResource(participant) + " was kicked out by " + actor + "for: " + reason);
+                updateOccupantList();
+            }
+
+            @Override
+            public void voiceGranted(String participant)
+            {
+                doc.insertInfo(StringUtils.parseResource(participant) + " was granted voice");
+            }
+
+            @Override
+            public void voiceRevoked(String participant)
+            {
+                doc.insertInfo("Voice was revoked from " + StringUtils.parseResource(participant));
+            }
+
+            @Override
+            public void banned(String participant, String actor, String reason)
+            {
+                doc.insertInfo(StringUtils.parseResource(participant) + " was banned by " + actor + " for: " + reason);
+            }
+
+            @Override
+            public void membershipGranted(String participant)
+            {
+                doc.insertInfo(StringUtils.parseResource(participant) + " was granted membership");
+            }
+
+            @Override
+            public void membershipRevoked(String participant)
+            {
+                doc.insertInfo(StringUtils.parseResource(participant) + " has had their membership revoked");
+            }
+
+            @Override
+            public void moderatorGranted(String participant)
+            {
+                doc.insertInfo(StringUtils.parseResource(participant) + " was granted moderator role");
+            }
+
+            @Override
+            public void moderatorRevoked(String participant)
+            {
+                doc.insertInfo(StringUtils.parseResource(participant) + " had their moderator role revoked");
+            }
+
+            @Override
+            public void ownershipGranted(String participant)
+            {
+                doc.insertInfo(StringUtils.parseResource(participant) + " was granted ownership of the conference");
+            }
+
+            @Override
+            public void ownershipRevoked(String participant)
+            {
+                doc.insertInfo(StringUtils.parseResource(participant) + " is no longer owner");
+            }
+
+            @Override
+            public void adminGranted(String participant)
+            {
+                doc.insertInfo(StringUtils.parseResource(participant) + " is now admin");
+            }
+
+            @Override
+            public void adminRevoked(String participant)
+            {
+                doc.insertInfo(StringUtils.parseResource(participant) + " is no longer admin");
+            }
+
+            @Override
+            public void nicknameChanged(String participant, String newNickname)
+            {
+                doc.insertInfo(StringUtils.parseResource(participant) + " changed their nickname to " + newNickname);
+            }
+        });
         muc.addInvitationRejectionListener(new InvitationRejectionListener()
         {
             @Override
@@ -86,9 +184,9 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
             public void subjectUpdated(String subject, String from)
             {
                 ChatTextPaneStyledDocument doc = (ChatTextPaneStyledDocument) messageTextPane.getStyledDocument();
-                doc.insertInfo("Room subject was changed by " + 
-                        StringUtils.parseResource(from) + 
-                        ". The subject is now " + 
+                doc.insertInfo("Room subject was changed by " +
+                        StringUtils.parseResource(from) +
+                        ". The subject is now " +
                         subject + ".");
             }
         });
@@ -106,6 +204,7 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         jToolBar1 = new javax.swing.JToolBar();
         inviteButton = new javax.swing.JButton();
         subjectButton = new javax.swing.JButton();
+        banButton = new javax.swing.JButton();
         verticalSplitPane = new javax.swing.JSplitPane();
         horizontalSplitPane = new javax.swing.JSplitPane();
         messageScrollPane = new javax.swing.JScrollPane();
@@ -169,14 +268,29 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         });
         jToolBar1.add(subjectButton);
 
+        banButton.setText("Ban user");
+        banButton.setFocusable(false);
+        banButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        banButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        banButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                banButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(banButton);
+
+        Utils.flattenSplitPane(verticalSplitPane);
         verticalSplitPane.setBorder(null);
         verticalSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
+        Utils.flattenSplitPane(horizontalSplitPane);
         horizontalSplitPane.setBorder(null);
+        horizontalSplitPane.setDividerSize(7);
         horizontalSplitPane.setOneTouchExpandable(true);
 
         messageScrollPane.setBackground(new java.awt.Color(255, 255, 255));
 
+        messageTextPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         messageTextPane.setEditable(false);
         messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
         messageScrollPane.setViewportView(messageTextPane);
@@ -194,6 +308,7 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         jPanel1.setMinimumSize(new java.awt.Dimension(0, 30));
 
         sendTextArea.setColumns(20);
+        sendTextArea.setFont(sendTextArea.getFont());
         sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 sendTextAreaKeyReleased(evt);
@@ -219,8 +334,8 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
-            .addComponent(sendButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+            .addComponent(sendButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
         );
 
         verticalSplitPane.setRightComponent(jPanel1);
@@ -312,30 +427,46 @@ private void sendTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
 }//GEN-LAST:event_sendTextAreaKeyReleased
 
 private void subjectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subjectButtonActionPerformed
-    String subject = JOptionPane.showInputDialog(this, "Enter new subject");
-    
-    if(subject == null) return;
-    if(subject.equals("")) return;
-    
-    try
-    {
+        String subject = JOptionPane.showInputDialog(this, "Enter new subject");
+
+        if (subject == null)
+        {
+            return;
+        }
+        if (subject.equals(""))
+        {
+            return;
+        }
+        try
+        {
+            muc.changeSubject(subject);
+        }
+        catch (XMPPException ex)
+        {
+            JOptionPane.showMessageDialog(this,
+                    "You are not allowed to change the subject",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
 //GEN-LAST:event_subjectButtonActionPerformed
-        muc.changeSubject(subject);
+private void banButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_banButtonActionPerformed
+    String reason = JOptionPane.showInputDialog(this, "Reason for ban");
+    String member = (String) memberList.getSelectedValue();
+    try
+    {//GEN-LAST:event_banButtonActionPerformed
+            muc.banUser(member, reason);
+        }
+        catch (XMPPException ex)
+        {
+            JOptionPane.showMessageDialog(this, "Could not ban user " + member, "Could not ban user", JOptionPane.ERROR_MESSAGE);
+        }
     }
-    catch (XMPPException ex)
-    {
-        JOptionPane.showMessageDialog(this, 
-                "You are not allowed to change the subject", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
-    }
-}
 
     @Override
     public void processPacket(Packet packet)
     {
         Message message = (Message) packet;
-        ChatTextPaneStyledDocument doc = (ChatTextPaneStyledDocument) messageTextPane.getStyledDocument();
         doc.insertUser(StringUtils.parseResource(message.getFrom()));
         doc.insertMessage(message.getBody());
         messageTextPane.setCaretPosition(doc.getLength());
@@ -358,6 +489,7 @@ private void subjectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton banButton;
     private javax.swing.JSplitPane horizontalSplitPane;
     private javax.swing.JButton inviteButton;
     private javax.swing.JPanel jPanel1;
@@ -373,17 +505,6 @@ private void subjectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JSplitPane verticalSplitPane;
     // End of variables declaration//GEN-END:variables
 
-    private class ParticipantListener implements PacketListener
-    {
-        @Override
-        public void processPacket(Packet packet)
-        {
-            ChatTextPaneStyledDocument doc = (ChatTextPaneStyledDocument) messageTextPane.getStyledDocument();
-            doc.insertInfo(StringUtils.parseResource(packet.getFrom()) + " joined");
-            updateOccupantList();
-        }
-    }
-
     private class MemberListRenderer extends DefaultListCellRenderer
     {
         @Override
@@ -395,3 +516,4 @@ private void subjectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         }
     }
 }
+

@@ -3,7 +3,6 @@
  *
  * Created on 04 May 2008, 17:49
  */
-
 package xmppclient;
 
 import java.awt.Graphics;
@@ -19,16 +18,17 @@ import org.jivesoftware.smack.XMPPConnection;
  * Shows the main login JFrame.
  * @author  Lee Boynton (323326)
  */
-public class XMPPClient extends javax.swing.JFrame 
+public class XMPPClient extends javax.swing.JFrame
 {
     private XMPPConnection XMPPConnection;
     private ImageIcon icon = new ImageIcon(getClass().getResource("images/bg.jpg"));
-    
+    private static boolean DEBUG = false;
+
     /** Creates new form XMPPClient */
-    public XMPPClient() 
+    public XMPPClient()
     {
-        XMPPConnection.DEBUG_ENABLED = false;
-        
+        XMPPConnection.DEBUG_ENABLED = DEBUG;
+
         try
         {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -37,9 +37,9 @@ public class XMPPClient extends javax.swing.JFrame
         {
             System.out.println("Unable to use system look and feel");
         }
-        
+
         initComponents();
-        
+
         Connection defaultConnection = new Connection();
         storedConnectionComboBox.addItem(defaultConnection);
         storedConnectionComboBox.setSelectedItem(defaultConnection);
@@ -332,7 +332,7 @@ public class XMPPClient extends javax.swing.JFrame
 
 private void storedConnectionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_storedConnectionComboBoxActionPerformed
     Connection connection = (Connection) storedConnectionComboBox.getSelectedItem();
-    
+
     usernameTextField.setText(connection.getUsername());
     resourceTextField.setText(connection.getResource());
     hostTextField.setText(connection.getHost());
@@ -350,13 +350,16 @@ private void hostTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:
 }//GEN-LAST:event_hostTextFieldKeyReleased
 
 private void storeConnectionCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_storeConnectionCheckBoxActionPerformed
-    if(storeConnectionCheckBox.isSelected()) 
+    if (storeConnectionCheckBox.isSelected())
     {
         nameTextField.setEnabled(true);
         nameTextField.requestFocus();
         nameTextField.selectAll();
     }
-    else nameTextField.setEnabled(false);
+    else
+    {
+        nameTextField.setEnabled(false);
+    }
 }//GEN-LAST:event_storeConnectionCheckBoxActionPerformed
 
 private void passwordTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordTextFieldKeyReleased
@@ -385,50 +388,71 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
+     * @param an argument of debug starts the program in debug mode
+     */
+    public static void main(final String args[])
+    {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
+                if (args.length > 0 && args[0].equals("debug"))
+                {
+                     DEBUG = true;
+                }
+                
                 new XMPPClient().setVisible(true);
             }
         });
     }
-    
+
     private void storeConnection(boolean store) throws Exception
     {
-        if(!store) return;
-        
+        if (!store)
+        {
+            return;
+        }
         Utils.saveConnection(usernameTextField.getText(),
                 resourceTextField.getText(),
                 hostTextField.getText(),
                 portTextField.getText(),
                 nameTextField.getText());
     }
-    
+
     private void validateInputs()
     {
         signInButton.setEnabled(false);
-        
+
         // validate lengths
-        if(usernameTextField.getText().equals("")) return;
-        if(passwordTextField.getPassword().length == 0) return;
-        if(portTextField.getText().equals("")) return;
-        if(hostTextField.getText().equals("")) return;
-        
+        if (usernameTextField.getText().equals(""))
+        {
+            return;
+        }
+        if (passwordTextField.getPassword().length == 0)
+        {
+            return;
+        }
+        if (portTextField.getText().equals(""))
+        {
+            return;
+        }
+        if (hostTextField.getText().equals(""))
+        {
+            return;
+        }
         try
         {
             Integer.parseInt(portTextField.getText());
         }
-        catch(NumberFormatException ex)
+        catch (NumberFormatException ex)
         {
             return;
         }
-        
+
         signInButton.setEnabled(true);
     }
-    
+
     private void enableComponents(boolean enable)
     {
         storedConnectionComboBox.setEnabled(enable);
@@ -439,29 +463,35 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         storeConnectionCheckBox.setEnabled(enable);
         passwordTextField.setEnabled(enable);
         signInButton.setEnabled(enable);
-        
-        if(enable) signInButton.setText("Sign in");
-        else signInButton.setText("Connecting");
+
+        if (enable)
+        {
+            signInButton.setText("Sign in");
+        }
+        else
+        {
+            signInButton.setText("Connecting");
+        }
     }
-    
+
     private class ConnectSwingWorker extends SwingWorker<XMPPConnection, Object>
     {
         @Override
         protected XMPPConnection doInBackground() throws Exception
         {
             ConnectionConfiguration config = new ConnectionConfiguration(
-                hostTextField.getText(), 
-                Integer.parseInt(portTextField.getText()));
-            
+                    hostTextField.getText(),
+                    Integer.parseInt(portTextField.getText()));
+
             XMPPConnection connection = new XMPPConnection(config);
-            
+
             connection.connect();
             connection.login(usernameTextField.getText(),
                     new String(passwordTextField.getPassword()),
                     resourceTextField.getText());
-            
+
             storeConnection(storeConnectionCheckBox.isSelected());
-            
+
             return connection;
         }
 
@@ -473,13 +503,11 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                 new ContactListUI(get(), nameTextField.getText()).setVisible(true);
                 XMPPClient.this.dispose();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                JOptionPane.showMessageDialog(XMPPClient.this, 
-                        "There was an error loading the main window\n" +
-                        "An error message may follow: " +
-                        ex.getMessage(), 
-                        "Error", 
+                JOptionPane.showMessageDialog(XMPPClient.this,
+                        ex.getMessage(),
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
                 enableComponents(true);
             }

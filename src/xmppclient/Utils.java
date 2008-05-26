@@ -10,18 +10,21 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JSplitPane;
+import javax.swing.border.Border;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.plaf.basic.BasicSplitPaneDivider;
+import javax.swing.plaf.basic.BasicSplitPaneUI;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.RosterGroup;
 import org.jivesoftware.smack.XMPPException;
@@ -393,9 +396,8 @@ public class Utils
      * @param host
      * @param port
      * @param name
-     * @throws java.lang.Exception If the filename is invalid
      */
-    public static void saveConnection(String username, String resource, String host, String port, String name) throws Exception
+    public static void saveConnection(String username, String resource, String host, String port, String name) throws FileNotFoundException, IOException
     {
         Properties properties = new Properties();
         properties.setProperty("username", username);
@@ -406,14 +408,7 @@ public class Utils
 
         (new File("connections")).mkdir();
 
-        try
-        {
-            properties.store(new FileOutputStream("connections/" + name + ".properties"), PROPERTIES_DESC);
-        }
-        catch (Exception e)
-        {
-            throw new Exception("Invalid filename");
-        }
+        properties.store(new FileOutputStream("connections/" + name + ".properties"), PROPERTIES_DESC);
     }
 
     /**
@@ -563,7 +558,7 @@ public class Utils
      */
     public static void openFileBrowser(String path, boolean create) throws IOException, SecurityException
     {
-        if(create && !new File(path).exists())
+        if (create && !new File(path).exists())
         {
             new File(path).mkdirs();
         }
@@ -578,13 +573,13 @@ public class Utils
             Runtime.getRuntime().exec("explorer.exe " + path);
             return;
         }
-        if(getSystem().equals("linux"))
+        if (getSystem().equals("linux"))
         {
             try
             {
                 Runtime.getRuntime().exec("konqueror file:///" + path);
             }
-            catch(IOException ex)
+            catch (IOException ex)
             {
                 Runtime.getRuntime().exec("nautilus " + path);
             }
@@ -612,5 +607,24 @@ public class Utils
         }
 
         return os;
+    }
+
+    public static void flattenSplitPane(JSplitPane jSplitPane)
+    {
+        jSplitPane.setUI(new BasicSplitPaneUI()
+        {
+            @Override
+            public BasicSplitPaneDivider createDefaultDivider()
+            {
+                return new BasicSplitPaneDivider(this)
+                {
+                    @Override
+                    public void setBorder(Border b)
+                    {
+                    }
+                };
+            }
+        });
+        jSplitPane.setBorder(null);
     }
 }

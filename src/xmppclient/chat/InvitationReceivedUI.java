@@ -207,8 +207,10 @@ private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     
         mucui.setVisible(true);
     }
-    
-    MultiUserChat.decline(ContactListUI.connection, room, inviter, declineReasonTextArea.getText());
+    else
+    {
+        MultiUserChat.decline(ContactListUI.connection, room, inviter, declineReasonTextArea.getText());
+    }
     dispose();
 }//GEN-LAST:event_okButtonActionPerformed
 

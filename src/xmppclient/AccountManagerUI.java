@@ -137,7 +137,7 @@ public class AccountManagerUI extends javax.swing.JFrame
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true
+                true, false, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -172,7 +172,7 @@ public class AccountManagerUI extends javax.swing.JFrame
             }
         });
 
-        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 14));
         titleLabel.setText("Accounts");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
