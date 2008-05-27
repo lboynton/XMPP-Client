@@ -22,6 +22,9 @@ public abstract class Session
     private XMPPConnection xmppConnection;
     private String responder;
     private String sid;
+    protected boolean complete = false;
+    protected boolean connected = false;
+    protected String status = "Not started";
 
     public Session(XMPPConnection xmppConnection, String responder)
     {
@@ -45,6 +48,21 @@ public abstract class Session
         terminate.setFrom(xmppConnection.getUser());
         terminate.setSid(sid);
         xmppConnection.sendPacket(terminate);
+    }
+
+    public boolean isComplete()
+    {
+        return complete;
+    }
+
+    public boolean isConnected()
+    {
+        return connected;
+    }
+
+    public String getStatus()
+    {
+        return status;
     }
 
     public String getResponder()

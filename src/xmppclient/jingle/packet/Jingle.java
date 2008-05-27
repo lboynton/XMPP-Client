@@ -48,6 +48,11 @@ public class Jingle extends IQ
         sid = "851ba2";
     }
 
+    public Description getDescription()
+    {
+        return description;
+    }
+
     public Jingle(Action action)
     {
         super.setType(IQ.Type.SET);

@@ -59,6 +59,8 @@ import xmppclient.audio.ui.StreamUI;
 import xmppclient.images.Icons;
 import xmppclient.images.tango.TangoIcons;
 import xmppclient.chat.InvitationReceivedUI;
+import xmppclient.jingle.IncomingSession;
+import xmppclient.jingle.IncomingSessionUI;
 import xmppclient.jingle.JingleSessionRequest;
 import xmppclient.vcard.VCardEditor;
 import xmppclient.jingle.JingleManager;
@@ -1339,8 +1341,8 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
     public void sessionRequested(JingleSessionRequest request)
     {
         System.out.println("Jingle session request received");
-        //Jingle jingle = request.getJingle();
-        request.accept();
+
+        new IncomingSessionUI(this, false, request).setVisible(true);
     }
 
     /**

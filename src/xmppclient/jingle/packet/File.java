@@ -32,6 +32,13 @@ public class File implements PacketExtension
         this.desc = desc;
     }
 
+    public File(String name, String size, String hash)
+    {
+        this.name = name;
+        this.size = size;
+        this.hash = hash;
+    }
+
     public File() {}
 
     public void setDate(String date)
@@ -69,6 +76,31 @@ public class File implements PacketExtension
     public String getElementName()
     {
         return NODENAME;
+    }
+
+    public String getDate()
+    {
+        return date;
+    }
+
+    public String getDesc()
+    {
+        return desc;
+    }
+
+    public String getHash()
+    {
+        return hash;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public String getSize()
+    {
+        return size;
     }
 
     @Override

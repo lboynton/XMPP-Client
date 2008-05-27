@@ -7,8 +7,6 @@ package xmppclient.audio.packet;
 import xmppclient.audio.*;
 import java.util.ArrayList;
 import java.util.List;
-import org.farng.mp3.MP3File;
-import org.farng.mp3.id3.ID3v1;
 import org.jivesoftware.smack.packet.IQ;
 
 /**
@@ -21,16 +19,17 @@ public class Audio extends IQ
     public static final String ELEMENTNAME = "audio";
     private List<AudioFile> audioFiles;
     private String AId;
+    private AudioType audioType;
 
     public Audio()
     {
-        setType(IQ.Type.GET);
         audioFiles = new ArrayList<AudioFile>();
     }
 
-    public Audio(IQ.Type type)
+    public Audio(AudioType audioType, IQ.Type type)
     {
         setType(type);
+        setAudioType(audioType);
         audioFiles = new ArrayList<AudioFile>();
     }
 
@@ -38,6 +37,16 @@ public class Audio extends IQ
     {
         setType(IQ.Type.SET);
         this.audioFiles = audioFiles;
+    }
+
+    public AudioType getAudioType()
+    {
+        return audioType;
+    }
+
+    public void setAudioType(AudioType audioType)
+    {
+        this.audioType = audioType;
     }
 
     public void addFile(AudioFile file)
@@ -65,16 +74,13 @@ public class Audio extends IQ
         {
             buf.append(" aid=\"").append(AId).append("\"");
         }
-        /*if (getFrom() != null)
-        {
-        buf.append(" from=\"").append(StringUtils.escapeForXML(getFrom())).append("\"");
-        }*/
+
 
         buf.append(">");
-        if(getType() == IQ.Type.SET)
+        if (getType() == IQ.Type.SET)
         {
             for (AudioFile file : audioFiles)
-            {              
+            {
                 buf.append("<file");
                 buf.append(" artist=\"").append(file.getArtist()).append("\"");
                 buf.append(" album=\"").append(file.getAlbum()).append("\"");
@@ -85,5 +91,38 @@ public class Audio extends IQ
         }
         buf.append("</audio>");
         return buf.toString();
+    }
+
+    public static enum AudioType
+    {
+        LIBRARY, FILE;
+        private static String names[] =
+        {
+            "library", "file"
+        };
+
+        /**
+         * Returns the String value for an AudioType.
+         */
+        @Override
+        public String toString()
+        {
+            return names[this.ordinal()];
+        }
+
+        /**
+         * Returns the AudioType for a String value.
+         */
+        public static AudioType getAudioType(String str)
+        {
+            for (int i = 0; i < names.length; i++)
+            {
+                if (names[i].equals(str))
+                {
+                    return AudioType.values()[i];
+                }
+            }
+            return null;
+        }
     }
 }

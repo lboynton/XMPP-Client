@@ -27,6 +27,7 @@ public class StreamUI extends javax.swing.JDialog
     {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(parent);
     }
 
     public StreamUI(java.awt.Frame parent, RosterEntry entry, JingleManager jingleManager)

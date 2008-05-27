@@ -8,6 +8,8 @@ import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -19,6 +21,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.packet.Bytestream;
 import xmppclient.jingle.packet.Description;
 import xmppclient.jingle.packet.Jingle;
@@ -46,15 +49,13 @@ public class OutgoingSession extends Session implements PacketListener
         jingle.setTo(responder);
         jingle.setInitiator(xmppConnection.getUser());
         jingle.setResponder(responder);
-        jingle.setSid("aaaa");
+        jingle.setSid(StringUtils.randomString(5));
         jingle.setAction(Jingle.Action.SESSIONINITIATE);
         jingle.setContent(Jingle.Content.FILEOFFER);
         jingle.setDescription(new Description(
-                new xmppclient.jingle.packet.File("test.txt",
-                "1022",
-                "552da749930852c69ae5d2141d3766b1",
-                "1969-07-21T02:56:15Z",
-                "This is a test. If this were a real file...")));
+                new xmppclient.jingle.packet.File(file.getName(),
+                String.valueOf(file.length()),
+                String.valueOf(file.hashCode()))));
         xmppConnection.sendPacket(jingle);
 
         xmppConnection.addPacketListener(this, new PacketTypeFilter(Jingle.class));
@@ -65,7 +66,7 @@ public class OutgoingSession extends Session implements PacketListener
     {
         System.out.println("Starting");
         InetSocketAddress addr = new InetSocketAddress(getHostAddress(), port);
-
+        
         try
         {
             buffer = new byte[new Long(file.length()).intValue()];

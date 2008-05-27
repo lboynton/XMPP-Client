@@ -32,6 +32,11 @@ public class Description implements PacketExtension
         this.type = type;
     }
 
+    public PacketExtension getType()
+    {
+        return type;
+    }
+
     @Override
     public String getElementName()
     {
