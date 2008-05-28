@@ -19,44 +19,43 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabel9" linkSize="1" pref="71" max="32767" attributes="1"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="titleTextField" min="-2" pref="112" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jLabel1" linkSize="1" alignment="0" max="32767" attributes="1"/>
-                                  <Component id="jLabel4" linkSize="1" alignment="0" max="32767" attributes="1"/>
-                                  <Component id="jLabel2" linkSize="1" alignment="0" min="-2" max="-2" attributes="1"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="secondNameTextField" linkSize="2" alignment="0" pref="113" max="32767" attributes="1"/>
-                                  <Component id="firstNameTextField" linkSize="2" alignment="0" max="32767" attributes="1"/>
-                                  <Component id="middleNameTextField" linkSize="2" alignment="0" min="-2" max="-2" attributes="1"/>
-                              </Group>
-                          </Group>
+                      <Component id="jLabel9" linkSize="1" pref="71" max="32767" attributes="1"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="titleTextField" min="-2" pref="113" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jLabel1" linkSize="1" alignment="0" pref="71" max="32767" attributes="1"/>
+                          <Component id="jLabel4" linkSize="1" alignment="0" pref="71" max="32767" attributes="1"/>
+                          <Component id="jLabel2" linkSize="1" alignment="0" min="-2" max="-2" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabel3" linkSize="1" pref="71" max="32767" attributes="1"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="nicknameTextField" linkSize="2" alignment="0" pref="112" max="32767" attributes="1"/>
-                                  <Component id="websiteTextField" linkSize="2" alignment="0" min="-2" pref="112" max="-2" attributes="0"/>
-                                  <Component id="jabberIDTextField" linkSize="2" alignment="0" min="-2" pref="113" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Component id="jLabel27" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel20" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="secondNameTextField" linkSize="2" alignment="0" pref="113" max="32767" attributes="1"/>
+                          <Component id="firstNameTextField" linkSize="2" alignment="0" max="32767" attributes="1"/>
+                          <Component id="middleNameTextField" linkSize="2" alignment="0" min="-2" max="-2" attributes="1"/>
                       </Group>
                   </Group>
-                  <Component id="avatarLabel" alignment="1" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="jLabel3" linkSize="1" pref="71" max="32767" attributes="1"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="nicknameTextField" linkSize="2" alignment="0" pref="112" max="32767" attributes="1"/>
+                              <Component id="websiteTextField" linkSize="2" alignment="0" min="-2" pref="112" max="-2" attributes="0"/>
+                              <Component id="jabberIDTextField" linkSize="2" alignment="0" min="-2" pref="113" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Component id="jLabel27" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel20" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="avatarLabel" alignment="1" min="-2" pref="75" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -103,8 +102,11 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="14" max="32767" attributes="0"/>
-              <Component id="avatarLabel" min="-2" pref="48" max="-2" attributes="1"/>
+              <EmptySpace pref="72" max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace pref="95" max="32767" attributes="0"/>
+              <Component id="avatarLabel" min="-2" pref="75" max="-2" attributes="1"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -219,8 +221,10 @@
     <Component class="javax.swing.JLabel" name="avatarLabel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
-            <EtchetBorder/>
+          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+            <LineBorder>
+              <Color PropertyName="color" blue="cc" green="cc" red="cc" type="rgb"/>
+            </LineBorder>
           </Border>
         </Property>
       </Properties>

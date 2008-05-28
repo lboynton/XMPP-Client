@@ -277,7 +277,7 @@ private void avatarFileChooserActionPerformed(java.awt.event.ActionEvent evt) {/
                 VCard vCard = new VCard();
                 vCard.load(ContactListUI.connection);
                 ImageIcon image = new ImageIcon(avatarFileChooser.getSelectedFile().toURI().toURL());
-                image = (ImageIcon) Utils.resizeImage(image, 52);
+                image = (ImageIcon) Utils.resizeImage(image, 100);
                 clientUI.setAvatar(image);
                 vCard.setAvatar(Utils.getBytesFromImage(image.getImage()));
 
