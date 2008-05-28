@@ -1,18 +1,10 @@
 /*
- * ContactListHover.java
+ * ContactToolTip.java
  *
  * Created on 30 April 2008, 19:02
  */
 package xmppclient;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.geom.RoundRectangle2D;
 import javax.swing.JToolTip;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.packet.Presence;
@@ -21,15 +13,15 @@ import org.jivesoftware.smack.packet.Presence;
  *
  * @author Lee Boynton (323326)
  */
-public class ContactListHover extends JToolTip
+public class ContactToolTip extends JToolTip
 {
     private RosterEntry rosterEntry;
     private Presence presence;
 
-    /** Creates new form ContactListHover
+    /** Creates new form ContactToolTip
      * @param JID 
      */
-    public ContactListHover(String JID)
+    public ContactToolTip(String JID)
     {
         initComponents();
     }
@@ -50,6 +42,7 @@ public class ContactListHover extends JToolTip
         JIDLabel.setText(rosterEntry.getUser());
         avatarLabel.setIcon(Utils.getAvatar(rosterEntry, 48));
         setVisible(true);
+        this.setSize(200, 500);
     }
 
     /** This method is called from within the constructor to
@@ -86,7 +79,7 @@ public class ContactListHover extends JToolTip
                     .addComponent(nameLabel)
                     .addComponent(statusLabel)
                     .addComponent(JIDLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addComponent(avatarLabel)
                 .addContainerGap())
         );
@@ -102,7 +95,7 @@ public class ContactListHover extends JToolTip
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(JIDLabel))
                     .addComponent(avatarLabel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

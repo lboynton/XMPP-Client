@@ -82,28 +82,22 @@ public class Utils
     }
 
     /**
-     * Resizes an image so that it is no higher than the specified height
-     * and no wider than 60 pixels
+     * Resizes an image so that it is no higher than the specified size
+     * and no wider than the specified size
      * @param image The image to resize
-     * @param height The maximum height
+     * @param size The maximum size
      * @return The resized image
      */
-    public static Icon resizeImage(ImageIcon image, int height)
+    public static Icon resizeImage(ImageIcon image, int size)
     {
         ImageIcon resizedImage = null;
 
         if (image != null)
         {
-            if (image.getIconHeight() > height && image.getIconWidth() > 60)
+            if (image.getIconWidth() > size || image.getIconHeight() > size)
             {
                 resizedImage = new ImageIcon(image.getImage().
-                        getScaledInstance(60, height,
-                        Image.SCALE_DEFAULT));
-            }
-            else if (image.getIconHeight() > height)
-            {
-                resizedImage = new ImageIcon(image.getImage().
-                        getScaledInstance(-1, height,
+                        getScaledInstance(size, size,
                         Image.SCALE_DEFAULT));
             }
             else
@@ -228,7 +222,9 @@ public class Utils
     }
 
     /**
-     * Gets the status message of the given presence
+     * Gets the custom status message of the given presence. If there is none, this
+     * will call the {@link getStatus(Presence presence)} method to get the textual
+     * status of the user
      * @param presence The presence
      * @return The status message
      */
@@ -256,12 +252,12 @@ public class Utils
             return "Offline";
         }
         return "Available";
-    }
-
+        }
+        
     /**
      * Gets the avatar of the specified roster entry and resizes it
      * @param rosterEntry The user
-     * @param height The max height
+     * @param size The max size
      * @return The resized avatar icon
      */
     public static Icon getAvatar(RosterEntry rosterEntry, int height)
@@ -287,7 +283,7 @@ public class Utils
 
     /**
      * Gets the avatar of the local user and resizes it
-     * @param height The max height
+     * @param size The max size
      * @return The resized avatar icon
      */
     public static Icon getAvatar(int height)
@@ -313,7 +309,7 @@ public class Utils
     /**
      * Gets the avatar of the given JID and resizes it
      * @param JID The JID
-     * @param height The max height
+     * @param size The max size
      * @return The resized avatar icon
      */
     public static Icon getAvatar(String JID, int height)

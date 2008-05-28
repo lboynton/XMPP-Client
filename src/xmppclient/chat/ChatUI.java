@@ -29,7 +29,9 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener, ChatM
         if (getTabIndex(chat) == -1)
         {
             chat.addMessageListener(this);
-            tabs.add(new ChatPanel(chat, this));
+            tabs.addTab(Utils.getNickname(chat.getParticipant()), 
+                    Utils.getUserIcon(ContactListUI.connection.getRoster().getPresence(chat.getParticipant())),
+                    new ChatPanel(chat, this));
         }
     }
 
@@ -83,7 +85,7 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener, ChatM
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE))
         );

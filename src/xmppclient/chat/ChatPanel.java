@@ -5,7 +5,7 @@
  */
 package xmppclient.chat;
 
-import xmppclient.*;
+import java.util.Collection;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -16,15 +16,24 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JFrame;
+import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.RosterEntry;
+import org.jivesoftware.smack.RosterListener;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.packet.VCard;
+import xmppclient.ContactListUI;
+import xmppclient.ContactToolTip;
+import xmppclient.EmoticonsUI;
+import xmppclient.FileTransferChooser;
+import xmppclient.Utils;
 import xmppclient.emoticons.Emoticon;
 import xmppclient.emoticons.Emoticons;
 import xmppclient.formatter.Format;
@@ -34,11 +43,12 @@ import xmppclient.formatter.Format;
  * one-to-one chat.
  * @author  Lee Boynton (323326)
  */
-public class ChatPanel extends javax.swing.JPanel
+public class ChatPanel extends javax.swing.JPanel implements RosterListener
 {
     private Chat chat;
     private JFrame parent;
     private Format format = new Format();
+    private Presence presence;
 
     /**
      * Creates a new JPanel for conducting the chat
@@ -47,8 +57,10 @@ public class ChatPanel extends javax.swing.JPanel
      */
     public ChatPanel(Chat chat, JFrame parent)
     {
+        this.presence = ContactListUI.connection.getRoster().getPresence(chat.getParticipant());
         this.parent = parent;
         this.chat = chat;
+        ContactListUI.connection.getRoster().addRosterListener(this);
         initComponents();
         initTextPane();
         if (!ContactListUI.connection.getRoster().getPresence(chat.getParticipant()).isAvailable())
@@ -118,6 +130,8 @@ public class ChatPanel extends javax.swing.JPanel
      */
     public void addMessage(Icon avatar, String name, Message message)
     {
+        if(message.getBody() == null || message.getBody().equals("")) return;
+        
         try
         {
             ChatTextPaneStyledDocument doc = (ChatTextPaneStyledDocument) messageTextPane.getStyledDocument();
@@ -215,116 +229,125 @@ public class ChatPanel extends javax.swing.JPanel
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        contactLabel = new javax.swing.JLabel();
-        sendButton = new javax.swing.JButton();
-        toLabel = new javax.swing.JLabel();
-        sendFileButton = new javax.swing.JButton();
-        statusLabel = new javax.swing.JLabel();
-        emoticonsButton = new javax.swing.JButton();
-        formatButton = new javax.swing.JButton();
-        messageScrollPane = new javax.swing.JScrollPane();
-        messageTextPane = new javax.swing.JTextPane();
-        sendScrollPane = new javax.swing.JScrollPane();
-        sendTextArea = new javax.swing.JTextArea();
-
-        contactLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
-        contactLabel.setText(chat.getParticipant());
-
-        sendButton.setText("Send");
-        sendButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sendButtonActionPerformed(evt);
+        contactLabel = new javax.swing.JLabel()
+        {
+            public JToolTip createToolTip()
+            {
+                return new ContactToolTip(chat.getParticipant());
             }
-        });
+        };
+        //);
+    sendButton = new javax.swing.JButton();
+    toLabel = new javax.swing.JLabel();
+    sendFileButton = new javax.swing.JButton();
+    statusLabel = new javax.swing.JLabel();
+    emoticonsButton = new javax.swing.JButton();
+    formatButton = new javax.swing.JButton();
+    messageScrollPane = new javax.swing.JScrollPane();
+    messageTextPane = new javax.swing.JTextPane();
+    sendScrollPane = new javax.swing.JScrollPane();
+    sendTextArea = new javax.swing.JTextArea();
 
-        toLabel.setText("To:");
+    contactLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+    contactLabel.setIcon(Utils.getAvatar(chat.getParticipant(), 20));
+    contactLabel.setText(Utils.getNickname(chat.getParticipant()));
+    contactLabel.setToolTipText(StringUtils.unescapeNode(chat.getParticipant()));
 
-        sendFileButton.setText("Send File");
-        sendFileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sendFileButtonActionPerformed(evt);
-            }
-        });
+    sendButton.setText("Send");
+    sendButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            sendButtonActionPerformed(evt);
+        }
+    });
 
-        statusLabel.setFont(new java.awt.Font("Tahoma", 0, 10));
-        statusLabel.setText("(" + Utils.getStatus(ContactListUI.connection.getRoster().getPresence(chat.getParticipant())) + ")");
+    toLabel.setText("To:");
 
-        emoticonsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/emoticons/face-smile.png"))); // NOI18N
-        emoticonsButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                emoticonsButtonActionPerformed(evt);
-            }
-        });
+    sendFileButton.setText("Send File");
+    sendFileButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            sendFileButtonActionPerformed(evt);
+        }
+    });
 
-        formatButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/format-text-bold-16x16.png"))); // NOI18N
-        formatButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                formatButtonActionPerformed(evt);
-            }
-        });
+    statusLabel.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    statusLabel.setText("(" + Utils.getStatus(presence) + ")");
 
-        messageScrollPane.setBackground(new java.awt.Color(255, 255, 255));
+    emoticonsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/emoticons/face-smile.png"))); // NOI18N
+    emoticonsButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            emoticonsButtonActionPerformed(evt);
+        }
+    });
 
-        messageTextPane.setEditable(false);
-        messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
-        messageScrollPane.setViewportView(messageTextPane);
+    formatButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/format-text-bold-16x16.png"))); // NOI18N
+    formatButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            formatButtonActionPerformed(evt);
+        }
+    });
 
-        sendTextArea.setColumns(20);
-        sendTextArea.setFont(sendTextArea.getFont());
-        sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                sendTextAreaKeyReleased(evt);
-            }
-        });
-        sendScrollPane.setViewportView(sendTextArea);
+    messageScrollPane.setBackground(new java.awt.Color(255, 255, 255));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(messageScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(formatButton, 0, 0, Short.MAX_VALUE)
-                            .addComponent(emoticonsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sendScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(toLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(contactLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(statusLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
-                        .addComponent(sendFileButton)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(sendFileButton)
+    messageTextPane.setEditable(false);
+    messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
+    messageScrollPane.setViewportView(messageTextPane);
+
+    sendTextArea.setColumns(20);
+    sendTextArea.setFont(sendTextArea.getFont());
+    sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyReleased(java.awt.event.KeyEvent evt) {
+            sendTextAreaKeyReleased(evt);
+        }
+    });
+    sendScrollPane.setViewportView(sendTextArea);
+
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+    this.setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(messageScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(formatButton, 0, 0, Short.MAX_VALUE)
+                        .addComponent(emoticonsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, Short.MAX_VALUE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(sendScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createSequentialGroup()
                     .addComponent(toLabel)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(contactLabel)
-                    .addComponent(statusLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(messageScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(sendScrollPane, 0, 0, Short.MAX_VALUE)
-                    .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(formatButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(emoticonsButton)))
-                .addContainerGap())
-        );
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(statusLabel)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
+                    .addComponent(sendFileButton)))
+            .addContainerGap())
+    );
+    layout.setVerticalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(sendFileButton)
+                .addComponent(toLabel)
+                .addComponent(contactLabel)
+                .addComponent(statusLabel))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(messageScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(sendScrollPane, 0, 0, Short.MAX_VALUE)
+                .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(formatButton)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(emoticonsButton)))
+            .addContainerGap())
+    );
     }// </editor-fold>//GEN-END:initComponents
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
@@ -428,4 +451,42 @@ private void sendTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
     private javax.swing.JLabel statusLabel;
     private javax.swing.JLabel toLabel;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void entriesAdded(Collection<String> addresses)
+    {
+        for(String address:addresses)
+        {
+            System.out.println(address + " added");
+        }
+    }
+
+    @Override
+    public void entriesUpdated(Collection<String> addresses)
+    {
+        for(String address:addresses)
+        {
+            System.out.println(address + " updated");
+        }
+    }
+
+    @Override
+    public void entriesDeleted(Collection<String> addresses)
+    {
+        for(String address:addresses)
+        {
+            System.out.println(address + " deleted");
+        }
+    }
+
+    @Override
+    public void presenceChanged(org.jivesoftware.smack.packet.Presence presence)
+    {
+        if(StringUtils.parseBareAddress(presence.getFrom()).equals(StringUtils.parseBareAddress(this.presence.getFrom())))
+        {
+            // get the presence value for the user with the highest priority and availability
+            this.presence = ContactListUI.connection.getRoster().getPresence(presence.getFrom());
+            statusLabel.setText("(" + Utils.getStatus(this.presence) + ")");
+        }
+    }
 }

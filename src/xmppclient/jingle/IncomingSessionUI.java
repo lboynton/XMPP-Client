@@ -45,9 +45,6 @@ public class IncomingSessionUI extends javax.swing.JDialog implements BasicPlaye
                     if (session.isConnected())
                     {
                         playButton.setEnabled(true);
-                        //session.getControl().open(session.getInputStream());
-                        //System.out.println("Playing");
-                        //control.play();
                     }
                     if (session.isComplete())
                     {
@@ -159,11 +156,11 @@ private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         System.out.println("stateUpdated : " + event.toString());
         if(event.getCode() == BasicPlayerEvent.RESUMED)
         {
-            playButton.setText("Play");
+            playButton.setText("Pause");
         }
         if(event.getCode() == BasicPlayerEvent.PAUSED)
         {
-            playButton.setText("Pause");
+            playButton.setText("Play");
         }
     }
 

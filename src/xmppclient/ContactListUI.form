@@ -173,19 +173,19 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="contactTreeScrollPane" alignment="0" pref="180" max="32767" attributes="1"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="contactTreeScrollPane" alignment="0" max="32767" attributes="1"/>
                       <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="nicknameTextField" pref="174" max="32767" attributes="3"/>
-                              <Component id="statusComboBox" alignment="1" pref="174" max="32767" attributes="3"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="nicknameTextField" max="32767" attributes="3"/>
+                              <Component id="statusComboBox" alignment="0" max="32767" attributes="3"/>
+                              <Component id="toolBar" alignment="0" max="32767" attributes="1"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="avatarLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="avatarLabel" min="-2" pref="84" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="toolBar" alignment="0" min="-2" max="-2" attributes="1"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -193,18 +193,18 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="nicknameTextField" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="statusComboBox" min="-2" pref="24" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="toolBar" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="avatarLabel" min="-2" pref="48" max="-2" attributes="0"/>
+                      <Component id="avatarLabel" min="-2" pref="84" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="toolBar" min="-2" pref="25" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="contactTreeScrollPane" pref="198" max="32767" attributes="0"/>
+                  <Component id="contactTreeScrollPane" pref="259" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -384,7 +384,7 @@
                 <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="contactTreeMouseReleased"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTree()&#xa;{&#xa;    public JToolTip createToolTip()&#xa;    {&#xa;        JToolTip tip = super.createToolTip();&#xa;        String text = tip.getTipText();&#xa;        return new JToolTip();&#xa;    }&#xa;&#xa;    public String getToolTipText(MouseEvent evt)&#xa;    {&#xa;        TreePath path = getPathForLocation(evt.getX(), evt.getY());&#xa;        if(path == null) return null;&#xa;        if(path.getLastPathComponent() instanceof DefaultMutableTreeNode)&#xa;        {&#xa;            DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();&#xa;            if(node.getUserObject() instanceof RosterEntry)&#xa;            {&#xa;                RosterEntry entry = (RosterEntry) node.getUserObject();&#xa;                return entry.getUser();&#xa;            }&#xa;        }&#xa;&#xa;        return null;&#xa;    }&#xa;};//)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTree()&#xa;{&#xa;    public JToolTip createToolTip()&#xa;    {&#xa;        JToolTip tip = super.createToolTip();&#xa;        String text = tip.getTipText();&#xa;        return new JToolTip();&#xa;    }&#xa;&#xa;    public String getToolTipText(MouseEvent evt)&#xa;    {&#xa;        TreePath path = getPathForLocation(evt.getX(), evt.getY());&#xa;        if(path == null) return null;&#xa;        if(path.getLastPathComponent() instanceof DefaultMutableTreeNode)&#xa;        {&#xa;            DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();&#xa;            if(node.getUserObject() instanceof RosterEntry)&#xa;            {&#xa;                RosterEntry entry = (RosterEntry) node.getUserObject();&#xa;                return StringUtils.unescapeNode(entry.getUser());&#xa;            }&#xa;        }&#xa;&#xa;        return null;&#xa;    }&#xa;};//)"/>
               </AuxValues>
             </Component>
           </SubComponents>

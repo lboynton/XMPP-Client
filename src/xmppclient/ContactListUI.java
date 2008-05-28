@@ -40,6 +40,7 @@ import org.jivesoftware.smack.PrivacyListManager;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.RosterGroup;
+import org.jivesoftware.smack.RosterListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
@@ -59,7 +60,6 @@ import xmppclient.audio.ui.StreamUI;
 import xmppclient.images.Icons;
 import xmppclient.images.tango.TangoIcons;
 import xmppclient.chat.InvitationReceivedUI;
-import xmppclient.jingle.IncomingSession;
 import xmppclient.jingle.IncomingSessionUI;
 import xmppclient.jingle.JingleSessionRequest;
 import xmppclient.vcard.VCardEditor;
@@ -70,7 +70,7 @@ import xmppclient.jingle.JingleSessionRequestListener;
  *
  * @author Lee Boynton (323326)
  */
-public class ContactListUI extends javax.swing.JFrame implements FileTransferListener, JingleSessionRequestListener
+public class ContactListUI extends javax.swing.JFrame implements FileTransferListener, JingleSessionRequestListener, RosterListener
 {
     /** The XMPP connection to the server */
     public static XMPPConnection connection;
@@ -122,7 +122,7 @@ public class ContactListUI extends javax.swing.JFrame implements FileTransferLis
         connection.addPacketListener(new SubscriptionRequestListener(), new PacketTypeFilter(Presence.class));
         FileTransferManager manager = new FileTransferManager(connection);
         manager.addFileTransferListener(this);
-        connection.getRoster().addRosterListener(new ContactListListener(this));
+        connection.getRoster().addRosterListener(this);
         jingleManager.addSessionRequestListener(this);
     }
 
@@ -359,7 +359,7 @@ public class ContactListUI extends javax.swing.JFrame implements FileTransferLis
                     if(node.getUserObject() instanceof RosterEntry)
                     {
                         RosterEntry entry = (RosterEntry) node.getUserObject();
-                        return entry.getUser();
+                        return StringUtils.unescapeNode(entry.getUser());
                     }
                 }
 
@@ -524,31 +524,31 @@ public class ContactListUI extends javax.swing.JFrame implements FileTransferLis
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                    .addGroup(contentPanelLayout.createSequentialGroup()
-                        .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                            .addComponent(statusComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, 174, Short.MAX_VALUE))
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contentPanelLayout.createSequentialGroup()
+                        .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(nicknameTextField)
+                            .addComponent(statusComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(avatarLabel))
-                    .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                        .addComponent(avatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(contentPanelLayout.createSequentialGroup()
                         .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(avatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(avatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1158,7 +1158,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
      */
     public void setAvatar(ImageIcon icon)
     {
-        avatarLabel.setIcon(Utils.resizeImage(icon, 48));
+        avatarLabel.setIcon(Utils.resizeImage(icon, 52));
         if (avatarLabel.getIcon() == null)
         {
             avatarLabel.setVisible(false);
@@ -1363,5 +1363,29 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
         {
             Logger.getLogger(ContactListUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void entriesAdded(Collection<String> addresses)
+    {
+        updateContacts();
+    }
+
+    @Override
+    public void entriesUpdated(Collection<String> addresses)
+    {
+        updateContacts();
+    }
+
+    @Override
+    public void entriesDeleted(Collection<String> addresses)
+    {
+        updateContacts();
+    }
+
+    @Override
+    public void presenceChanged(Presence presence)
+    {
+        updateContacts();
     }
 }

@@ -7,6 +7,7 @@
 package xmppclient;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
@@ -92,7 +93,22 @@ private void fileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     }
     
     FileTransferManager manager = new FileTransferManager(ContactListUI.connection);
-    OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
+    OutgoingFileTransfer transfer = null;
+    
+    try
+    {
+        transfer = manager.createOutgoingFileTransfer(
+                ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
+    }
+    catch(IllegalArgumentException e)
+    {
+        JOptionPane.showMessageDialog(this, 
+                "Could not send file to this user\n" +
+                "the user ID was not fully qualified.", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
     try
     {

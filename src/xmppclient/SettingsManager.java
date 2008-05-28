@@ -88,6 +88,7 @@ public class SettingsManager
     public void logConversation(JTextPane textPane, String contact)
     {
         FileWriter fstream = null;
+        contact = StringUtils.unescapeNode(contact);
         
         // remove resource, if present
         contact = StringUtils.parseBareAddress(contact);

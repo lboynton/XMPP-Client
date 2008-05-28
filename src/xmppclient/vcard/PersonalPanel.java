@@ -28,7 +28,7 @@ public class PersonalPanel extends javax.swing.JPanel
     {
         if(vCard.getAvatar() != null)
         {
-            avatarLabel.setIcon(xmppclient.Utils.resizeImage(new ImageIcon(vCard.getAvatar()), 48));
+            avatarLabel.setIcon(xmppclient.Utils.resizeImage(new ImageIcon(vCard.getAvatar()), 52));
         }
         else
         {
