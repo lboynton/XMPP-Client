@@ -408,6 +408,11 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
 
         return emoticons;
     }
+    
+    private Icon getStatusIcon()
+    {
+        return Utils.getUserIcon(presence);
+    }
 
 private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFileButtonActionPerformed
     new FileTransferChooser(parent, true, getRosterEntry()).setVisible(true);
@@ -482,11 +487,16 @@ private void sendTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
     @Override
     public void presenceChanged(org.jivesoftware.smack.packet.Presence presence)
     {
+        System.out.println("Presence changed: " + presence.toString());
         if(StringUtils.parseBareAddress(presence.getFrom()).equals(StringUtils.parseBareAddress(this.presence.getFrom())))
         {
             // get the presence value for the user with the highest priority and availability
             this.presence = ContactListUI.connection.getRoster().getPresence(presence.getFrom());
-            statusLabel.setText("(" + Utils.getStatus(this.presence) + ")");
+            statusLabel.setText("(" + Utils.getStatusMessage(this.presence) + ")");
+            if(presence.isAvailable()) sendFileButton.setEnabled(true);
+            else sendFileButton.setEnabled(false);
+            contactLabel.setText(Utils.getNickname(chat.getParticipant()));
+            contactLabel.setIcon(Utils.getAvatar(chat.getParticipant(), 20));
         }
     }
 }

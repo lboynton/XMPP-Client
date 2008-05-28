@@ -252,8 +252,8 @@ public class Utils
             return "Offline";
         }
         return "Available";
-        }
-        
+    }
+
     /**
      * Gets the avatar of the specified roster entry and resizes it
      * @param rosterEntry The user

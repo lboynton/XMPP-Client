@@ -264,6 +264,19 @@ private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     vCard.setPhoneWork("FAX", work.faxWorkTextField.getText());
     vCard.setPhoneWork("CELL", work.mobileWorkTextField.getText());
     vCard.setPhoneWork("PAGER", work.pagerWorkTextField.getText());
+    
+    // avatar
+    if(!personal.avatarCheckBox.isSelected())
+    {
+        // delete avatar
+        byte[] bytes = null;
+        vCard.setAvatar(bytes);
+    }
+    else
+    {
+        // use original avatar
+        vCard.setAvatar(vCard.getAvatar());
+    }
 
     try
     {

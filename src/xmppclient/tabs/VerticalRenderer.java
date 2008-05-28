@@ -28,7 +28,7 @@ public class VerticalRenderer extends DefaultListCellRenderer
         lbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbl.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         lbl.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        lbl.setPreferredSize(new Dimension(list.getSize().width, 60));
+        lbl.setPreferredSize(new Dimension(list.getSize().width, 62));
         return lbl;
     }
 }
