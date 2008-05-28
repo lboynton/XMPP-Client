@@ -1050,7 +1050,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
-                    new AudioLibraryUI(audioManager, entry).setVisible(true);
+                    new AudioLibraryUI(ContactListUI.this, audioManager, entry).setVisible(true);
                 }
             });
             menu.add(viewLibraryMenuItem);

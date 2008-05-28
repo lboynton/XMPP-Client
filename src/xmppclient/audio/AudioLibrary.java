@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import org.farng.mp3.MP3File;
 import org.farng.mp3.TagException;
 import org.farng.mp3.id3.ID3v1;
-import org.farng.mp3.id3.ID3v1_1;
 import xmppclient.Utils;
 
 /**
@@ -36,15 +35,50 @@ public class AudioLibrary
         return audioFiles;
     }
 
+    private void addFile(File file)
+    {
+        try
+        {
+            ID3v1 tag = new MP3File(file).getID3v1Tag();
+
+            audioFiles.add(new AudioFile(
+                    tag.getSongTitle(),
+                    tag.getArtist(),
+                    tag.getAlbum(),
+                    tag.getTrackNumberOnAlbum()));
+        }
+        catch (IOException ex)
+        {
+            // could not find the file for some reason
+        }
+        catch (TagException ex)
+        {
+            // could not read tag
+            Logger.getLogger(AudioLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void generateListing()
     {
         File dir = new File(path);
+        generateListing(dir);
+    }
 
-        File[] files = dir.listFiles(new FileFilter()
+    /**
+     * Recursively retrieves audio files from the directory
+     * @param directory
+     */
+    public void generateListing(File directory)
+    {
+        File[] files = directory.listFiles(new FileFilter()
         {
             @Override
             public boolean accept(File pathname)
             {
+                if (pathname.isDirectory())
+                {
+                    return true;
+                }
                 if (Utils.getExtension(pathname).equals("mp3"))
                 {
                     return true;
@@ -55,25 +89,13 @@ public class AudioLibrary
 
         for (File file : files)
         {
-            try
+            if(file.isDirectory())
             {
-                ID3v1 tag = new MP3File(file).getID3v1Tag();
-
-                audioFiles.add(new AudioFile(
-                        tag.getSongTitle(),
-                        tag.getArtist(),
-                        tag.getAlbum(),
-                        tag.getTrackNumberOnAlbum()));
+                generateListing(file);
             }
-            catch (IOException ex)
+            else
             {
-                // could not find the file for some reason
-                continue;
-            }
-            catch (TagException ex)
-            {
-                // could not read tag
-                Logger.getLogger(AudioLibrary.class.getName()).log(Level.SEVERE, null, ex);
+                addFile(file);
             }
         }
     }

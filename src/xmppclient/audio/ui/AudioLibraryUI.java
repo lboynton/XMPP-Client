@@ -8,6 +8,7 @@ package xmppclient.audio.ui;
 import xmppclient.audio.*;
 import xmppclient.audio.ui.AudioLibraryPanel;
 import java.awt.BorderLayout;
+import javax.swing.JFrame;
 import org.jivesoftware.smack.RosterEntry;
 
 /**
@@ -20,7 +21,7 @@ public class AudioLibraryUI extends javax.swing.JFrame
     private RosterEntry entry;
     
     /** Creates new form AudioLibraryUI */
-    public AudioLibraryUI(AudioManager manager, RosterEntry entry)
+    public AudioLibraryUI(JFrame parent, AudioManager manager, RosterEntry entry)
     {
         this.manager = manager;
         this.entry = entry;
@@ -29,6 +30,7 @@ public class AudioLibraryUI extends javax.swing.JFrame
         add(panel, BorderLayout.CENTER);
         pack();
         panel.refresh();
+        setLocationRelativeTo(parent);
     }
 
     /** This method is called from within the constructor to

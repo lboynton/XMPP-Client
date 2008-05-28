@@ -493,7 +493,7 @@ private void sendTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
             // get the presence value for the user with the highest priority and availability
             this.presence = ContactListUI.connection.getRoster().getPresence(presence.getFrom());
             statusLabel.setText("(" + Utils.getStatusMessage(this.presence) + ")");
-            if(presence.isAvailable()) sendFileButton.setEnabled(true);
+            if(this.presence.isAvailable()) sendFileButton.setEnabled(true);
             else sendFileButton.setEnabled(false);
             contactLabel.setText(Utils.getNickname(chat.getParticipant()));
             contactLabel.setIcon(Utils.getAvatar(chat.getParticipant(), 20));
