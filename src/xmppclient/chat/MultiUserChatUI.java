@@ -30,6 +30,7 @@ import org.jivesoftware.smackx.muc.InvitationRejectionListener;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.ParticipantStatusListener;
 import org.jivesoftware.smackx.muc.SubjectUpdatedListener;
+import org.jivesoftware.smackx.muc.UserStatusListener;
 import xmppclient.formatter.Format;
 import xmppclient.formatter.FormatterUI;
 
@@ -101,6 +102,88 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
     {
         updateOccupantList();
         muc.addMessageListener(this);
+        muc.addParticipantListener(new PacketListener()
+        {
+            @Override
+            public void processPacket(Packet packet)
+            {
+                updateOccupantList();
+            }
+        });
+        muc.addUserStatusListener(new UserStatusListener()
+        {
+            @Override
+            public void kicked(String actor, String reason)
+            {
+                doc.insertInfo(actor + " was kicked for: " + reason);
+            }
+
+            @Override
+            public void voiceGranted()
+            {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public void voiceRevoked()
+            {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public void banned(String actor, String reason)
+            {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public void membershipGranted()
+            {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public void membershipRevoked()
+            {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public void moderatorGranted()
+            {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public void moderatorRevoked()
+            {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public void ownershipGranted()
+            {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public void ownershipRevoked()
+            {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public void adminGranted()
+            {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public void adminRevoked()
+            {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        });
         muc.addParticipantStatusListener(new ParticipantStatusListener()
         {
             @Override
@@ -213,9 +296,8 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
             public void subjectUpdated(String subject, String from)
             {
                 ChatTextPaneStyledDocument doc = (ChatTextPaneStyledDocument) messageTextPane.getStyledDocument();
-                doc.insertInfo("Room subject was changed by " +
-                        StringUtils.parseResource(from) +
-                        ". The subject is now " +
+                doc.insertInfo(StringUtils.parseResource(from) + 
+                        " changed the subject to: " +
                         subject + ".");
             }
         });
@@ -234,6 +316,7 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         inviteButton = new javax.swing.JButton();
         subjectButton = new javax.swing.JButton();
         banButton = new javax.swing.JButton();
+        kickButton = new javax.swing.JButton();
         verticalSplitPane = new javax.swing.JSplitPane();
         horizontalSplitPane = new javax.swing.JSplitPane();
         messageScrollPane = new javax.swing.JScrollPane();
@@ -310,6 +393,17 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         });
         jToolBar1.add(banButton);
 
+        kickButton.setText("Kick user");
+        kickButton.setFocusable(false);
+        kickButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        kickButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        kickButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                kickButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(kickButton);
+
         Utils.flattenSplitPane(verticalSplitPane);
         verticalSplitPane.setBorder(null);
         verticalSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
@@ -384,12 +478,12 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+            .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(formatButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(emoticonsButton))
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
         );
 
         verticalSplitPane.setRightComponent(jPanel1);
@@ -427,7 +521,7 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         {
             return;
         }
-        
+
         try
         {
             Message message = new Message(muc.getRoom(), Message.Type.groupchat);
@@ -515,13 +609,17 @@ private void banButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     String member = (String) memberList.getSelectedValue();
     try
     {//GEN-LAST:event_banButtonActionPerformed
-    muc.banUser(member, reason);
+            muc.banUser(member, reason);
+        }
+        catch (XMPPException ex)
+        {
+            JOptionPane.showMessageDialog(this,
+                    "Could not ban user " + member + "\n" +
+                    ex.getMessage(),
+                    "Could not ban user",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
-    catch (XMPPException ex)
-    {
-        JOptionPane.showMessageDialog(this, "Could not ban user " + member, "Could not ban user", JOptionPane.ERROR_MESSAGE);
-    }
-}
 private void emoticonsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emoticonsButtonActionPerformed
     Point point = emoticonsButton.getMousePosition();
     SwingUtilities.convertPointToScreen(point, emoticonsButton);
@@ -534,20 +632,40 @@ private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     sendTextArea.setFont(format.getFont());
     sendTextArea.setForeground(format.getColor());
 }//GEN-LAST:event_formatButtonActionPerformed
-            
+
+private void kickButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kickButtonActionPerformed
+    String member = (String) memberList.getSelectedValue();
+    String reason = JOptionPane.showInputDialog(this, "Reason for kick");
+    try
+    {//GEN-LAST:event_kickButtonActionPerformed
+        muc.kickParticipant(member, reason);
+    }
+    catch (XMPPException ex)
+    {
+        JOptionPane.showMessageDialog(this,
+                "Could not kick user " + member + "\n" +
+                ex.getMessage(),
+                "Could not kick user",
+                JOptionPane.ERROR_MESSAGE);
+    }
+}
+
     @Override
     public void processPacket(Packet packet)
     {
         Message message = (Message) packet;
         doc.insertUser(StringUtils.parseResource(message.getFrom()));
         // see if the message has a formatting property
-        if(message.getProperty("format") != null)
+        if (message.getProperty("format") != null)
         {
             Format newFormat = (Format) message.getProperty("format");
             doc.insertMessage(message.getBody(), newFormat);
         }
         // insert message body with defualt style
-        else doc.insertMessage(message.getBody());
+        else
+        {
+            doc.insertMessage(message.getBody());
+        }
         messageTextPane.setCaretPosition(doc.getLength());
     }
 
@@ -577,6 +695,7 @@ private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JButton kickButton;
     private javax.swing.JList memberList;
     private javax.swing.JScrollPane messageScrollPane;
     private javax.swing.JTextPane messageTextPane;

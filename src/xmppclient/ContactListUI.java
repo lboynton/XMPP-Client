@@ -857,11 +857,11 @@ private void viewReceivedFilesButtonActionPerformed(java.awt.event.ActionEvent e
     {
         Utils.openFileBrowser(accountManager.getRootDir() + File.separator + SettingsManager.RECEIVED_DIR, true);
     }
-
     catch (IOException ex)
     {
         Logger.getLogger(ContactListUI.class.getName()).log(Level.SEVERE, null, ex);
-    }    catch (SecurityException ex)
+    }
+    catch (SecurityException ex)
     {
         Logger.getLogger(ContactListUI.class.getName()).log(Level.SEVERE, null, ex);
     }
@@ -899,16 +899,47 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
 
     private void showContactPopup(java.awt.event.MouseEvent evt)
     {
+        final JPopupMenu menu = new JPopupMenu();
+        
         if (!evt.isPopupTrigger())
         {
             return;
         }
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) contactTree.getClosestPathForLocation(evt.getX(), evt.getY()).getLastPathComponent();
-
+        
+        if (node.getUserObject() instanceof RosterGroup)
+        {
+            final RosterGroup group = (RosterGroup) node.getUserObject();
+            JMenuItem groupMenuItem = new JMenuItem(group.getName());
+            groupMenuItem.setEnabled(false);
+            menu.add(groupMenuItem);
+            JMenuItem blockMenuItem = new JMenuItem("Block group");
+            blockMenuItem.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    try
+                    {
+                        PrivacyListManager manager = PrivacyListManager.getInstanceFor(connection);
+                        PrivacyItem item = new PrivacyItem("group", false, 0);
+                        item.setValue(group.getName());
+                        List<PrivacyItem> items = new ArrayList<PrivacyItem>();
+                        items.add(item);
+                        manager.createPrivacyList("default", items);
+                        manager.setActiveListName("default");
+                        updateContacts();
+                    }
+                    catch (XMPPException ex)
+                    {
+                        Logger.getLogger(ContactListUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+        }
         if (node.getUserObject() instanceof RosterEntry)
         {
             final RosterEntry entry = (RosterEntry) node.getUserObject();
-            final JPopupMenu menu = new JPopupMenu();
             JMenuItem nickname = new JMenuItem(Utils.getNickname(entry));
             nickname.setEnabled(false);
             menu.add(nickname);
@@ -1113,8 +1144,9 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                 }
             });
             menu.add(removeMenuItem);
-            menu.show(evt.getComponent(), evt.getX(), evt.getY());
         }
+        
+        menu.show(evt.getComponent(), evt.getX(), evt.getY());
     }
 
     private void showAddContactDialog()
