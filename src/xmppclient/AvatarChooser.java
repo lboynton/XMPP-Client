@@ -32,10 +32,10 @@ public class AvatarChooser extends javax.swing.JDialog
 {
     private ContactListUI clientUI;
 
-    /*
+    /**
      * Creates new form AvatarChooser 
      * @param owner The JFrame owner of the dialog
-     * @param model If the dialog should be modal
+     * @param modal If the dialog should be modal
      */
     public AvatarChooser(JFrame owner, boolean modal)
     {

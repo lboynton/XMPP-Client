@@ -16,6 +16,10 @@ public class PersonalPanel extends javax.swing.JPanel
 {
     private VCard vCard;
 
+    /**
+     * Creates a new JPanel for fields associated with personal information
+     * @param vCard The vCard to load from
+     */
     public PersonalPanel(VCard vCard)
     {
         this.vCard = vCard;

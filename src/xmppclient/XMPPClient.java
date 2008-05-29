@@ -388,7 +388,7 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
-     * @param an argument of debug starts the program in debug mode
+     * @param args an argument of debug starts the program in debug mode
      */
     public static void main(final String args[])
     {

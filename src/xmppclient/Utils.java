@@ -260,14 +260,14 @@ public class Utils
      * @param size The max size
      * @return The resized avatar icon
      */
-    public static Icon getAvatar(RosterEntry rosterEntry, int height)
+    public static Icon getAvatar(RosterEntry rosterEntry, int size)
     {
         VCard vCard = new VCard();
 
         try
         {
             vCard.load(ContactListUI.connection, rosterEntry.getUser());
-            return Utils.resizeImage(new ImageIcon(vCard.getAvatar()), height);
+            return Utils.resizeImage(new ImageIcon(vCard.getAvatar()), size);
         }
         catch (XMPPException ex)
         {
@@ -286,14 +286,14 @@ public class Utils
      * @param size The max size
      * @return The resized avatar icon
      */
-    public static Icon getAvatar(int height)
+    public static Icon getAvatar(int size)
     {
         VCard vCard = new VCard();
 
         try
         {
             vCard.load(ContactListUI.connection);
-            return Utils.resizeImage(new ImageIcon(vCard.getAvatar()), height);
+            return Utils.resizeImage(new ImageIcon(vCard.getAvatar()), size);
         }
         catch (XMPPException ex)
         {
@@ -312,9 +312,9 @@ public class Utils
      * @param size The max size
      * @return The resized avatar icon
      */
-    public static Icon getAvatar(String JID, int height)
+    public static Icon getAvatar(String JID, int size)
     {
-        return getAvatar(ContactListUI.connection.getRoster().getEntry(StringUtils.parseBareAddress(JID)), height);
+        return getAvatar(ContactListUI.connection.getRoster().getEntry(StringUtils.parseBareAddress(JID)), size);
     }
 
     /**
@@ -605,6 +605,10 @@ public class Utils
         return os;
     }
 
+    /**
+     * Removes the unsightly borders from the given JSplitPane
+     * @param jSplitPane The split pane to remove borders from
+     */
     public static void flattenSplitPane(JSplitPane jSplitPane)
     {
         jSplitPane.setUI(new BasicSplitPaneUI()

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package xmppclient.audio;
 
 import xmppclient.audio.packet.Audio;
@@ -18,7 +14,7 @@ import org.jivesoftware.smackx.ServiceDiscoveryManager;
 import xmppclient.audio.provider.AudioProvider;
 
 /**
- *
+ * The audio manager handles requests and responses for the audio library
  * @author Lee Boynton (323326)
  */
 public class AudioManager
@@ -42,6 +38,12 @@ public class AudioManager
         });
     }
 
+    /**
+     * Creates a new audio manager for handling sending and receiving of audio
+     * library requests and responses
+     * @param connection The XMPP connection the manager should be associated with
+     * @param libraryPath The path to the audio library containing the audio files
+     */
     public AudioManager(final XMPPConnection connection, final String libraryPath)
     {
         this.connection = connection;
@@ -61,6 +63,11 @@ public class AudioManager
         });
     }
 
+    /**
+     * Used to enable or disable the audio library feature for the given XMPP connection
+     * @param connection The XMPP connection
+     * @param enabled True to enable, false otherwise
+     */
     public synchronized static void setServiceEnabled(XMPPConnection connection, boolean enabled)
     {
         if (isServiceEnabled(connection) == enabled)
@@ -78,12 +85,21 @@ public class AudioManager
         }
     }
 
+    /**
+     * Determines if the audio library feature is enabled for the given XMPP connection instance
+     * @param connection The connection to query
+     * @return True if enabled, false otherwise
+     */
     public static boolean isServiceEnabled(XMPPConnection connection)
     {
         return ServiceDiscoveryManager.getInstanceFor(connection).includesFeature(
                 Audio.NAMESPACE);
     }
 
+    /**
+     * Sends a request for the given JID's audio library
+     * @param JID The JID the request should be sent to
+     */
     public void sendRequest(String JID)
     {
         Audio request = new Audio();
@@ -92,6 +108,11 @@ public class AudioManager
         connection.sendPacket(request);
     }
 
+    /**
+     * Adds a response listener which will be notified every time a response is
+     * received from an audio library request
+     * @param responseListener The response listener to add
+     */
     public void addResponseListener(AudioResponseListener responseListener)
     {
         if (responseListener != null)
@@ -107,6 +128,11 @@ public class AudioManager
         }
     }
 
+    /**
+     * Adds a audio library request listener which will be notified every time
+     * a request is received
+     * @param requestListener The request listener to add
+     */
     public void addRequestListener(AudioRequestListener requestListener)
     {
         if (requestListener != null)

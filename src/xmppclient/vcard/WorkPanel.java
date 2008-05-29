@@ -15,6 +15,10 @@ public class WorkPanel extends javax.swing.JPanel
 {
     private VCard vCard;
 
+    /**
+     * Create a JPanel for field associated with the user's work details
+     * @param vCard The vCard to load from
+     */
     public WorkPanel(VCard vCard)
     {
         this.vCard = vCard;

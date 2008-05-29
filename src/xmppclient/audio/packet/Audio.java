@@ -15,17 +15,32 @@ import org.jivesoftware.smack.packet.IQ;
  */
 public class Audio extends IQ
 {
+    /**
+     * The namespace associated with the audio library feature. As this is not
+     * an official feature any string can be used
+     */
     public static final String NAMESPACE = "somenamespace";
+    /**
+     * The element name of the XML tag
+     */
     public static final String ELEMENTNAME = "audio";
     private List<AudioFile> audioFiles;
     private String AId;
     private AudioType audioType;
 
+    /**
+     * Creates a new audio packet with an empty list of audio files
+     */
     public Audio()
     {
         audioFiles = new ArrayList<AudioFile>();
     }
 
+    /**
+     * Creates a new audio packet with the given audio type and IQ type.
+     * @param audioType The audio type is either a whole library or an individual file
+     * @param type The IQ packet type. Get for requests, set for responses
+     */
     public Audio(AudioType audioType, IQ.Type type)
     {
         setType(type);
@@ -33,32 +48,57 @@ public class Audio extends IQ
         audioFiles = new ArrayList<AudioFile>();
     }
 
+    /**
+     * Creates a new audio packet, adds the list of files to it, and sets the IQ
+     * type to set, as files are only sent in responses
+     * @param audioFiles The audio files to add to the packet
+     */
     public Audio(List<AudioFile> audioFiles)
     {
         setType(IQ.Type.SET);
         this.audioFiles = audioFiles;
     }
 
+    /**
+     * Gets the audio type
+     * @return Either file or library
+     */
     public AudioType getAudioType()
     {
         return audioType;
     }
 
+    /**
+     * Sets the audio type
+     * @param audioType Either file or library
+     */
     public void setAudioType(AudioType audioType)
     {
         this.audioType = audioType;
     }
 
+    /**
+     * Adds a file to the packet
+     * @param file The file to add
+     */
     public void addFile(AudioFile file)
     {
         audioFiles.add(file);
     }
 
+    /**
+     * Sets the audio ID. This may or may not be necessary
+     * @param AId The new audio ID
+     */
     public void setAId(String AId)
     {
         this.AId = AId;
     }
 
+    /**
+     * Gets the list of audio files in this packet
+     * @return
+     */
     public List<AudioFile> getAudioFiles()
     {
         return audioFiles;
@@ -93,9 +133,19 @@ public class Audio extends IQ
         return buf.toString();
     }
 
+    /**
+     * The audio type is either an entire library or an individual file
+     */
     public static enum AudioType
     {
-        LIBRARY, FILE;
+        /**
+         * 
+         */
+        LIBRARY,
+        /**
+         * 
+         */
+        FILE;
         private static String names[] =
         {
             "library", "file"
@@ -112,6 +162,8 @@ public class Audio extends IQ
 
         /**
          * Returns the AudioType for a String value.
+         * @param str
+         * @return 
          */
         public static AudioType getAudioType(String str)
         {

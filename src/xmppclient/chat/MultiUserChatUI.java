@@ -9,6 +9,7 @@ import xmppclient.*;
 import xmppclient.chat.MultiUserChatInviteUI;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -18,6 +19,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
@@ -28,6 +30,8 @@ import org.jivesoftware.smackx.muc.InvitationRejectionListener;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.ParticipantStatusListener;
 import org.jivesoftware.smackx.muc.SubjectUpdatedListener;
+import xmppclient.formatter.Format;
+import xmppclient.formatter.FormatterUI;
 
 /**
  * A JFrame for conducting conferences in
@@ -37,8 +41,12 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
 {
     private MultiUserChat muc;
     private ChatTextPaneStyledDocument doc;
+    private Format format = new Format();
 
-    /** Creates new form MultiUserChatUI */
+    /**
+     * Creates a new JFrame for conducting a conference in.
+     * @param room The name of the conference to create/join
+     */
     public MultiUserChatUI(String room)
     {
         muc = new MultiUserChat(ContactListUI.connection, room + "@conference.192.168.0.8");
@@ -46,6 +54,14 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         doc = (ChatTextPaneStyledDocument) messageTextPane.getStyledDocument();
     }
 
+    /**
+     * Creates a conference and joins the user with the given nickname
+     * @param nickname The nickname to use in the conference
+     * @throws org.jivesoftware.smack.XMPPException If the room cannot be created
+     * 
+     * NOTE: The nickname may be in use
+     * 
+     */
     public void create(String nickname) throws XMPPException
     {
         muc.create(nickname);
@@ -53,12 +69,25 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         initialise();
     }
 
+    /**
+     * Joins the conference using the nickname
+     * @param nickname The nickname to use in the conference
+     * @throws org.jivesoftware.smack.XMPPException If the room cannot be joined
+     * 
+     * NOTE: The nickname may be in use
+     * 
+     */
     public void join(String nickname) throws XMPPException
     {
         muc.join(nickname);
         initialise();
     }
 
+    /**
+     * When the JFrame is made visible this sets the split pane dividers to
+     * the default position
+     * @param b If the JFrame should be made visible or not
+     */
     @Override
     public void setVisible(boolean b)
     {
@@ -239,6 +268,8 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         jScrollPane2 = new javax.swing.JScrollPane();
         sendTextArea = new javax.swing.JTextArea();
         sendButton = new javax.swing.JButton();
+        emoticonsButton = new javax.swing.JButton();
+        formatButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(muc.getRoom() + " - Conference");
@@ -309,6 +340,7 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
 
         sendTextArea.setColumns(20);
         sendTextArea.setFont(sendTextArea.getFont());
+        sendTextArea.setLineWrap(true);
         sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 sendTextAreaKeyReleased(evt);
@@ -323,19 +355,41 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
             }
         });
 
+        emoticonsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/emoticons/face-smile.png"))); // NOI18N
+        emoticonsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                emoticonsButtonActionPerformed(evt);
+            }
+        });
+
+        formatButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/format-text-bold-16x16.png"))); // NOI18N
+        formatButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formatButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(emoticonsButton, 0, 0, Short.MAX_VALUE)
+                    .addComponent(formatButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-            .addComponent(sendButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+            .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(formatButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(emoticonsButton))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
         );
 
         verticalSplitPane.setRightComponent(jPanel1);
@@ -347,7 +401,7 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(verticalSplitPane, javax.swing.GroupLayout.PREFERRED_SIZE, 467, Short.MAX_VALUE)
+                    .addComponent(verticalSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
                     .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -357,7 +411,7 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
                 .addContainerGap()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(verticalSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                .addComponent(verticalSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -368,13 +422,18 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
     {
         String text = sendTextArea.getText().trim();
 
+        // dont send anything if there's no text to send
         if (text.length() == 0)
         {
             return;
         }
+        
         try
         {
-            muc.sendMessage(text);
+            Message message = new Message(muc.getRoom(), Message.Type.groupchat);
+            message.setBody(text);
+            message.setProperty("format", format);
+            muc.sendMessage(message);
             sendTextArea.setText("");
         }
         catch (XMPPException ex)
@@ -396,6 +455,7 @@ private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:even
 
     if (option == JOptionPane.YES_OPTION)
     {
+        ContactListUI.accountManager.logConversation(messageTextPane, muc.getRoom());
         muc.leave();
         dispose();
     }
@@ -455,20 +515,39 @@ private void banButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     String member = (String) memberList.getSelectedValue();
     try
     {//GEN-LAST:event_banButtonActionPerformed
-            muc.banUser(member, reason);
-        }
-        catch (XMPPException ex)
-        {
-            JOptionPane.showMessageDialog(this, "Could not ban user " + member, "Could not ban user", JOptionPane.ERROR_MESSAGE);
-        }
+    muc.banUser(member, reason);
     }
+    catch (XMPPException ex)
+    {
+        JOptionPane.showMessageDialog(this, "Could not ban user " + member, "Could not ban user", JOptionPane.ERROR_MESSAGE);
+    }
+}
+private void emoticonsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emoticonsButtonActionPerformed
+    Point point = emoticonsButton.getMousePosition();
+    SwingUtilities.convertPointToScreen(point, emoticonsButton);
+    new EmoticonsUI(this, sendTextArea, point).setVisible(true);
+}//GEN-LAST:event_emoticonsButtonActionPerformed
 
+private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formatButtonActionPerformed
+    FormatterUI formatter = new FormatterUI(null, format.getFont(), format.getColor());
+    format = formatter.showDialog();
+    sendTextArea.setFont(format.getFont());
+    sendTextArea.setForeground(format.getColor());
+}//GEN-LAST:event_formatButtonActionPerformed
+            
     @Override
     public void processPacket(Packet packet)
     {
         Message message = (Message) packet;
         doc.insertUser(StringUtils.parseResource(message.getFrom()));
-        doc.insertMessage(message.getBody());
+        // see if the message has a formatting property
+        if(message.getProperty("format") != null)
+        {
+            Format newFormat = (Format) message.getProperty("format");
+            doc.insertMessage(message.getBody(), newFormat);
+        }
+        // insert message body with defualt style
+        else doc.insertMessage(message.getBody());
         messageTextPane.setCaretPosition(doc.getLength());
     }
 
@@ -490,6 +569,8 @@ private void banButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton banButton;
+    private javax.swing.JButton emoticonsButton;
+    private javax.swing.JButton formatButton;
     private javax.swing.JSplitPane horizontalSplitPane;
     private javax.swing.JButton inviteButton;
     private javax.swing.JPanel jPanel1;

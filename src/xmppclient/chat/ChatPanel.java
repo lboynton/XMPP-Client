@@ -408,11 +408,6 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
 
         return emoticons;
     }
-    
-    private Icon getStatusIcon()
-    {
-        return Utils.getUserIcon(presence);
-    }
 
 private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFileButtonActionPerformed
     new FileTransferChooser(parent, true, getRosterEntry()).setVisible(true);

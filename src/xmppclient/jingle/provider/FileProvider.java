@@ -41,7 +41,7 @@ public class FileProvider implements PacketExtensionProvider
             }
             if (eventType == XmlPullParser.END_TAG)
             {
-                if (elementName.equals(File.NODENAME))
+                if (elementName.equals(File.ELEMENTNAME))
                 {
                     done = true;
                 }

@@ -13,7 +13,7 @@ import org.jivesoftware.smack.packet.IQ;
 public class Jingle extends IQ
 {
     public static final String NAMESPACE = "urn:xmpp:tmp:jingle";
-    public static final String NODENAME = "jingle";
+    public static final String ELEMENTNAME = "jingle";
     private String initiator; // the user who initiated communication
     private String responder; // the user who should respond to communication
     private String sid; // the session id
@@ -159,7 +159,7 @@ public class Jingle extends IQ
     {
         StringBuilder buf = new StringBuilder();
 
-        buf.append("<").append(NODENAME);
+        buf.append("<").append(ELEMENTNAME);
         buf.append(" xmlns=\"").append(NAMESPACE).append("\"");
         if (initiator != null)
         {

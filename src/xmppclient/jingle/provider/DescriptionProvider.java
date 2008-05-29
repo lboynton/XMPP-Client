@@ -32,11 +32,11 @@ public class DescriptionProvider implements PacketExtensionProvider
 
             if (eventType == XmlPullParser.START_TAG)
             {
-                if (name.equals(File.NODENAME))
+                if (name.equals(File.ELEMENTNAME))
                 {
                     desc.setType(new FileProvider().parseExtension(parser));
                 }
-                else if(name.equals(Description.NODENAME)) continue;
+                else if(name.equals(Description.ELEMENTNAME)) continue;
                 else if(name.equals("offer")) continue;
                 else
                 {
@@ -45,7 +45,7 @@ public class DescriptionProvider implements PacketExtensionProvider
             }
             else if (eventType == XmlPullParser.END_TAG)
             {
-                if (name.equals(Description.NODENAME))
+                if (name.equals(Description.ELEMENTNAME))
                 {
                     done = true;
                 }

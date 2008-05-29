@@ -13,7 +13,7 @@ import org.jivesoftware.smack.packet.PacketExtension;
 public class Description implements PacketExtension
 {
     // constant values
-    public static final String NODENAME = "description";
+    public static final String ELEMENTNAME = "description";
     public static final String NAMESPACE = "urn:xmpp:tmp:jingle:apps:file-transfer";
     // variable content
     private PacketExtension type;
@@ -40,7 +40,7 @@ public class Description implements PacketExtension
     @Override
     public String getElementName()
     {
-        return NODENAME;
+        return ELEMENTNAME;
     }
 
     @Override

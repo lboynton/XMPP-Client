@@ -15,6 +15,11 @@ public class HomePanel extends javax.swing.JPanel
 {
     private VCard vCard;
 
+    /**
+     * Creates a new JPanel for the VCardEditor with all the fields associated
+     * with the user's home address
+     * @param vCard The vCard to load values from
+     */
     public HomePanel(VCard vCard)
     {
         this.vCard = vCard;

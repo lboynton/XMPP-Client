@@ -51,14 +51,14 @@ public class JingleProvider implements IQProvider
                 {
                     jingle.setContent(Jingle.Content.getContent(parser.getAttributeValue("", "name")));
                 }
-                if (elementName.equals(Description.NODENAME))
+                if (elementName.equals(Description.ELEMENTNAME))
                 {
                     jingle.setDescription((Description) new DescriptionProvider().parseExtension(parser));
                 }
             }
             else if (eventType == XmlPullParser.END_TAG)
             {
-                if (elementName.equals(Jingle.NODENAME))
+                if (elementName.equals(Jingle.ELEMENTNAME))
                 {
                     done = true;
                 }

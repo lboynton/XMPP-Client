@@ -44,9 +44,9 @@ public class JingleManager
     static
     {
         ProviderManager providerManager = ProviderManager.getInstance();
-        providerManager.addIQProvider(Jingle.NODENAME, Jingle.NAMESPACE, new JingleProvider());
-        providerManager.addExtensionProvider(Description.NODENAME, Description.NAMESPACE, new DescriptionProvider());
-        providerManager.addExtensionProvider(File.NODENAME, File.NAMESPACE, new FileProvider());
+        providerManager.addIQProvider(Jingle.ELEMENTNAME, Jingle.NAMESPACE, new JingleProvider());
+        providerManager.addExtensionProvider(Description.ELEMENTNAME, Description.NAMESPACE, new DescriptionProvider());
+        providerManager.addExtensionProvider(File.ELEMENTNAME, File.NAMESPACE, new FileProvider());
         providerManager.addIQProvider(Bytestream.StreamHost.ELEMENTNAME, Bytestream.StreamHost.NAMESPACE, new BytestreamsProvider());
 
         XMPPConnection.addConnectionCreationListener(new ConnectionCreationListener()

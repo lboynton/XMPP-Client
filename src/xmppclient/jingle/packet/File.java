@@ -13,7 +13,7 @@ import org.jivesoftware.smack.packet.PacketExtension;
 public class File implements PacketExtension
 {
     // constant values
-    public static final String NODENAME = "file";
+    public static final String ELEMENTNAME = "file";
     public static final String NAMESPACE = "http://jabber.org/protocol/si/profile/file-transfer";
     
     // variable file information
@@ -75,7 +75,7 @@ public class File implements PacketExtension
     @Override
     public String getElementName()
     {
-        return NODENAME;
+        return ELEMENTNAME;
     }
 
     public String getDate()
