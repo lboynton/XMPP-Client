@@ -8,6 +8,7 @@ package xmppclient.vcard;
 import xmppclient.*;
 import java.awt.Component;
 import javax.swing.DefaultListModel;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -72,6 +73,11 @@ public class VCardEditor extends javax.swing.JFrame
             {
                 JTextField textfield = (JTextField) c;
                 textfield.setEditable(editable);
+            }
+            if(c instanceof JCheckBox)
+            {
+                JCheckBox checkBox = (JCheckBox) c;
+                checkBox.setVisible(editable);
             }
         }
         

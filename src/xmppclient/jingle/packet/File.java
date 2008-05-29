@@ -111,9 +111,13 @@ public class File implements PacketExtension
         buf.append(" xmlns=\"").append(getNamespace()).append("\"");
         buf.append(" name=\"").append(name).append("\"");
         buf.append(" size=\"").append(size).append("\"");
-        buf.append(" hash=\"").append(hash).append("\"");
-        buf.append(" date=\"").append(date).append("\">");
-        buf.append("<desc>").append(desc).append("</desc>");
+        if(hash != null)
+            buf.append(" hash=\"").append(hash).append("\"");
+        if(date != null)
+            buf.append(" date=\"").append(date).append("\"");
+        buf.append(">");
+        if(desc != null)
+            buf.append("<desc>").append(desc).append("</desc>");
         buf.append("</").append(getElementName()).append(">");
         return buf.toString();
     }

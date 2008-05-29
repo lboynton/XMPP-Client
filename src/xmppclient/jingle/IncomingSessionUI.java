@@ -8,6 +8,7 @@ package xmppclient.jingle;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javazoom.jlgui.basicplayer.BasicController;
 import javazoom.jlgui.basicplayer.BasicPlayer;
@@ -71,9 +72,17 @@ public class IncomingSessionUI extends javax.swing.JDialog implements BasicPlaye
         statusLabel = new javax.swing.JLabel();
         fileLabel = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
-        playButton.setText("Play");
+        playButton.setText("Pause");
         playButton.setEnabled(false);
         playButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,15 +122,15 @@ public class IncomingSessionUI extends javax.swing.JDialog implements BasicPlaye
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-                                                                       
+
 private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
     try
     {
-        if(session.getPlayer().getStatus() == BasicPlayer.PLAYING)
+        if (session.getPlayer().getStatus() == BasicPlayer.PLAYING)
         {
             session.getControl().pause();
         }
-        else if(session.getPlayer().getStatus() == BasicPlayer.PAUSED)
+        else if (session.getPlayer().getStatus() == BasicPlayer.PAUSED)
         {
             session.getControl().resume();
         }
@@ -131,6 +140,31 @@ private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         Logger.getLogger(IncomingSessionUI.class.getName()).log(Level.SEVERE, null, ex);
     }
 }//GEN-LAST:event_playButtonActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt)
+    {//GEN-FIRST:event_formWindowClosed
+        
+    }//GEN-LAST:event_formWindowClosed
+
+private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+
+    if (JOptionPane.showConfirmDialog(this,
+            "Terminate stream?",
+            "Terminate Stream",
+            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+    {
+        try
+        {
+            session.getControl().stop();
+            session.sendTerminate();
+        }
+        catch (BasicPlayerException ex)
+        {
+            Logger.getLogger(IncomingSessionUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        dispose();
+    }
+}//GEN-LAST:event_formWindowClosing
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel fileLabel;
@@ -154,11 +188,11 @@ private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     public void stateUpdated(BasicPlayerEvent event)
     {
         System.out.println("stateUpdated : " + event.toString());
-        if(event.getCode() == BasicPlayerEvent.RESUMED)
+        if (event.getCode() == BasicPlayerEvent.RESUMED)
         {
             playButton.setText("Pause");
         }
-        if(event.getCode() == BasicPlayerEvent.PAUSED)
+        if (event.getCode() == BasicPlayerEvent.PAUSED)
         {
             playButton.setText("Play");
         }

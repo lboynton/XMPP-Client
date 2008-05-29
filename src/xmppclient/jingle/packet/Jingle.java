@@ -12,7 +12,7 @@ import org.jivesoftware.smack.packet.IQ;
  */
 public class Jingle extends IQ
 {
-    public static final String NAMESPACE = "http://jabber.org/protocol/jingle";
+    public static final String NAMESPACE = "urn:xmpp:tmp:jingle";
     public static final String NODENAME = "jingle";
     private String initiator; // the user who initiated communication
     private String responder; // the user who should respond to communication
@@ -235,10 +235,9 @@ public class Jingle extends IQ
     public static enum Action
     {
         CONTENTACCEPT, CONTENTADD, CONTENTDECLINE, CONTENTMODIFY,
-        CONTENTREMOVE, DESCRIPTIONADD, DESCRIPTIONDECLINE,
-        DESCRIPTIONINFO, DESCRIPTIONMODIFY, SESSIONACCEPT,
-        SESSIONINFO, SESSIONINITIATE, SESSIONREDIRECT,
-        SESSIONTERMINATE, TRANSPORTACCEPT, TRANSPORTDECLINE,
+        CONTENTREMOVE, DESCRIPTIONADD, DESCRIPTIONDECLINE, DESCRIPTIONINFO, 
+        DESCRIPTIONMODIFY, SESSIONACCEPT, SESSIONINFO, SESSIONINITIATE, 
+        SESSIONREDIRECT, SESSIONTERMINATE, TRANSPORTACCEPT, TRANSPORTDECLINE,
         TRANSPORTINFO, TRANSPORTMODIFY;
         private static String names[] =
         {

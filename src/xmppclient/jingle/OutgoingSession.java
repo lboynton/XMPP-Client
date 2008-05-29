@@ -1,28 +1,19 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package xmppclient.jingle;
 
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.filter.PacketTypeFilter;
-import org.jivesoftware.smack.packet.IQ;
-import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.util.StringUtils;
-import org.jivesoftware.smackx.packet.Bytestream;
 import xmppclient.jingle.packet.Description;
 import xmppclient.jingle.packet.Jingle;
 
@@ -30,7 +21,7 @@ import xmppclient.jingle.packet.Jingle;
  *
  * @author Lee Boynton (323326)
  */
-public class OutgoingSession extends Session implements PacketListener
+public class OutgoingSession extends Session
 {
     private File file;
     private InputStream in;
@@ -38,7 +29,6 @@ public class OutgoingSession extends Session implements PacketListener
     private Socket connection;
     private ServerSocket serverSocket;
     private byte[] buffer;
-    private int port;
 
     public OutgoingSession(XMPPConnection xmppConnection, String responder, java.io.File file)
     {
@@ -57,8 +47,6 @@ public class OutgoingSession extends Session implements PacketListener
                 String.valueOf(file.length()),
                 String.valueOf(file.hashCode()))));
         xmppConnection.sendPacket(jingle);
-
-        xmppConnection.addPacketListener(this, new PacketTypeFilter(Jingle.class));
     }
 
     @Override
@@ -66,7 +54,7 @@ public class OutgoingSession extends Session implements PacketListener
     {
         System.out.println("Starting");
         InetSocketAddress addr = new InetSocketAddress(getHostAddress(), port);
-        
+
         try
         {
             buffer = new byte[new Long(file.length()).intValue()];
@@ -84,6 +72,19 @@ public class OutgoingSession extends Session implements PacketListener
             out.close();
             in.close();
         }
+        catch(SocketException ex)
+        {
+            System.out.println("Peer closed socket");
+            try
+            {
+                out.close();
+                in.close();
+            }
+            catch (IOException ex1)
+            {
+                Logger.getLogger(OutgoingSession.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
         catch (Exception ex)
         {
             Logger.getLogger(OutgoingSession.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,22 +92,17 @@ public class OutgoingSession extends Session implements PacketListener
     }
 
     @Override
-    public void processPacket(Packet packet)
+    public void terminate()
     {
-        Jingle jingle = (Jingle) packet;
-        System.out.println("Outgoing session: Jingle packet received");
-
-        if (jingle.getAction() == Jingle.Action.SESSIONACCEPT)
+        try
         {
-            port = getFreePort();
-            Bytestream bytestream = new Bytestream();
-            bytestream.addStreamHost(super.getXmppConnection().getUser(), getHostAddress(), port);
-            bytestream.setTo(jingle.getFrom());
-            bytestream.setFrom(jingle.getTo());
-            bytestream.setMode(Bytestream.Mode.tcp);
-            bytestream.setType(IQ.Type.SET);
-            super.getXmppConnection().sendPacket(bytestream);
-            start();
+            in.close();
+            out.close();
+            connection.close();
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(OutgoingSession.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

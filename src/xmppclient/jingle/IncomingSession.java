@@ -1,6 +1,7 @@
 package xmppclient.jingle;
 
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -12,19 +13,18 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smackx.packet.Bytestream;
+import xmppclient.ContactListUI;
 import xmppclient.jingle.packet.File;
-import xmppclient.jingle.packet.Jingle;
 
 /**
  * An incoming file transfer jingle session
  * @author Lee Boynton (323326)
  */
-public class IncomingSession extends Session implements PacketListener
+public class IncomingSession extends Session
 {
     private Socket socket;
     private BufferedInputStream bis;
     private String host;
-    private int port;
     private int received = 0;
     private File file;
     private BasicPlayer player;
@@ -43,7 +43,6 @@ public class IncomingSession extends Session implements PacketListener
     public IncomingSession(XMPPConnection xmppConnection, String responder, String sid)
     {
         super(xmppConnection, responder, sid);
-        xmppConnection.addPacketListener(this, new PacketTypeFilter(Jingle.class));
         xmppConnection.addPacketListener(new BytestreamListener(), new PacketTypeFilter(Bytestream.class));
         player = new BasicPlayer();
         control = (BasicController) player;
@@ -59,30 +58,21 @@ public class IncomingSession extends Session implements PacketListener
     {
         super.status = "Connecting...";
 
-        System.out.printf("Attempting to connect to %s:%s\n", host, port);
+        System.out.printf("Attempting to connect to %s:%s\n", host, super.port);
         try
         {
             socket = new Socket();
-            socket.connect(new InetSocketAddress(host, port), 0);
+            socket.connect(new InetSocketAddress(host, super.port), 0);
             super.status = "Connected";
             super.connected = true;
             bis = new BufferedInputStream(socket.getInputStream());
             control.open(bis);
             control.play();
-            socket.close();
         }
         catch (Exception ex)
         {
             Logger.getLogger(IncomingSession.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    @Override
-    public void processPacket(Packet packet)
-    {
-        System.out.println("Incoming session: Jingle packet received");
-        Jingle jingle = (Jingle) packet;
-        file = (File) jingle.getDescription().getType();
     }
 
     public class BytestreamListener implements PacketListener
@@ -93,8 +83,22 @@ public class IncomingSession extends Session implements PacketListener
             Bytestream bytestream = (Bytestream) packet;
             System.out.println("Incoming session: Bytestream packet received");
             host = bytestream.getStreamHost(bytestream.getFrom()).getAddress();
-            port = bytestream.getStreamHost(bytestream.getFrom()).getPort();
+            IncomingSession.super.port = bytestream.getStreamHost(bytestream.getFrom()).getPort();
             start();
+        }
+    }
+
+    @Override
+    public void terminate()
+    {
+        try
+        {
+            bis.close();
+            socket.close();
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(IncomingSession.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

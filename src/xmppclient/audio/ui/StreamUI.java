@@ -133,16 +133,17 @@ private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonActionPerformed
     JFileChooser chooser = new JFileChooser();
     chooser.setFileFilter(new FileChooserFilter("mp3", "MP3 files"));
-    if(chooser.showDialog(this, "Stream to " + Utils.getNickname(entry)) ==
+    if (chooser.showDialog(this, "Stream to " + Utils.getNickname(entry)) ==
             JFileChooser.APPROVE_OPTION)
     {
         fileTextField.setText(chooser.getSelectedFile().getAbsolutePath());
     }
 }//GEN-LAST:event_browseButtonActionPerformed
 
-private void streamButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
+private void streamButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_streamButtonActionPerformed
     try
     {
+        System.out.println("Stream button pressed");
         jingleManager.createOutgoingSession(
                 ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom(),
                 fileTextField.getText());
@@ -151,7 +152,7 @@ private void streamButtonActionPerformed(java.awt.event.ActionEvent evt) {
     {
         JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-}                                                                                      
+}//GEN-LAST:event_streamButtonActionPerformed
 
     /**
      * @param args the command line arguments
