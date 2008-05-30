@@ -62,13 +62,11 @@
                           <Component id="jLabel29" linkSize="10" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="pagerWorkTextField" linkSize="11" max="32767" attributes="1"/>
                           <Component id="telephoneWorkTextField" linkSize="11" alignment="0" min="-2" pref="112" max="-2" attributes="0"/>
                           <Component id="faxWorkTextField" linkSize="11" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="pagerWorkTextField" linkSize="11" max="32767" attributes="1"/>
-                              <Component id="mobileWorkTextField" linkSize="11" alignment="0" min="-2" max="-2" attributes="1"/>
-                          </Group>
+                          <Component id="mobileWorkTextField" linkSize="11" alignment="0" min="-2" max="-2" attributes="1"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="1">
@@ -111,11 +109,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabel26" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabel29" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jLabel26" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="postCodeWorkTextField" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -125,6 +119,8 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="countryWorkTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="pagerWorkTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel29" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -136,10 +132,6 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
-                              <Component id="pagerWorkTextField" min="-2" max="-2" attributes="0"/>
-                          </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="telephoneWorkTextField" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>

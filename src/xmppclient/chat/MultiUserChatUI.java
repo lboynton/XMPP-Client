@@ -416,12 +416,16 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         messageScrollPane.setBackground(new java.awt.Color(255, 255, 255));
 
         messageTextPane.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+        messageTextPane.setBackground(new java.awt.Color(255, 255, 255));
         messageTextPane.setEditable(false);
         messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
         messageScrollPane.setViewportView(messageTextPane);
 
         horizontalSplitPane.setLeftComponent(messageScrollPane);
 
+        jScrollPane3.setBackground(new java.awt.Color(255, 255, 255));
+
+        memberList.setBackground(new java.awt.Color(255, 255, 255));
         memberList.setCellRenderer(new MemberListRenderer());
         memberList.setMinimumSize(new java.awt.Dimension(85, 0));
         jScrollPane3.setViewportView(memberList);
@@ -470,7 +474,7 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(emoticonsButton, 0, 0, Short.MAX_VALUE)
-                    .addComponent(formatButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, Short.MAX_VALUE))
+                    .addComponent(formatButton, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -478,12 +482,12 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+            .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(formatButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(emoticonsButton))
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
         );
 
         verticalSplitPane.setRightComponent(jPanel1);

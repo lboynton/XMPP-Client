@@ -269,7 +269,7 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
         }
     });
 
-    statusLabel.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    statusLabel.setFont(new java.awt.Font("Tahoma", 0, 10));
     statusLabel.setText("(" + Utils.getStatus(presence) + ")");
 
     emoticonsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/emoticons/face-smile.png"))); // NOI18N
@@ -288,12 +288,15 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
 
     messageScrollPane.setBackground(new java.awt.Color(255, 255, 255));
 
+    messageTextPane.setBackground(new java.awt.Color(255, 255, 255));
     messageTextPane.setEditable(false);
     messageTextPane.setStyledDocument(new ChatTextPaneStyledDocument());
     messageScrollPane.setViewportView(messageTextPane);
 
+    sendTextArea.setBackground(new java.awt.Color(255, 255, 255));
     sendTextArea.setColumns(20);
     sendTextArea.setFont(sendTextArea.getFont());
+    sendTextArea.setLineWrap(true);
     sendTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
         public void keyReleased(java.awt.event.KeyEvent evt) {
             sendTextAreaKeyReleased(evt);
@@ -312,7 +315,7 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(formatButton, 0, 0, Short.MAX_VALUE)
-                        .addComponent(emoticonsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, Short.MAX_VALUE))
+                        .addComponent(emoticonsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(sendScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -323,7 +326,7 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
                     .addComponent(contactLabel)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(statusLabel)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
                     .addComponent(sendFileButton)))
             .addContainerGap())
     );
@@ -482,7 +485,6 @@ private void sendTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
     @Override
     public void presenceChanged(org.jivesoftware.smack.packet.Presence presence)
     {
-        System.out.println("Presence changed: " + presence.toString());
         if(StringUtils.parseBareAddress(presence.getFrom()).equals(StringUtils.parseBareAddress(this.presence.getFrom())))
         {
             // get the presence value for the user with the highest priority and availability
