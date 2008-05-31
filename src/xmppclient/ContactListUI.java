@@ -100,7 +100,7 @@ public class ContactListUI extends javax.swing.JFrame implements FileTransferLis
         this.accountName = accountName;
         jingleManager = new JingleManager(connection);
         settingsManager = new SettingsManager(connection.getUser());
-        audioManager = new AudioManager(connection, settingsManager.createDirectory(SettingsManager.AUDIO_DIR).getAbsolutePath());
+        audioManager = new AudioManager(connection, settingsManager.createDirectory(SettingsManager.AUDIO_DIR).getAbsolutePath(), jingleManager);
         chatUI = new ChatUI();
         initComponents();
         initSystemTray();

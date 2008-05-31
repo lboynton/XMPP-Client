@@ -121,16 +121,16 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="hostTextField" pref="84" max="32767" attributes="0"/>
+                          <Component id="hostTextField" pref="138" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="portTextField" min="-2" pref="56" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="resourceTextField" alignment="0" pref="187" max="32767" attributes="1"/>
-                      <Component id="passwordTextField" alignment="0" pref="187" max="32767" attributes="1"/>
-                      <Component id="usernameTextField" alignment="0" pref="187" max="32767" attributes="3"/>
-                      <Component id="storedConnectionComboBox" alignment="0" pref="187" max="32767" attributes="3"/>
+                      <Component id="resourceTextField" alignment="0" pref="222" max="32767" attributes="1"/>
+                      <Component id="passwordTextField" alignment="0" pref="222" max="32767" attributes="1"/>
+                      <Component id="usernameTextField" alignment="0" pref="222" max="32767" attributes="3"/>
+                      <Component id="storedConnectionComboBox" alignment="0" pref="222" max="32767" attributes="3"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -143,12 +143,12 @@
                   <EmptySpace min="10" pref="10" max="10" attributes="0"/>
                   <Component id="jLabel8" min="-2" pref="43" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="nameTextField" pref="208" max="32767" attributes="0"/>
+                  <Component id="nameTextField" pref="233" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="storeConnectionCheckBox" pref="261" max="32767" attributes="0"/>
+                  <Component id="storeConnectionCheckBox" pref="280" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>

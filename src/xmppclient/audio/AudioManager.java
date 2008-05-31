@@ -1,5 +1,10 @@
 package xmppclient.audio;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.jivesoftware.smack.XMPPException;
 import xmppclient.audio.packet.Audio;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +17,7 @@ import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smackx.ServiceDiscoveryManager;
 import xmppclient.audio.provider.AudioProvider;
+import xmppclient.jingle.JingleManager;
 
 /**
  * The audio manager handles requests and responses for the audio library
@@ -20,9 +26,10 @@ import xmppclient.audio.provider.AudioProvider;
 public class AudioManager
 {
     private XMPPConnection connection;
+    private AudioLibrary library;
     private List<AudioRequestListener> audioRequestListeners;
     private List<AudioResponseListener> audioResponseListeners;
-
+    
     static
     {
         ProviderManager providerManager = ProviderManager.getInstance();
@@ -44,21 +51,51 @@ public class AudioManager
      * @param connection The XMPP connection the manager should be associated with
      * @param libraryPath The path to the audio library containing the audio files
      */
-    public AudioManager(final XMPPConnection connection, final String libraryPath)
+    public AudioManager(final XMPPConnection connection, final String libraryPath, final JingleManager jingleManager)
     {
         this.connection = connection;
+        library = new AudioLibrary(libraryPath);
         this.addRequestListener(new AudioRequestListener()
         {
             @Override
             public void audioRequested(AudioMessage request)
             {
-                System.out.println("Audio library requested");
-                AudioLibrary library = new AudioLibrary(libraryPath);
-                library.generateListing();
-                Audio audio = new Audio(library.getAudioFiles());
-                audio.setFrom(connection.getUser());
-                audio.setTo(request.getFrom());
-                connection.sendPacket(audio);
+                if(request.getAudio().getAudioType().equals(Audio.AudioType.LIBRARY))
+                {
+                    System.out.println("Audio library requested");
+
+                    library.generateListing();
+                    Audio audio = new Audio(library.getAudioFiles());
+                    audio.setFrom(connection.getUser());
+                    audio.setTo(request.getFrom());
+                    connection.sendPacket(audio);
+                }
+
+                if(request.getAudio().getAudioType().equals(Audio.AudioType.FILE))
+                {
+                    System.out.println("Received file request");
+
+                    File file = library.getFile(request.getAudio().getAudioFile().getId());
+                    
+                    if (file == null)
+                    {
+                        System.out.println("Could not find the requested file");
+                        return;
+                    }
+                    
+                    try
+                    {
+                        jingleManager.createOutgoingSession(request.getAudio().getFrom(), file.getAbsolutePath());
+                    }
+                    catch (XMPPException ex)
+                    {
+                        Logger.getLogger(AudioManager.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    catch (FileNotFoundException ex)
+                    {
+                        Logger.getLogger(AudioManager.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             }
         });
     }
@@ -105,6 +142,7 @@ public class AudioManager
         Audio request = new Audio();
         request.setTo(JID);
         request.setFrom(connection.getUser());
+        request.setAudioType(Audio.AudioType.LIBRARY);
         connection.sendPacket(request);
     }
 
@@ -184,7 +222,7 @@ public class AudioManager
             }
         }, initRequestFilter);
     }
-    
+
     private void initAudioResponseListeners()
     {
         PacketFilter initResponseFilter = new PacketFilter()
@@ -201,7 +239,7 @@ public class AudioManager
                     {
                         if (iq instanceof Audio)
                         {
-                            return true;
+                            return true; 
                         }
                     }
                 }
@@ -240,7 +278,7 @@ public class AudioManager
             audioRequestListeners[i].audioRequested(request);
         }
     }
-    
+
     private void triggerAudioResponse(Audio audio)
     {
         AudioResponseListener[] audioResponseListeners = null;
@@ -258,5 +296,13 @@ public class AudioManager
         {
             audioResponseListeners[i].audioResponse(response);
         }
+    }
+
+    public void sendFileRequest(AudioFile file, String JID)
+    {
+        Audio request = new Audio(Audio.AudioType.FILE, IQ.Type.GET);
+        request.setTo(JID);
+        request.addFile(file);
+        connection.sendPacket(request);
     }
 }

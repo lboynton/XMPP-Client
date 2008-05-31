@@ -5,12 +5,17 @@
  */
 package xmppclient.audio.ui;
 
+import java.awt.Component;
+import javax.swing.DefaultListCellRenderer;
 import xmppclient.audio.*;
 import xmppclient.audio.packet.Audio;
 import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import xmppclient.*;
 import org.jivesoftware.smack.RosterEntry;
 import xmppclient.audio.AudioManager;
+import xmppclient.images.tango.TangoIcons;
 
 /**
  *
@@ -56,6 +61,7 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
         jSlider1 = new javax.swing.JSlider();
 
         audioList.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        audioList.setCellRenderer(new LibraryListRenderer());
         audioList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 audioListMouseClicked(evt);
@@ -157,6 +163,11 @@ private void albumButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 private void audioListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_audioListMouseClicked
     if (evt.getClickCount() == 2)
     {
+        if (audioList.getSelectedValue() instanceof AudioFile)
+        {
+            play();
+            return;
+        }
         if (show.equals("artist"))
         {
             showAlbum((String) audioList.getSelectedValue());
@@ -169,17 +180,16 @@ private void audioListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:e
 }//GEN-LAST:event_audioListMouseClicked
 
 private void audioListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_audioListValueChanged
-    if (show.equals("album"))
+    if (audioList.getSelectedValue() instanceof AudioFile)
     {
         playButton.setEnabled(true);
     }
+    else playButton.setEnabled(false);
 }//GEN-LAST:event_audioListValueChanged
 
 private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-    String name = (String) audioList.getSelectedValue();
-    System.out.println("Attempting to play " + name);
+    play();
 }//GEN-LAST:event_playButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton albumButton;
     private javax.swing.JButton allButton;
@@ -190,10 +200,10 @@ private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JButton playButton;
     private javax.swing.JButton stopButton;
     // End of variables declaration//GEN-END:variables
-
     @Override
     public void audioResponse(final AudioMessage response)
     {
+        System.out.println("Audio library response received");
         this.response = response;
         showAll();
     }
@@ -212,7 +222,7 @@ private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         {
             if (file.getAlbum().equals(album))
             {
-                model.addElement(file.getTrack() + ". " + file.getName());
+                model.addElement(file);
             }
         }
 
@@ -257,5 +267,44 @@ private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         }
 
         audioList.setModel(model);
+    }
+    
+    private void play()
+    {
+        AudioFile file;
+        
+        if(audioList.getSelectedValue() instanceof AudioFile)
+        {
+            file = (AudioFile) audioList.getSelectedValue();
+        }
+        else return;
+        
+        System.out.printf("Requesting file: %s", file.toString());
+        
+        manager.sendFileRequest(file, ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
+    }
+
+    public class LibraryListRenderer extends DefaultListCellRenderer
+    {
+        @Override
+        public Component getListCellRendererComponent(
+                JList list,
+                Object value,
+                int index,
+                boolean isSelected,
+                boolean cellHasFocus)
+        {
+            JLabel lbl = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+            if (value instanceof AudioFile)
+            {
+                AudioFile file = (AudioFile) value;
+
+                lbl.setText(file.getTrack() + ". " + file.getName());
+                lbl.setIcon(TangoIcons.audio16x16);
+            }
+
+            return lbl;
+        }
     }
 }

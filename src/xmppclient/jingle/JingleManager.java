@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package xmppclient.jingle;
 
 import java.io.FileNotFoundException;
@@ -39,7 +35,6 @@ public class JingleManager
     {
         this.connection = connection;
     }
-    
 
     static
     {
@@ -106,7 +101,6 @@ public class JingleManager
 
     private void triggerSessionCreated(JingleSessionRequest request)
     {
-        //throw new UnsupportedOperationException("Not yet implemented");
     }
 
     private void triggerSessionRequested(Jingle initJin)

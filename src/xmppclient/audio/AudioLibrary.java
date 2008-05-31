@@ -24,6 +24,19 @@ public class AudioLibrary
 {
     private List<AudioFile> audioFiles = new ArrayList<AudioFile>();
     private String path;
+    
+    public File getFile(int id)
+    {
+        for(AudioFile file:audioFiles)
+        {
+            if(file.getId() == id)
+            {
+                return file.getFile();
+            }
+        }
+        
+        return null;
+    }
 
     public AudioLibrary(String path)
     {
@@ -45,7 +58,8 @@ public class AudioLibrary
                     tag.getSongTitle(),
                     tag.getArtist(),
                     tag.getAlbum(),
-                    tag.getTrackNumberOnAlbum()));
+                    tag.getTrackNumberOnAlbum(),
+                    file));
         }
         catch (IOException ex)
         {

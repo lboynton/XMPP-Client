@@ -1,5 +1,7 @@
 package xmppclient.audio;
 
+import java.io.File;
+
 /**
  * Represents an audio file
  * @author Lee Boynton (323326)
@@ -10,6 +12,28 @@ public class AudioFile
     private String artist;
     private String album;
     private String track;
+    private static int counter = 0;
+    private int id;
+    private File file;
+
+    public void setFile(File file)
+    {
+        this.file = file;
+    }
+
+    public File getFile()
+    {
+        return file;
+    }
+
+    /**
+     * Gets the ID of this audio file
+     * @return The ID
+     */
+    public int getId()
+    {
+        return id;
+    }
 
     /**
      * Returns the name of the file
@@ -20,6 +44,20 @@ public class AudioFile
         return name;
     }
 
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+    
+    public AudioFile()
+    {
+    }
+
     /**
      * Creates a new audio file
      * @param name The name
@@ -27,12 +65,14 @@ public class AudioFile
      * @param album The album
      * @param track The track
      */
-    public AudioFile(String name, String artist, String album, String track)
+    public AudioFile(String name, String artist, String album, String track, File file)
     {
         this.name = name;
         this.artist = artist;
         this.album = album;
         this.track = track;
+        this.file = file;
+        this.id = counter++;
     }
 
     /**
@@ -42,6 +82,7 @@ public class AudioFile
     public AudioFile(String name)
     {
         this.name = name;
+        this.id = counter++;
     }
 
     /**
@@ -96,5 +137,11 @@ public class AudioFile
     public void setTrack(String track)
     {
         this.track = track;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return track + ". " + name + " - " + artist + " (" + album + ")";
     }
 }

@@ -16,6 +16,7 @@ import org.jivesoftware.smack.provider.IQProvider;
 import org.jivesoftware.smack.util.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
+import xmppclient.audio.packet.Audio.AudioType;
 
 /**
  *
@@ -28,7 +29,11 @@ public class AudioProvider implements IQProvider
     {
         Audio audio = new Audio();
         
+        // for testing
+        //parser.next();
+        
         audio.setAId(parser.getAttributeValue("", "aid"));
+        audio.setAudioType(AudioType.getAudioType(parser.getAttributeValue("", "type")));
 
         while(true)
         {
@@ -39,11 +44,13 @@ public class AudioProvider implements IQProvider
             {
                 if (elementName.equals("file"))
                 {
-                    String artist = parser.getAttributeValue("", "artist");
-                    String album = parser.getAttributeValue("", "album");
-                    String track = parser.getAttributeValue("", "track");
-                    String name = parser.nextText();
-                    audio.addFile(new AudioFile(name, artist, album, track));
+                    AudioFile file = new AudioFile();
+                    file.setId(Integer.parseInt(parser.getAttributeValue("", "id")));
+                    file.setArtist(parser.getAttributeValue("", "artist"));
+                    file.setAlbum(parser.getAttributeValue("", "album"));
+                    file.setTrack(parser.getAttributeValue("", "track"));
+                    file.setName(parser.nextText());
+                    audio.addFile(file);
                 }
             }
             else if (eventType == XmlPullParser.END_TAG)
@@ -64,7 +71,7 @@ public class AudioProvider implements IQProvider
         {
             AudioFile file1 = new AudioFile("test.txt");
             AudioFile file2 = new AudioFile("bleh.mp3");
-            AudioFile file3 = new AudioFile("fuck.txt");
+            AudioFile file3 = new AudioFile("feftxt");
             List<AudioFile> files = new ArrayList<AudioFile>();
             files.add(file1);
             files.add(file2);

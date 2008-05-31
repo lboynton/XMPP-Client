@@ -56,6 +56,7 @@ public class Audio extends IQ
     public Audio(List<AudioFile> audioFiles)
     {
         setType(IQ.Type.SET);
+        setAudioType(AudioType.LIBRARY);
         this.audioFiles = audioFiles;
     }
 
@@ -103,6 +104,11 @@ public class Audio extends IQ
     {
         return audioFiles;
     }
+    
+    public AudioFile getAudioFile()
+    {
+        return audioFiles.get(0);
+    }
 
     @Override
     public String getChildElementXML()
@@ -110,23 +116,34 @@ public class Audio extends IQ
         StringBuilder buf = new StringBuilder();
         buf.append("<audio");
         buf.append(" xmlns=\"").append(NAMESPACE).append("\"");
+        if(audioType != null)
+        {
+            buf.append(" type=\"").append(audioType).append("\"");
+        }
         if (AId != null)
         {
             buf.append(" aid=\"").append(AId).append("\"");
         }
 
-
         buf.append(">");
-        if (getType() == IQ.Type.SET)
+        if (getType() == IQ.Type.SET && audioType == AudioType.LIBRARY)
         {
             for (AudioFile file : audioFiles)
             {
                 buf.append("<file");
+                buf.append(" id=\"").append(file.getId()).append("\"");
                 buf.append(" artist=\"").append(file.getArtist()).append("\"");
                 buf.append(" album=\"").append(file.getAlbum()).append("\"");
                 buf.append(" track=\"").append(file.getTrack()).append("\">");
                 buf.append(file.getName());
                 buf.append("</file>");
+            }
+        }
+        if (audioType == AudioType.FILE)
+        {
+            for (AudioFile file : audioFiles)
+            {
+                buf.append("<file id=\"").append(file.getId()).append("\"/>");
             }
         }
         buf.append("</audio>");
