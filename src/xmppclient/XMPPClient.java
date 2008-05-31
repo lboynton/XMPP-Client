@@ -22,7 +22,7 @@ public class XMPPClient extends javax.swing.JFrame
 {
     private XMPPConnection XMPPConnection;
     private ImageIcon icon = new ImageIcon(getClass().getResource("images/bg.jpg"));
-    private static boolean DEBUG = true;
+    private static boolean DEBUG = false;
 
     /** Creates new form XMPPClient */
     public XMPPClient()

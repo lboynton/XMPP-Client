@@ -6,40 +6,69 @@
 package xmppclient.audio.ui;
 
 import java.awt.Component;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
+import javazoom.jlgui.basicplayer.BasicController;
+import javazoom.jlgui.basicplayer.BasicPlayerEvent;
 import xmppclient.audio.*;
 import xmppclient.audio.packet.Audio;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import xmppclient.*;
+import javazoom.jlgui.basicplayer.BasicPlayer;
+import javazoom.jlgui.basicplayer.BasicPlayerException;
+import javazoom.jlgui.basicplayer.BasicPlayerListener;
 import org.jivesoftware.smack.RosterEntry;
+import xmppclient.ContactListUI;
 import xmppclient.audio.AudioManager;
 import xmppclient.images.tango.TangoIcons;
+import xmppclient.jingle.IncomingSession;
+import xmppclient.jingle.JingleManager;
+import xmppclient.jingle.JingleSessionRequest;
+import xmppclient.jingle.JingleSessionRequestListener;
 
 /**
  *
  * @author  Lee Boynton (323326)
  */
-public class AudioLibraryPanel extends javax.swing.JPanel implements AudioResponseListener
+public class AudioLibraryPanel extends javax.swing.JPanel implements AudioResponseListener, BasicPlayerListener
 {
     private RosterEntry entry;
-    private AudioManager manager;
+    private AudioManager audioManager;
     private AudioMessage response;
+    private JingleManager jingleManager;
     private String show;
+    private boolean connected = false;
+    private IncomingSession session;
 
     /** Creates new form AudioLibraryUI */
-    public AudioLibraryPanel(AudioManager manager, RosterEntry entry)
+    public AudioLibraryPanel(AudioManager audioManager, RosterEntry entry, JingleManager jingleManager)
     {
-        this.manager = manager;
+        this.audioManager = audioManager;
         this.entry = entry;
+        this.jingleManager = jingleManager;
         initComponents();
-        manager.addResponseListener(this);
+        audioManager.addResponseListener(this);
+        jingleManager.addSessionRequestListener(new JingleSessionRequestListener()
+        {
+            @Override
+            public void sessionRequested(JingleSessionRequest request)
+            {
+                session = request.accept();
+                connected = true;
+                session.getPlayer().addBasicPlayerListener(AudioLibraryPanel.this);
+                stopButton.setEnabled(true);
+                playButton.setIcon(TangoIcons.pause16x16);
+                playButton.setIcon(TangoIcons.play16x16);
+            }
+        });
     }
 
     public void refresh()
     {
-        manager.sendRequest(ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
+        audioManager.sendRequest(ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
     }
 
     /** This method is called from within the constructor to
@@ -95,7 +124,7 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
             }
         });
 
-        playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/media-playback-start.png"))); // NOI18N
+        playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/media-playback-start16x16.png"))); // NOI18N
         playButton.setEnabled(false);
         playButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -103,8 +132,13 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
             }
         });
 
-        stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/media-playback-stop.png"))); // NOI18N
+        stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/media-playback-stop16x16.png"))); // NOI18N
         stopButton.setEnabled(false);
+        stopButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stopButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -165,7 +199,7 @@ private void audioListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:e
     {
         if (audioList.getSelectedValue() instanceof AudioFile)
         {
-            play();
+            sendFileRequest();
             return;
         }
         if (show.equals("artist"))
@@ -184,12 +218,49 @@ private void audioListValueChanged(javax.swing.event.ListSelectionEvent evt) {//
     {
         playButton.setEnabled(true);
     }
-    else playButton.setEnabled(false);
+    else
+    {
+        playButton.setEnabled(false);
+    }
 }//GEN-LAST:event_audioListValueChanged
 
 private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-    play();
+    if (connected)
+    {
+        try
+        {
+            if (session.getPlayer().getStatus() == BasicPlayer.PLAYING)
+            {
+                session.getControl().pause();
+            }
+            else if (session.getPlayer().getStatus() == BasicPlayer.PAUSED)
+            {
+                session.getControl().resume();
+            }
+        }
+        catch (BasicPlayerException ex)
+        {
+            Logger.getLogger(AudioLibraryPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    else
+    {
+        sendFileRequest();
+    }
 }//GEN-LAST:event_playButtonActionPerformed
+
+private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
+    try
+    {//GEN-LAST:event_stopButtonActionPerformed
+        session.getControl().stop();
+    }
+    catch (BasicPlayerException ex)
+    {
+        Logger.getLogger(AudioLibraryPanel.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    connected = false;
+    stopButton.setEnabled(false);
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton albumButton;
     private javax.swing.JButton allButton;
@@ -268,20 +339,22 @@ private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
         audioList.setModel(model);
     }
-    
-    private void play()
+
+    private void sendFileRequest()
     {
         AudioFile file;
-        
-        if(audioList.getSelectedValue() instanceof AudioFile)
+
+        if (audioList.getSelectedValue() instanceof AudioFile)
         {
             file = (AudioFile) audioList.getSelectedValue();
         }
-        else return;
-        
+        else
+        {
+            return;
+        }
         System.out.printf("Requesting file: %s", file.toString());
-        
-        manager.sendFileRequest(file, ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
+
+        audioManager.sendFileRequest(file, ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
     }
 
     public class LibraryListRenderer extends DefaultListCellRenderer
@@ -306,5 +379,33 @@ private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
             return lbl;
         }
+    }
+
+    @Override
+    public void opened(Object stream, Map properties)
+    {
+    }
+
+    @Override
+    public void progress(int bytesread, long microseconds, byte[] pcmdata, Map properties)
+    {
+    }
+
+    @Override
+    public void stateUpdated(BasicPlayerEvent event)
+    {
+        if (event.getCode() == BasicPlayerEvent.RESUMED)
+        {
+            playButton.setIcon(TangoIcons.pause16x16);
+        }
+        if (event.getCode() == BasicPlayerEvent.PAUSED)
+        {
+            playButton.setIcon(TangoIcons.play16x16);
+        }
+    }
+
+    @Override
+    public void setController(BasicController controller)
+    {
     }
 }

@@ -10,22 +10,18 @@ import xmppclient.audio.ui.AudioLibraryPanel;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import org.jivesoftware.smack.RosterEntry;
+import xmppclient.jingle.JingleManager;
 
 /**
  *
  * @author  Lee Boynton (323326)
  */
 public class AudioLibraryUI extends javax.swing.JFrame
-{
-    private AudioManager manager;
-    private RosterEntry entry;
-    
+{  
     /** Creates new form AudioLibraryUI */
-    public AudioLibraryUI(JFrame parent, AudioManager manager, RosterEntry entry)
+    public AudioLibraryUI(JFrame parent, AudioManager audioManager, RosterEntry entry, JingleManager jingleManager)
     {
-        this.manager = manager;
-        this.entry = entry;
-        AudioLibraryPanel panel = new AudioLibraryPanel(manager, entry);
+        AudioLibraryPanel panel = new AudioLibraryPanel(audioManager, entry, jingleManager);
         initComponents();
         add(panel, BorderLayout.CENTER);
         pack();

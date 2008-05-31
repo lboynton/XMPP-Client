@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package xmppclient.images.tango;
 
 import javax.swing.ImageIcon;
@@ -16,6 +11,8 @@ public class TangoIcons
     public static final ImageIcon error = new ImageIcon(TangoIcons.class.getResource("error-16x16.png"), "Error");
     public static final ImageIcon downloads16x16 = new ImageIcon(TangoIcons.class.getResource("document-save-16x16.png"), "Downloads");
     public static final ImageIcon audio16x16 = new ImageIcon(TangoIcons.class.getResource("audio-x-generic16x16.png"), "Audio");
+    public static final ImageIcon play16x16 = new ImageIcon(TangoIcons.class.getResource("media-playback-start16x16.png"), "Play");
+    public static final ImageIcon pause16x16 = new ImageIcon(TangoIcons.class.getResource("media-playback-pause16x16.png"), "Pause");
     
     public static final ImageIcon logOut16x16 = new ImageIcon(TangoIcons.class.getResource("log-out-16x16.png"), "Log out");
     public static final ImageIcon logOut22x22 = new ImageIcon(TangoIcons.class.getResource("log-out-22x22.png"), "Log out");

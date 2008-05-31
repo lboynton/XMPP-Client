@@ -115,7 +115,7 @@
     <Component class="javax.swing.JButton" name="playButton">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/xmppclient/images/tango/media-playback-start.png"/>
+          <Image iconType="3" name="/xmppclient/images/tango/media-playback-start16x16.png"/>
         </Property>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
@@ -126,10 +126,13 @@
     <Component class="javax.swing.JButton" name="stopButton">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/xmppclient/images/tango/media-playback-stop.png"/>
+          <Image iconType="3" name="/xmppclient/images/tango/media-playback-stop16x16.png"/>
         </Property>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="stopButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JSlider" name="jSlider1">
     </Component>

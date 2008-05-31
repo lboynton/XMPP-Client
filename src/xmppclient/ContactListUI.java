@@ -124,7 +124,6 @@ public class ContactListUI extends javax.swing.JFrame implements FileTransferLis
         FileTransferManager manager = new FileTransferManager(connection);
         manager.addFileTransferListener(this);
         connection.getRoster().addRosterListener(this);
-        jingleManager.addSessionRequestListener(this);
     }
 
     private void initStatusComboBox()
@@ -1100,7 +1099,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
-                    new AudioLibraryUI(ContactListUI.this, audioManager, entry).setVisible(true);
+                    new AudioLibraryUI(ContactListUI.this, audioManager, entry, jingleManager).setVisible(true);
                 }
             });
             menu.add(viewLibraryMenuItem);
