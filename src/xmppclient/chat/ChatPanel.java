@@ -204,7 +204,7 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
 
     public void saveChat()
     {
-        ContactListUI.accountManager.logConversation(messageTextPane, chat.getParticipant());
+        ContactListUI.settingsManager.logConversation(messageTextPane, chat.getParticipant());
     }
 
     /**

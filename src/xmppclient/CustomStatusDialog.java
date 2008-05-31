@@ -9,6 +9,7 @@ import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Presence.Mode;
 
 /**
@@ -153,7 +154,7 @@ public class CustomStatusDialog extends javax.swing.JDialog
     }// </editor-fold>//GEN-END:initComponents
 
 private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-    presence = new Presence(Presence.Type.available, (Mode) modeComboBox.getSelectedItem(), statusTextField.getText());
+    presence = new Presence(Presence.Type.available, statusTextField.getText(), 0, (Mode) modeComboBox.getSelectedItem());
     dispose();
 }//GEN-LAST:event_okButtonActionPerformed
 
@@ -168,11 +169,13 @@ private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     {
         java.awt.EventQueue.invokeLater(new Runnable()
         {
+            @Override
             public void run()
             {
                 CustomStatusDialog dialog = new CustomStatusDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter()
                 {
+                    @Override
                     public void windowClosing(java.awt.event.WindowEvent e)
                     {
                         System.exit(0);

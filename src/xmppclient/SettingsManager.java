@@ -6,11 +6,21 @@ package xmppclient;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTextPane;
 import javax.swing.text.StyledDocument;
+import org.jivesoftware.smack.filter.PacketTypeFilter;
+import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.util.StringUtils;
 
 /**
@@ -110,5 +120,86 @@ public class SettingsManager
         {
             Logger.getLogger(SettingsManager.class.getName()).log(Level.SEVERE, null, ex);
         }        
+    }
+    
+    public void saveObject(Object obj, String name)
+    {
+        try
+        {
+            ObjectOutputStream fileOut = new ObjectOutputStream(new FileOutputStream(rootDir.getAbsolutePath() + File.separator + name));
+            fileOut.writeObject(obj);
+            fileOut.close();
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(SettingsManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * Loads an object from file
+     * @param objectClass The 
+     * @param name The name of the file to load from
+     * @return The object read from the file if it matches the class given, or null otherwise
+     */
+    public Object loadObject(Class objectClass, String name)
+    {
+        Object obj = null;
+        
+        try
+        {
+            ObjectInputStream fileIn = new ObjectInputStream(new FileInputStream(rootDir.getAbsolutePath() + File.separator + name));
+            
+            Object foundObject = fileIn.readObject();
+            if(foundObject.getClass().equals(objectClass))
+            {
+                obj = foundObject;
+            }
+            fileIn.close();
+        }
+        catch (FileNotFoundException ex)
+        {
+            // object file does not exist
+        }
+        catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(SettingsManager.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        catch (IOException ex)
+        {
+            Logger.getLogger(SettingsManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return obj;
+    }
+    
+    public List<Presence> getPresences()
+    {
+        List<Presence> presences = new ArrayList<Presence>();        
+        List storedPresences = (List) loadObject(ArrayList.class, "presences");
+        
+        if(storedPresences == null) return presences;
+        
+        for(Object o:storedPresences)
+        {
+            if(o instanceof Presence)
+            {
+                presences.add((Presence) o);
+            }
+        }
+        
+        return presences;
+    }
+    
+    public void addPresence(Presence presence)
+    {
+        List<Presence> presences = getPresences();
+        presences.add(presence);
+        savePresences(presences);
+    }
+    
+    public void savePresences(List<Presence> presences)
+    {
+        saveObject(presences, "presences");
     }
 }

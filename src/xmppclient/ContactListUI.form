@@ -346,7 +346,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="statusComboBoxActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox()&#xa;{&#xa;    public void setSelectedIndex(int index)&#xa;    {&#xa;        if(statusComboBox.getItemAt(index) instanceof JSeparator)&#xa;        return;&#xa;&#xa;        super.setSelectedIndex(index);&#xa;    }&#xa;};//)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox()&#xa;{&#xa;    public void setSelectedIndex(int index)&#xa;    {&#xa;        // prevent the separators from being selected&#xa;        if(statusComboBox.getItemAt(index) instanceof JSeparator)&#xa;        return;&#xa;&#xa;        super.setSelectedIndex(index);&#xa;    }&#xa;};//)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="avatarLabel">

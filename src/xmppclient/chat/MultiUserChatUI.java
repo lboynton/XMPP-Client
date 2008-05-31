@@ -553,7 +553,7 @@ private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:even
 
     if (option == JOptionPane.YES_OPTION)
     {
-        ContactListUI.accountManager.logConversation(messageTextPane, muc.getRoom());
+        ContactListUI.settingsManager.logConversation(messageTextPane, muc.getRoom());
         muc.leave();
         dispose();
     }

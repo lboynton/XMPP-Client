@@ -86,7 +86,7 @@ public class ContactListUI extends javax.swing.JFrame implements FileTransferLis
     private int sortMethod = SORT_BY_STATUS;
     private JingleManager jingleManager;
     private AudioManager audioManager;
-    public static SettingsManager accountManager;
+    public static SettingsManager settingsManager;
 
     /**
      * Creates the main user interface which displays the contacts etc
@@ -99,8 +99,8 @@ public class ContactListUI extends javax.swing.JFrame implements FileTransferLis
         ContactListUI.connection = connection;
         this.accountName = accountName;
         jingleManager = new JingleManager(connection);
-        accountManager = new SettingsManager(connection.getUser());
-        audioManager = new AudioManager(connection, accountManager.createDirectory(SettingsManager.AUDIO_DIR).getAbsolutePath());
+        settingsManager = new SettingsManager(connection.getUser());
+        audioManager = new AudioManager(connection, settingsManager.createDirectory(SettingsManager.AUDIO_DIR).getAbsolutePath());
         chatUI = new ChatUI();
         initComponents();
         initSystemTray();
@@ -112,7 +112,7 @@ public class ContactListUI extends javax.swing.JFrame implements FileTransferLis
 
     public SettingsManager getAccountManager()
     {
-        return accountManager;
+        return settingsManager;
     }
 
     private void addListeners()
@@ -130,32 +130,49 @@ public class ContactListUI extends javax.swing.JFrame implements FileTransferLis
     private void initStatusComboBox()
     {
         statusComboBox.removeAllItems();
-
-        // add default statuses
-        statusComboBox.addItem(new xmppclient.Presence(
+        
+        // add default presences
+        statusComboBox.addItem(new Presence(
                 Presence.Type.available,
-                Presence.Mode.available,
-                "Online"));
-        statusComboBox.addItem(new xmppclient.Presence(
+                "Online",
+                0,
+                Presence.Mode.available));
+        statusComboBox.addItem(new Presence(
                 Presence.Type.available,
-                Presence.Mode.away,
-                "Away"));
-        statusComboBox.addItem(new xmppclient.Presence(
+                "Away",
+                0,
+                Presence.Mode.away));
+        statusComboBox.addItem(new Presence(
                 Presence.Type.available,
-                Presence.Mode.xa,
-                "Extended away"));
-        statusComboBox.addItem(new xmppclient.Presence(
+                "Extended away",
+                0,
+                Presence.Mode.xa));
+        statusComboBox.addItem(new Presence(
                 Presence.Type.available,
-                Presence.Mode.dnd,
-                "Busy"));
-        statusComboBox.addItem(new xmppclient.Presence(
+                "Busy",
+                0,
+                Presence.Mode.dnd));
+        statusComboBox.addItem(new Presence(
                 Presence.Type.available,
-                Presence.Mode.chat,
-                "Free to chat"));
-        statusComboBox.addItem(new xmppclient.Presence());
+                "Free to chat",
+                0,
+                Presence.Mode.chat));
+        statusComboBox.addItem(new Presence(
+                Presence.Type.unavailable,
+                "Offline",
+                0,
+                Presence.Mode.away));        
+        
         statusComboBox.addItem(new JSeparator());
         statusComboBox.addItem(new CustomStatusDialog(this, true));
         statusComboBox.addItem(new JSeparator());
+        
+        // add custom statuses
+        for(Presence presence:settingsManager.getPresences())
+        {
+            statusComboBox.addItem(presence);
+        }
+        
         statusComboBox.setSelectedIndex(0);
     }
 
@@ -333,6 +350,7 @@ public class ContactListUI extends javax.swing.JFrame implements FileTransferLis
         {
             public void setSelectedIndex(int index)
             {
+                // prevent the separators from being selected
                 if(statusComboBox.getItemAt(index) instanceof JSeparator)
                 return;
 
@@ -737,10 +755,12 @@ public class ContactListUI extends javax.swing.JFrame implements FileTransferLis
             Presence presence = dialog.showDialog();
             if (presence == null)
             {
+                statusComboBox.setSelectedItem(statusComboBox.getSelectedItem());
                 return;
             }
+            settingsManager.addPresence(presence);
             initStatusComboBox();
-            statusComboBox.addItem(presence);
+            statusComboBox.setSelectedItem(presence);
             return;
         }
         connection.sendPacket((Presence) statusComboBox.getSelectedItem());
@@ -855,7 +875,7 @@ private void joinConferenceButtonActionPerformed(java.awt.event.ActionEvent evt)
 private void viewReceivedFilesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewReceivedFilesButtonActionPerformed
     try
     {
-        Utils.openFileBrowser(accountManager.getRootDir() + File.separator + SettingsManager.RECEIVED_DIR, true);
+        Utils.openFileBrowser(settingsManager.getRootDir() + File.separator + SettingsManager.RECEIVED_DIR, true);
     }
     catch (IOException ex)
     {
@@ -869,7 +889,7 @@ private void viewReceivedFilesButtonActionPerformed(java.awt.event.ActionEvent e
 private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAudioFilesButtonActionPerformed
     try
     {
-        Utils.openFileBrowser(accountManager.getRootDir() + File.separator + SettingsManager.AUDIO_DIR, true);
+        Utils.openFileBrowser(settingsManager.getRootDir() + File.separator + SettingsManager.AUDIO_DIR, true);
     }
     catch (Exception ex)
     {
@@ -1307,7 +1327,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
         if (option == JOptionPane.YES_OPTION)
         {
             IncomingFileTransfer transfer = request.accept();
-            File dir = accountManager.createDirectory(SettingsManager.RECEIVED_DIR);
+            File dir = settingsManager.createDirectory(SettingsManager.RECEIVED_DIR);
 
             try
             {
