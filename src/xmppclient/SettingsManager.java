@@ -19,7 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTextPane;
 import javax.swing.text.StyledDocument;
-import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.util.StringUtils;
 
@@ -49,7 +48,7 @@ public class SettingsManager
     
     /** The JID to store account details under */
     private String JID;
-    private File rootDir;
+    private File accountDir;
 
     /**
      * Creates a new settings manager for the given JID. This will create a 
@@ -68,13 +67,13 @@ public class SettingsManager
      */
     public File getRootDir()
     {
-        return rootDir;
+        return accountDir;
     }
 
     private void createRootDirectory()
     {
-        rootDir = new File(ROOT_DIR + File.separator + File.separator + JID);
-        if(!rootDir.exists()) rootDir.mkdirs();
+        accountDir = new File(ROOT_DIR + File.separator + File.separator + JID);
+        if(!accountDir.exists()) accountDir.mkdirs();
     }
 
     /**
@@ -84,7 +83,7 @@ public class SettingsManager
      */
     public File createDirectory(String name)
     {
-        File dir = new File(rootDir.getAbsolutePath() + File.separator + name);
+        File dir = new File(accountDir.getAbsolutePath() + File.separator + name);
         if(!dir.exists()) dir.mkdir();
         return dir;
     }
@@ -126,7 +125,7 @@ public class SettingsManager
     {
         try
         {
-            ObjectOutputStream fileOut = new ObjectOutputStream(new FileOutputStream(rootDir.getAbsolutePath() + File.separator + name));
+            ObjectOutputStream fileOut = new ObjectOutputStream(new FileOutputStream(accountDir.getAbsolutePath() + File.separator + name));
             fileOut.writeObject(obj);
             fileOut.close();
         }
@@ -148,7 +147,7 @@ public class SettingsManager
         
         try
         {
-            ObjectInputStream fileIn = new ObjectInputStream(new FileInputStream(rootDir.getAbsolutePath() + File.separator + name));
+            ObjectInputStream fileIn = new ObjectInputStream(new FileInputStream(accountDir.getAbsolutePath() + File.separator + name));
             
             Object foundObject = fileIn.readObject();
             if(foundObject.getClass().equals(objectClass))

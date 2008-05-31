@@ -761,7 +761,6 @@ public class ContactListUI extends javax.swing.JFrame implements FileTransferLis
             settingsManager.addPresence(presence);
             initStatusComboBox();
             statusComboBox.setSelectedItem(presence);
-            return;
         }
         connection.sendPacket((Presence) statusComboBox.getSelectedItem());
     }//GEN-LAST:event_statusComboBoxActionPerformed
