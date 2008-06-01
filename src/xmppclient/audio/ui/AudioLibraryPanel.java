@@ -61,7 +61,11 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
                 session.getPlayer().addBasicPlayerListener(AudioLibraryPanel.this);
                 stopButton.setEnabled(true);
                 playButton.setIcon(TangoIcons.pause16x16);
-                playButton.setIcon(TangoIcons.play16x16);
+                try
+                {
+                    session.getPlayer().setGain(new Double(volumeSlider.getValue()) / 100);
+                }
+                catch (BasicPlayerException ex){}
             }
         });
     }
@@ -87,7 +91,7 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
         allButton = new javax.swing.JButton();
         playButton = new javax.swing.JButton();
         stopButton = new javax.swing.JButton();
-        jSlider1 = new javax.swing.JSlider();
+        volumeSlider = new javax.swing.JSlider();
 
         audioList.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 2, 2, 2));
         audioList.setCellRenderer(new LibraryListRenderer());
@@ -140,6 +144,15 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
             }
         });
 
+        volumeSlider.setMajorTickSpacing(25);
+        volumeSlider.setPaintTicks(true);
+        volumeSlider.setToolTipText("Volume");
+        volumeSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                volumeSliderStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -159,7 +172,7 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(stopButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(volumeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -171,13 +184,13 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
                     .addComponent(albumButton)
                     .addComponent(allButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(playButton)
-                        .addComponent(stopButton))
-                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(volumeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -253,6 +266,8 @@ private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     try
     {//GEN-LAST:event_stopButtonActionPerformed
         session.getControl().stop();
+        session.terminate();
+        session.getPlayer().removeBasicPlayerListener(this);
     }
     catch (BasicPlayerException ex)
     {
@@ -260,6 +275,18 @@ private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }
     connected = false;
     stopButton.setEnabled(false);
+    playButton.setIcon(TangoIcons.play16x16);
+}
+
+private void volumeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_volumeSliderStateChanged
+    try
+    {//GEN-LAST:event_volumeSliderStateChanged
+        session.getControl().setGain(new Double(volumeSlider.getValue()) / 100);
+    }
+    catch (Exception ex)
+    {
+        // not playing
+    }
 }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton albumButton;
@@ -267,9 +294,9 @@ private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JButton artistButton;
     private javax.swing.JList audioList;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSlider jSlider1;
     private javax.swing.JButton playButton;
     private javax.swing.JButton stopButton;
+    private javax.swing.JSlider volumeSlider;
     // End of variables declaration//GEN-END:variables
     @Override
     public void audioResponse(final AudioMessage response)
@@ -352,7 +379,7 @@ private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         {
             return;
         }
-        System.out.printf("Requesting file: %s", file.toString());
+        System.out.printf("Requesting file: %s\n", file.toString());
 
         audioManager.sendFileRequest(file, ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
     }

@@ -13,7 +13,6 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smackx.packet.Bytestream;
-import xmppclient.ContactListUI;
 import xmppclient.jingle.packet.File;
 
 /**
@@ -29,6 +28,7 @@ public class IncomingSession extends Session
     private File file;
     private BasicPlayer player;
     private BasicController control;
+    private BytestreamListener listener;
 
     public BasicController getControl()
     {
@@ -40,10 +40,11 @@ public class IncomingSession extends Session
         return player;
     }
 
-    public IncomingSession(XMPPConnection xmppConnection, String responder, String sid)
+    public IncomingSession(XMPPConnection connection, String responder, String sid)
     {
-        super(xmppConnection, responder, sid);
-        xmppConnection.addPacketListener(new BytestreamListener(), new PacketTypeFilter(Bytestream.class));
+        super(connection, responder, sid);
+        listener = new BytestreamListener();
+        connection.addPacketListener(listener, new PacketTypeFilter(Bytestream.class));
         player = new BasicPlayer();
         control = (BasicController) player;
     }
@@ -91,6 +92,8 @@ public class IncomingSession extends Session
     @Override
     public void terminate()
     {
+        super.connection.removePacketListener(listener);
+        
         try
         {
             bis.close();

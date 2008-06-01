@@ -12,21 +12,26 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.util.StringUtils;
+import org.jivesoftware.smackx.packet.Bytestream;
 import xmppclient.jingle.packet.Description;
 import xmppclient.jingle.packet.Jingle;
+import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.filter.PacketTypeFilter;
 
 /**
  *
  * @author Lee Boynton (323326)
  */
-public class OutgoingSession extends Session
+public class OutgoingSession extends Session implements PacketListener
 {
     private File file;
     private InputStream in;
     private DataOutputStream out;
-    private Socket connection;
+    private Socket socket;
     private ServerSocket serverSocket;
     private byte[] buffer;
 
@@ -47,6 +52,7 @@ public class OutgoingSession extends Session
                 String.valueOf(file.length()),
                 String.valueOf(file.hashCode()))));
         xmppConnection.sendPacket(jingle);
+        xmppConnection.addPacketListener(this, new PacketTypeFilter(Jingle.class));
     }
 
     @Override
@@ -60,11 +66,11 @@ public class OutgoingSession extends Session
             buffer = new byte[new Long(file.length()).intValue()];
             serverSocket = new ServerSocket();
             serverSocket.bind(addr);
-            System.out.printf("Listening for connections on: %s:%s",
+            System.out.printf("Listening for connections on: %s:%s\n",
                     serverSocket.getInetAddress().getHostAddress(),
                     serverSocket.getLocalPort());
-            connection = serverSocket.accept();
-            out = new DataOutputStream(connection.getOutputStream());
+            socket = serverSocket.accept();
+            out = new DataOutputStream(socket.getOutputStream());
             in = new BufferedInputStream(new FileInputStream(file));
             in.read(buffer);
             out.write(buffer);
@@ -75,15 +81,7 @@ public class OutgoingSession extends Session
         catch(SocketException ex)
         {
             System.out.println("Peer closed socket");
-            try
-            {
-                out.close();
-                in.close();
-            }
-            catch (IOException ex1)
-            {
-                Logger.getLogger(OutgoingSession.class.getName()).log(Level.SEVERE, null, ex1);
-            }
+            terminate();
         }
         catch (Exception ex)
         {
@@ -94,15 +92,39 @@ public class OutgoingSession extends Session
     @Override
     public void terminate()
     {
+        super.connection.removePacketListener(this);
+        
         try
         {
             in.close();
             out.close();
-            connection.close();
+            socket.close();
         }
         catch (IOException ex)
         {
             Logger.getLogger(OutgoingSession.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    public void processPacket(Packet packet)
+    {
+        Jingle jingle = (Jingle) packet;
+        System.out.printf("%s: Jingle packet received\n", this.getClass().getName());
+        System.out.println(jingle.getChildElementXML());
+
+        // sending a session accept triggers this listener on the sender for some reason
+        if (jingle.getAction() == Jingle.Action.SESSIONACCEPT)
+        {
+            port = getFreePort();
+            Bytestream bytestream = new Bytestream();
+            bytestream.addStreamHost(super.connection.getUser(), getHostAddress(), port);
+            bytestream.setTo(jingle.getFrom());
+            bytestream.setFrom(jingle.getTo());
+            bytestream.setMode(Bytestream.Mode.tcp);
+            bytestream.setType(IQ.Type.SET);
+            connection.sendPacket(bytestream);
+            start();
         }
     }
 }
