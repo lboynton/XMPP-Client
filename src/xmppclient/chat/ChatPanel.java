@@ -33,6 +33,7 @@ import xmppclient.MainUI;
 import xmppclient.ContactToolTip;
 import xmppclient.EmoticonsUI;
 import xmppclient.FileTransferChooser;
+import xmppclient.SettingsManager;
 import xmppclient.Utils;
 import xmppclient.emoticons.Emoticon;
 import xmppclient.emoticons.Emoticons;
@@ -53,7 +54,7 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
     /**
      * Creates a new JPanel for conducting the chat
      * @param chat The chat this panel should be associated with
-     * @param frame The chat JFrame
+     * @param parent The parent JFrame which contains this JPanel
      */
     public ChatPanel(Chat chat, JFrame parent)
     {
@@ -147,7 +148,7 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
             {
                 StyleConstants.setFontFamily(newStyle, newFormat.getFont().getFamily());
                 StyleConstants.setFontSize(newStyle, newFormat.getFont().getSize());
-                StyleConstants.setForeground(newStyle, newFormat.getColor());
+                StyleConstants.setForeground(newStyle, newFormat.getColour());
                 StyleConstants.setItalic(newStyle, newFormat.getFont().isItalic());
                 StyleConstants.setBold(newStyle, newFormat.getFont().isBold());
             }
@@ -203,6 +204,12 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
         }
     }
 
+    /**
+     * This method is called when the JFrame is closing, and calls the log conversation
+     * method in the {@link SettingsManager} and supplies the text pane and the 
+     * JID of the participant in the chat as parameters
+     * @see SettingsManager
+     */
     public void saveChat()
     {
         MainUI.settingsManager.logConversation(messageTextPane, chat.getParticipant());
@@ -418,10 +425,10 @@ private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GE
 }//GEN-LAST:event_sendFileButtonActionPerformed
 
 private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formatButtonActionPerformed
-    FormatterUI formatter = new FormatterUI(null, format.getFont(), format.getColor());
+    FormatterUI formatter = new FormatterUI(null, format.getFont(), format.getColour());
     format = formatter.showDialog();
     sendTextArea.setFont(format.getFont());
-    sendTextArea.setForeground(format.getColor());
+    sendTextArea.setForeground(format.getColour());
 }//GEN-LAST:event_formatButtonActionPerformed
 
 private void emoticonsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emoticonsButtonActionPerformed

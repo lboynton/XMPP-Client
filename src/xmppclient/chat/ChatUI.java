@@ -13,7 +13,8 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.util.StringUtils;
 
 /**
- *
+ * Controls one-to-one conversations by adding and removing conversation tabs
+ * where necessary.
  * @author  Lee Boynton (323326)
  */
 public class ChatUI extends javax.swing.JFrame implements MessageListener, ChatManagerListener
@@ -24,6 +25,10 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener, ChatM
         initComponents();
     }
 
+    /**
+     * Adds a conversation tab if the tab isn't already open
+     * @param chat The chat to add
+     */
     public void addChat(Chat chat)
     {
         if (getTabIndex(chat) == -1)
@@ -35,6 +40,11 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener, ChatM
         }
     }
 
+    /**
+     * Gets the tab index of the given chat
+     * @param chat The chat
+     * @return The tab index of the chat
+     */
     public int getTabIndex(Chat chat)
     {
         for (int i = 0; i < tabs.getTabCount(); i++)
@@ -52,6 +62,11 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener, ChatM
         return -1;
     }
 
+    /**
+     * Gets the conversation JPanel of the given chat
+     * @param chat The chat
+     * @return The conversation JPanel
+     */
     public ChatPanel getChat(Chat chat)
     {
         return (ChatPanel) tabs.getComponentAt(getTabIndex(chat));
@@ -125,6 +140,13 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener, ChatM
         }
     }
 
+    /**
+     * This method is fired every time a message is sent to the local user. If
+     * the message is a chat message, it will add the chat as a tab and add the
+     * message that was sent to the user.
+     * @param chat The chat the message is part of
+     * @param message The message sent to the user
+     */
     @Override
     public void processMessage(Chat chat, Message message)
     {

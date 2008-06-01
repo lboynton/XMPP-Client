@@ -68,7 +68,16 @@ import xmppclient.jingle.JingleManager;
 import xmppclient.jingle.JingleSessionRequestListener;
 
 /**
- *
+ * The main user interface of the application. This class displays the contact
+ * list. It also acts as a listener for various events. These include:
+ * <ul>
+ * <li>Normal file transfer requests</li>
+ * <li>Jingle file transfer requests (used for audio streaming)</li> 
+ * <li>Changes in the roster</li>
+ * <li>Multiuser chat invitations</li>
+ * <li>Subscription requests (when another user adds this user to their contact 
+ * list)</li>
+ * </ul>
  * @author Lee Boynton (323326)
  */
 public class MainUI extends javax.swing.JFrame implements FileTransferListener, JingleSessionRequestListener, RosterListener
@@ -79,6 +88,10 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
     private SystemTray tray;
     private Image appIcon = new ImageIcon(this.getClass().getResource(
             "/xmppclient/images/user.png")).getImage();
+    /**
+     * The chat UI handles the one-to-one conversations, and listens for new chats
+     * and messages.
+     */
     public static ChatUI chatUI;
     private String accountName;
     private final int SORT_BY_STATUS = 0;
@@ -86,6 +99,10 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
     private int sortMethod = SORT_BY_STATUS;
     private JingleManager jingleManager;
     private AudioManager audioManager;
+    /**
+     * The settings manager is used for storing and loading settings associated
+     * with the XMPP connection instance
+     */
     public static SettingsManager settingsManager;
 
     /**
@@ -108,11 +125,6 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
         updateContacts();
         addListeners();
         contactTree.requestFocus();
-    }
-
-    public SettingsManager getAccountManager()
-    {
-        return settingsManager;
     }
 
     private void addListeners()
@@ -1208,11 +1220,6 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
         avatarLabel.setIcon(Utils.resizeImage(icon, 84));
     }
 
-    public XMPPConnection getConnection()
-    {
-        return connection;
-    }
-
     /**
      * Updates the list of contacts by calling the appropriate contact sorting method
      */
@@ -1379,6 +1386,11 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
         }
     }
 
+    /**
+     * Called when a Jingle file transfer session is requested. This means that
+     * a user wishes to send a file.
+     * @param request The request that was received
+     */
     @Override
     public void sessionRequested(JingleSessionRequest request)
     {
@@ -1407,24 +1419,45 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
         }
     }
 
+    /**
+     * Updates the contact list when an entry is added to the roster
+     * @param addresses The addresses which were added
+     * @see updateContacts()
+     */
     @Override
     public void entriesAdded(Collection<String> addresses)
     {
         updateContacts();
     }
 
+    /**
+     * Updates the contact list when an entry on the roster is updated
+     * @param addresses The addresses which were updated
+     * @see updateContacts()
+     */
     @Override
     public void entriesUpdated(Collection<String> addresses)
     {
         updateContacts();
     }
 
+    /**
+     * Updates the contact list when a entry is removed from the roster
+     * @param addresses The addresses which were removed
+     * @see updateContacts()
+     */
     @Override
     public void entriesDeleted(Collection<String> addresses)
     {
         updateContacts();
     }
 
+    /**
+     * Updates the contact list when a presence packet is received from a user
+     * on the roster
+     * @param presence The presence packet received
+     * @see updateContacts()
+     */
     @Override
     public void presenceChanged(Presence presence)
     {

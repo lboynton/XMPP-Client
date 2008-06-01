@@ -12,14 +12,19 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
 /**
- *
+ * A JDialog for changing the password on the server for an XMPP account
  * @author  Lee Boynton (323326)
  */
 public class ChangePasswordDialog extends javax.swing.JDialog
 {
     private Connection connection;
 
-    /** Creates new form ChangePasswordDialog */
+    /** 
+     * Initialises the dialog
+     * @param parent The parent JDialog
+     * @param modal True if modal, false otherwise
+     * @param connection The connection to change the password of
+     */
     public ChangePasswordDialog(JDialog parent, boolean modal, Connection connection)
     {
         super(parent, modal);

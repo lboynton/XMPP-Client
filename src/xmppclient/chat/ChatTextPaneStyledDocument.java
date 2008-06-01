@@ -112,7 +112,7 @@ public class ChatTextPaneStyledDocument extends DefaultStyledDocument
         Style newStyle = super.addStyle("newStyle", null);
         StyleConstants.setFontFamily(newStyle, format.getFont().getFamily());
         StyleConstants.setFontSize(newStyle, format.getFont().getSize());
-        StyleConstants.setForeground(newStyle, format.getColor());
+        StyleConstants.setForeground(newStyle, format.getColour());
         StyleConstants.setItalic(newStyle, format.getFont().isItalic());
         StyleConstants.setBold(newStyle, format.getFont().isBold());
         insertMessage(message, newStyle);

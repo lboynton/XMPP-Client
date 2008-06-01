@@ -631,10 +631,10 @@ private void emoticonsButtonActionPerformed(java.awt.event.ActionEvent evt) {//G
 }//GEN-LAST:event_emoticonsButtonActionPerformed
 
 private void formatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formatButtonActionPerformed
-    FormatterUI formatter = new FormatterUI(null, format.getFont(), format.getColor());
+    FormatterUI formatter = new FormatterUI(null, format.getFont(), format.getColour());
     format = formatter.showDialog();
     sendTextArea.setFont(format.getFont());
-    sendTextArea.setForeground(format.getColor());
+    sendTextArea.setForeground(format.getColour());
 }//GEN-LAST:event_formatButtonActionPerformed
 
 private void kickButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kickButtonActionPerformed

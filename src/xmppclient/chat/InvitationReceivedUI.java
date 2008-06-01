@@ -17,7 +17,8 @@ import xmppclient.Utils;
 import xmppclient.MainUI;
 
 /**
- *
+ * A dialog which is displayed when the user receives an invitation to join
+ * a multiuser chat
  * @author  Lee Boynton (323326)
  */
 public class InvitationReceivedUI extends javax.swing.JDialog implements InvitationListener
@@ -26,7 +27,11 @@ public class InvitationReceivedUI extends javax.swing.JDialog implements Invitat
     private String password;
     private String inviter;
 
-    /** Creates new form InvitationReceivedUI */
+    /** 
+     * Initialises the dialog
+     * @param parent The parent JFrame
+     * @param modal True if dialog should be modal, false otherwise
+     */
     public InvitationReceivedUI(java.awt.Frame parent, boolean modal)
     {
         super(parent, modal);

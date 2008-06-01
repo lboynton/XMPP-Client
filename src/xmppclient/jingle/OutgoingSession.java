@@ -23,7 +23,8 @@ import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 
 /**
- *
+ * An outgoing jingle file transfer
+ * Based on XEP-0234: Jingle File Transfer - http://www.xmpp.org/extensions/xep-0234.html
  * @author Lee Boynton (323326)
  */
 public class OutgoingSession extends Session implements PacketListener

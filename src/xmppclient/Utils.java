@@ -10,15 +10,12 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -452,8 +449,9 @@ public class Utils
     }
 
     /**
-     * 
-     * @param name
+     * Deletes a stored XMPP connection by searching the connections.properties file
+     * for keys matching the given name, and removing them
+     * @param deleteName The name of the account to delete
      */
     public static void deleteConnection(String deleteName)
     {

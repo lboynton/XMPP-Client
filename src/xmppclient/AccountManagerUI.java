@@ -20,7 +20,10 @@ import javax.swing.table.TableColumn;
  */
 public class AccountManagerUI extends javax.swing.JDialog
 {
-    /** Creates new form AccountManager */
+    /** 
+     * Initialises the account manager UI
+     * @param parent The parent JFrame
+     */
     public AccountManagerUI(JFrame parent)
     {
         super(parent, "Account Manager", true);

@@ -10,7 +10,8 @@ import org.jivesoftware.smack.XMPPConnection;
 import xmppclient.jingle.packet.Jingle;
 
 /**
- *
+ * Base class for Jingle file transfer sessions
+ * Based on XEP-0234: Jingle File Transfer - http://www.xmpp.org/extensions/xep-0234.html
  * @author Lee Boynton (323326)
  */
 public abstract class Session

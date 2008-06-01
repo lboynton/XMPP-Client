@@ -1,13 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package xmppclient;
 
 /**
- *
- * @author Lee
+ * A connection contains all the information needed to connect to an XMPP server
+ * and sign in, with the exception of the password.
+ * @author Lee Boynton (323326)
  */
 public class Connection 
 {
@@ -95,6 +91,10 @@ public class Connection
         return port;
     }
     
+    /**
+     * Gets the port of this connection as an int
+     * @return The port
+     */
     public int getPortAsInt()
     {
         return Integer.parseInt(port);

@@ -12,14 +12,20 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.XMPPConnection;
 
 /**
- *
+ * A dialog allowing the user to delete their account on an XMPP server. The 
+ * user must enter their password.
  * @author  Lee Boynton (323326)
  */
 public class DeleteAccountDialog extends javax.swing.JDialog
 {
     private Connection connection;
 
-    /** Creates new form DeleteAccountDialog */
+    /** 
+     * Initialises the dialog
+     * @param parent The parent JDialog
+     * @param modal
+     * @param connection 
+     */
     public DeleteAccountDialog(JDialog parent, boolean modal, Connection connection)
     {
         super(parent, modal);

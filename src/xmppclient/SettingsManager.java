@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package xmppclient;
 
 import java.io.BufferedWriter;
@@ -24,7 +20,9 @@ import org.jivesoftware.smack.util.StringUtils;
 import xmppclient.emoticons.Emoticon;
 
 /**
- *
+ * The SettingsManager is used for storing information associated with a given
+ * XMPP connection. Information is stored under a directory in the format
+ * accounts/JID.
  * @author Lee Boynton (323326)
  */
 public class SettingsManager
@@ -122,6 +120,11 @@ public class SettingsManager
         }        
     }
     
+    /**
+     * 
+     * @param obj
+     * @param name
+     */
     public void saveObject(Object obj, String name)
     {
         try
@@ -173,6 +176,11 @@ public class SettingsManager
         return obj;
     }
     
+    /**
+     * Gets the custom presences for this XMPP connection
+     * @return The list of custom presences, which may have zero length if the
+     * custom presences file does not exist
+     */
     public List<Presence> getPresences()
     {
         List<Presence> presences = new ArrayList<Presence>();        
@@ -191,6 +199,11 @@ public class SettingsManager
         return presences;
     }
     
+    /**
+     * Adds a custom presence to the list of custom presences, and saves the list
+     * to file
+     * @param presence The presence to add
+     */
     public void addPresence(Presence presence)
     {
         List<Presence> presences = getPresences();
@@ -198,11 +211,21 @@ public class SettingsManager
         savePresences(presences);
     }
     
+    /**
+     * Saves the custom presences list to file, under the account folder for this user
+     * @param presences The list of presences to store
+     */
     public void savePresences(List<Presence> presences)
     {
         saveObject(presences, "presences");
     }
     
+    /**
+     * Gets the custom emoticons associated with this XMPP account, which are 
+     * stored as a file
+     * @return The list of custom emoticons, which may be zero length
+     * if the file does not exist
+     */
     public List<Emoticon> getEmoticons()
     {
         List<Emoticon> emoticons = new ArrayList<Emoticon>();
@@ -221,6 +244,11 @@ public class SettingsManager
         return emoticons;
     }
     
+    /**
+     * Adds a custom emoticon to the list of custom emoticons, and saves the
+     * updated list to file
+     * @param emoticon The emoticon to add
+     */
     public void addEmoticon(Emoticon emoticon)
     {
         List<Emoticon> emoticons = getEmoticons();

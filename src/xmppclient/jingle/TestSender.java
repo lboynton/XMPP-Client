@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package xmppclient.jingle;
 
 import java.util.logging.Level;
@@ -9,7 +5,8 @@ import java.util.logging.Logger;
 import org.jivesoftware.smack.XMPPConnection;
 
 /**
- *
+ * Sends Jingle file transfers
+ * Used for testing Jingle file transfer 
  * @author Lee Boynton (323326)
  */
 public class TestSender

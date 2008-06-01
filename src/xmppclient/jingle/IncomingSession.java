@@ -16,7 +16,8 @@ import org.jivesoftware.smackx.packet.Bytestream;
 import xmppclient.jingle.packet.File;
 
 /**
- * An incoming file transfer jingle session
+ * An incoming file transfer jingle session.
+ * Based on XEP-0234: Jingle File Transfer - http://www.xmpp.org/extensions/xep-0234.html
  * @author Lee Boynton (323326)
  */
 public class IncomingSession extends Session

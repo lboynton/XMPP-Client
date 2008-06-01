@@ -1,10 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package xmppclient;
 
-import java.awt.Color;
 import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.JDialog;
@@ -16,7 +11,10 @@ import org.jivesoftware.smack.packet.Presence;
 import xmppclient.images.Icons;
 
 /**
- *
+ * A combo box renderer for a combo box containing Presence objects. If a Presence
+ * object is found it displays the status message and the icon representing the 
+ * presence. Also makes sure JSeparators and JDialogs in the combo box display 
+ * correctly.
  * @author Lee Boynton (323326)
  */
 public class StatusComboBoxRenderer extends BasicComboBoxRenderer
@@ -61,9 +59,10 @@ public class StatusComboBoxRenderer extends BasicComboBoxRenderer
     }
     
     /**
-     * Gets the icon representing this presence depending on the presence type 
+     * Gets the icon representing the presence depending on the presence type 
      * and presence mode
-     * @return
+     * @param presence The presence to get the icon for
+     * @return The icon which indicates the given presence
      */
     public Icon getIcon(Presence presence)
     {

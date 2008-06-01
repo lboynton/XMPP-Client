@@ -8,20 +8,33 @@ package xmppclient.chat;
 import xmppclient.*;
 
 /**
- *
+ * A dialog for inviting users to multiuser chats. The local user can select a 
+ * remote user and type in a message to pass to the remote user. The message can
+ * be used to inform the remote user why they are being invited.
  * @author  Lee Boynton (323326)
  */
 public class MultiUserChatInviteUI extends javax.swing.JDialog
 {
     private String values[] = new String[2];
     
-    /** Creates new form MultiUserChatInviteUI */
+    /** 
+     * Initialises the multiuser chat invite user interface
+     * @param parent The parent JFrame
+     * @param modal This dialog needs to be modal for the showDialog() method
+     * to function correctly
+     */
     public MultiUserChatInviteUI(java.awt.Frame parent, boolean modal)
     {
         super(parent, modal);
         initComponents();
     }
     
+    /**
+     * If the dialog is modal, this will show the dialog and wait for the user
+     * to close the dialog in some way before returning the JID of the user to 
+     * invite and the reason message.
+     * @return
+     */
     public String[] showDialog()
     {
         setVisible(true);
