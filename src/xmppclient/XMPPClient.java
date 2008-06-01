@@ -6,6 +6,7 @@
 package xmppclient;
 
 import java.awt.Graphics;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
@@ -41,8 +42,8 @@ public class XMPPClient extends javax.swing.JFrame
         initComponents();
 
         Connection defaultConnection = new Connection();
-        storedConnectionComboBox.addItem(defaultConnection);
-        storedConnectionComboBox.setSelectedItem(defaultConnection);
+        connectionComboBox.addItem(defaultConnection);
+        connectionComboBox.setSelectedItem(defaultConnection);
         usernameTextField.requestFocus();
         validateInputs();
         getRootPane().setDefaultButton(signInButton);
@@ -88,7 +89,7 @@ public class XMPPClient extends javax.swing.JFrame
         passwordLabel = new javax.swing.JLabel();
         resourceLabel = new javax.swing.JLabel();
         hostLabel = new javax.swing.JLabel();
-        storedConnectionComboBox = new javax.swing.JComboBox(Utils.getConnections().toArray());
+        connectionComboBox = new javax.swing.JComboBox(Utils.getConnections().toArray());
         usernameTextField = new javax.swing.JTextField();
         resourceTextField = new javax.swing.JTextField();
         hostTextField = new javax.swing.JTextField();
@@ -123,13 +124,13 @@ public class XMPPClient extends javax.swing.JFrame
 
         hostLabel.setText("Host");
 
-        storedConnectionComboBox.setFont(storedConnectionComboBox.getFont());
-        storedConnectionComboBox.setToolTipText("Select a previously stored connection, or select new connection to create a new connection");
-        storedConnectionComboBox.setFocusable(false);
-        storedConnectionComboBox.setOpaque(false);
-        storedConnectionComboBox.addActionListener(new java.awt.event.ActionListener() {
+        connectionComboBox.setFont(connectionComboBox.getFont());
+        connectionComboBox.setToolTipText("Select a previously stored connection, or select new connection to create a new connection");
+        connectionComboBox.setFocusable(false);
+        connectionComboBox.setOpaque(false);
+        connectionComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                storedConnectionComboBoxActionPerformed(evt);
+                connectionComboBoxActionPerformed(evt);
             }
         });
 
@@ -152,7 +153,7 @@ public class XMPPClient extends javax.swing.JFrame
 
         storeConnectionCheckBox.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         storeConnectionCheckBox.setText("Save connection");
-        storeConnectionCheckBox.setToolTipText("<html>If this checkbox is selected, upon a successful login<br>\n the connection details (except password) will be stored to<br>\nmake future logins quicker.</html>");
+        storeConnectionCheckBox.setToolTipText("<html>If this checkbox is selected, upon a successful login<br>\n the connection details (except password) will be stored to<br>\nmake future logins quicker. Stored connections can be <br>\noverwritten by this function by entering the same name.</html>");
         storeConnectionCheckBox.setBorder(null);
         storeConnectionCheckBox.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         storeConnectionCheckBox.addActionListener(new java.awt.event.ActionListener() {
@@ -218,7 +219,7 @@ public class XMPPClient extends javax.swing.JFrame
                     .addComponent(resourceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
                     .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
                     .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-                    .addComponent(storedConnectionComboBox, 0, 176, Short.MAX_VALUE))
+                    .addComponent(connectionComboBox, 0, 176, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerPanelLayout.createSequentialGroup()
                 .addContainerGap(161, Short.MAX_VALUE)
@@ -244,7 +245,7 @@ public class XMPPClient extends javax.swing.JFrame
                 .addContainerGap(113, Short.MAX_VALUE)
                 .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(connectionLabel)
-                    .addComponent(storedConnectionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(connectionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(usernameLabel)
@@ -326,8 +327,8 @@ public class XMPPClient extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-private void storedConnectionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_storedConnectionComboBoxActionPerformed
-    Connection connection = (Connection) storedConnectionComboBox.getSelectedItem();
+private void connectionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectionComboBoxActionPerformed
+    Connection connection = (Connection) connectionComboBox.getSelectedItem();
 
     usernameTextField.setText(connection.getUsername());
     resourceTextField.setText(connection.getResource());
@@ -335,7 +336,7 @@ private void storedConnectionComboBoxActionPerformed(java.awt.event.ActionEvent 
     portTextField.setText(connection.getPort());
     nameTextField.setText(connection.getName());
     validateInputs();
-}//GEN-LAST:event_storedConnectionComboBoxActionPerformed
+}//GEN-LAST:event_connectionComboBoxActionPerformed
 
 private void usernameTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameTextFieldKeyReleased
     validateInputs();
@@ -349,6 +350,7 @@ private void storeConnectionCheckBoxActionPerformed(java.awt.event.ActionEvent e
     if (storeConnectionCheckBox.isSelected())
     {
         nameTextField.setEnabled(true);
+        nameTextField.setText(usernameTextField.getText() + "@" + hostTextField.getText());
         nameTextField.requestFocus();
         nameTextField.selectAll();
     }
@@ -372,7 +374,18 @@ private void signInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 }//GEN-LAST:event_signInButtonActionPerformed
 
 private void accountManagerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accountManagerMenuItemActionPerformed
-    new AccountManagerUI().setVisible(true);
+    new AccountManagerUI(this).setVisible(true);
+    
+    DefaultComboBoxModel model = new DefaultComboBoxModel();
+
+    model.addElement(new Connection());
+    
+    for(Connection connection:Utils.getConnections())
+    {
+        model.addElement(connection);
+    }
+    
+    connectionComboBox.setModel(model);
 }//GEN-LAST:event_accountManagerMenuItemActionPerformed
 
 private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
@@ -403,7 +416,7 @@ private void registerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         });
     }
 
-    private void storeConnection(boolean store) throws Exception
+    private void storeConnection(boolean store)
     {
         if (!store)
         {
@@ -451,7 +464,7 @@ private void registerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
 
     private void enableComponents(boolean enable)
     {
-        storedConnectionComboBox.setEnabled(enable);
+        connectionComboBox.setEnabled(enable);
         usernameTextField.setEnabled(enable);
         resourceTextField.setEnabled(enable);
         portTextField.setEnabled(enable);
@@ -512,6 +525,7 @@ private void registerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem accountManagerMenuItem;
+    private javax.swing.JComboBox connectionComboBox;
     private javax.swing.JLabel connectionLabel;
     private javax.swing.JPanel containerPanel;
     private javax.swing.JMenuItem exitMenuItem;
@@ -530,7 +544,6 @@ private void registerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JTextField resourceTextField;
     private javax.swing.JButton signInButton;
     private javax.swing.JCheckBox storeConnectionCheckBox;
-    private javax.swing.JComboBox storedConnectionComboBox;
     private javax.swing.JLabel usernameLabel;
     private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables

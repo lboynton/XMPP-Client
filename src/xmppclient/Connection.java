@@ -94,6 +94,11 @@ public class Connection
     {
         return port;
     }
+    
+    public int getPortAsInt()
+    {
+        return Integer.parseInt(port);
+    }
 
     /**
      * Sets the port of this connection

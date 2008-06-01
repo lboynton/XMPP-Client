@@ -6,6 +6,7 @@ package xmppclient.chat;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
@@ -13,6 +14,7 @@ import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
+import xmppclient.MainUI;
 import xmppclient.emoticons.Emoticon;
 import xmppclient.emoticons.Emoticons;
 import xmppclient.formatter.Format;
@@ -164,9 +166,12 @@ public class ChatTextPaneStyledDocument extends DefaultStyledDocument
      */
     private void showEmoticons(int start, int end)
     {
+        List<Emoticon> emoticons = Emoticons.getDefaultEmoticons();
+        emoticons.addAll(MainUI.settingsManager.getEmoticons());
+        
         for (int i = start; i < end; i++)
         {
-            for (Emoticon e : Emoticons.getEmoticons())
+            for (Emoticon e : emoticons)
             {
                 try
                 {

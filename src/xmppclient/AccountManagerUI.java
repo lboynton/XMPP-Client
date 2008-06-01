@@ -7,6 +7,9 @@ package xmppclient;
 
 import java.awt.Color;
 import java.awt.Component;
+import javax.swing.JFrame;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -15,11 +18,12 @@ import javax.swing.table.TableColumn;
  * Displays a window for managing accounts
  * @author  Lee Boynton (323326)
  */
-public class AccountManagerUI extends javax.swing.JFrame
+public class AccountManagerUI extends javax.swing.JDialog
 {
     /** Creates new form AccountManager */
-    public AccountManagerUI()
+    public AccountManagerUI(JFrame parent)
     {
+        super(parent, "Account Manager", true);
         initComponents();
         initTable();
         initColumnSizes();
@@ -30,7 +34,7 @@ public class AccountManagerUI extends javax.swing.JFrame
      */
     private void initTable()
     {
-        for (Connection connection:Utils.getConnections())
+        for (Connection connection : Utils.getConnections())
         {
             Object[] row = new Object[]
             {
@@ -47,6 +51,17 @@ public class AccountManagerUI extends javax.swing.JFrame
 
         // change the background colour of the table
         scrollPane.getViewport().setBackground(Color.white);
+
+        // add row selection listener to table
+        accountsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener()
+        {
+            @Override
+            public void valueChanged(ListSelectionEvent e)
+            {
+                passwordButton.setEnabled(true);
+                deleteButton.setEnabled(true);
+            }
+        });
     }
 
     /**
@@ -117,6 +132,9 @@ public class AccountManagerUI extends javax.swing.JFrame
         applyButton = new javax.swing.JButton();
         separator = new javax.swing.JSeparator();
         titleLabel = new javax.swing.JLabel();
+        passwordButton = new javax.swing.JButton();
+        serverSettingsLabel = new javax.swing.JLabel();
+        deleteButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Account Manager");
@@ -148,10 +166,10 @@ public class AccountManagerUI extends javax.swing.JFrame
         });
         accountsTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         accountsTable.setFocusable(false);
-        accountsTable.setIntercellSpacing(new java.awt.Dimension(15, 5));
+        accountsTable.setIntercellSpacing(new java.awt.Dimension(0, 0));
         accountsTable.setOpaque(false);
         accountsTable.setRowHeight(20);
-        accountsTable.setRowSelectionAllowed(false);
+        accountsTable.setRowMargin(0);
         accountsTable.setShowHorizontalLines(false);
         accountsTable.setShowVerticalLines(false);
         scrollPane.setViewportView(accountsTable);
@@ -173,20 +191,44 @@ public class AccountManagerUI extends javax.swing.JFrame
         titleLabel.setFont(new java.awt.Font("Tahoma", 1, 14));
         titleLabel.setText("Accounts");
 
+        passwordButton.setText("Change password");
+        passwordButton.setEnabled(false);
+        passwordButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordButtonActionPerformed(evt);
+            }
+        });
+
+        serverSettingsLabel.setText("Server settings:");
+
+        deleteButton.setText("Delete account");
+        deleteButton.setEnabled(false);
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
-                    .addComponent(titleLabel)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(scrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
+                    .addComponent(titleLabel, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 411, Short.MAX_VALUE)
                         .addComponent(applyButton))
-                    .addComponent(separator, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE))
+                    .addComponent(separator, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(serverSettingsLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(passwordButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -195,8 +237,13 @@ public class AccountManagerUI extends javax.swing.JFrame
                 .addContainerGap()
                 .addComponent(titleLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(passwordButton)
+                    .addComponent(serverSettingsLabel)
+                    .addComponent(deleteButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -212,9 +259,9 @@ private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     dispose();
 }//GEN-LAST:event_cancelButtonActionPerformed
 
-/**
- * Gets any rows which should be deleted, and deletes them
- */
+    /**
+     * Gets any rows which should be deleted, and deletes them
+     */
 private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
     DefaultTableModel model = (DefaultTableModel) accountsTable.getModel();
 
@@ -225,15 +272,41 @@ private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             Utils.deleteConnection((String) model.getValueAt(row, 0));
         }
     }
+
+    dispose();
 }//GEN-LAST:event_applyButtonActionPerformed
+
+private void passwordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordButtonActionPerformed
+    Connection connection = new Connection();
+    int row = accountsTable.getSelectedRow();
+    connection.setHost((String) accountsTable.getValueAt(row, 3));
+    connection.setUsername((String) accountsTable.getValueAt(row, 1));
+    connection.setResource((String) accountsTable.getValueAt(row, 2));
+    connection.setPort((String) accountsTable.getValueAt(row, 4));
+    new ChangePasswordDialog(this, true, connection).setVisible(true);
+}//GEN-LAST:event_passwordButtonActionPerformed
+
+private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+
+    Connection connection = new Connection();
+    int row = accountsTable.getSelectedRow();
+    connection.setHost((String) accountsTable.getValueAt(row, 3));
+    connection.setUsername((String) accountsTable.getValueAt(row, 1));
+    connection.setResource((String) accountsTable.getValueAt(row, 2));
+    connection.setPort((String) accountsTable.getValueAt(row, 4));
+    new DeleteAccountDialog(this, true, connection).setVisible(true);
+}//GEN-LAST:event_deleteButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable accountsTable;
     private javax.swing.JButton applyButton;
     private javax.swing.JButton cancelButton;
+    private javax.swing.JButton deleteButton;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JButton passwordButton;
     private javax.swing.JScrollPane scrollPane;
     private javax.swing.JSeparator separator;
+    private javax.swing.JLabel serverSettingsLabel;
     private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
 }

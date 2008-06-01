@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -351,39 +353,38 @@ public class Utils
     {
         Properties properties = new Properties();
         List<Connection> connections = new ArrayList<Connection>();
-        
+
         try
         {
             properties.load(new FileInputStream("connections.properties"));
         }
         catch (IOException ex)
         {
-            ex.printStackTrace();
             return connections;
         }
-        
+
         Enumeration keys = properties.keys();
-        
-        while(keys.hasMoreElements())
+
+        while (keys.hasMoreElements())
         {
             String key = (String) keys.nextElement();
-            
-            if(key.endsWith("-port"))
+
+            if (key.endsWith("-port"))
             {
                 String name = key.substring(0, key.length() - 5);
                 getConnection(connections, name).setPort(properties.getProperty(name + "-port"));
             }
-            if(key.endsWith("-host"))
+            if (key.endsWith("-host"))
             {
                 String name = key.substring(0, key.length() - 5);
                 getConnection(connections, name).setHost(properties.getProperty(name + "-host"));
             }
-            if(key.endsWith("-username"))
+            if (key.endsWith("-username"))
             {
                 String name = key.substring(0, key.length() - 9);
                 getConnection(connections, name).setUsername(properties.getProperty(name + "-username"));
             }
-            if(key.endsWith("-resource"))
+            if (key.endsWith("-resource"))
             {
                 String name = key.substring(0, key.length() - 9);
                 getConnection(connections, name).setResource(properties.getProperty(name + "-resource"));
@@ -392,7 +393,7 @@ public class Utils
 
         return connections;
     }
-    
+
     /**
      * Gets the connection matching the given name if it exists in the list, otherwise
      * creates the connection, adds it to the list and returns the connection
@@ -402,15 +403,18 @@ public class Utils
      */
     public static Connection getConnection(List<Connection> connections, String name)
     {
-        for(Connection c:connections)
+        for (Connection c : connections)
         {
-            if(c.getName().equals(name)) return c;
+            if (c.getName().equals(name))
+            {
+                return c;
+            }
         }
-        
+
         Connection connection = new Connection();
         connection.setName(name);
         connections.add(connection);
-        
+
         return connection;
     }
 
@@ -422,25 +426,82 @@ public class Utils
      * @param port
      * @param name
      */
-    public static void saveConnection(String username, String resource, String host, String port, String name) throws FileNotFoundException, IOException
+    public static void saveConnection(String username, String resource, String host, String port, String name)
     {
         Properties properties = new Properties();
-        properties.load(new FileInputStream("connections.properties"));
+        try
+        {
+            properties.load(new FileInputStream("connections.properties"));
+        }
+        catch (IOException ex)
+        {
+            // no previous connections
+        }
         properties.setProperty(name + "-username", username);
         properties.setProperty(name + "-resource", resource);
         properties.setProperty(name + "-host", host);
         properties.setProperty(name + "-port", port);
-
-        properties.store(new FileOutputStream("connections.properties"), CONNECTIONS_DESC);
+        
+        try
+        {
+            properties.store(new FileOutputStream("connections.properties"), CONNECTIONS_DESC);
+        }
+        catch (IOException ex)
+        {
+        }
     }
 
     /**
      * 
      * @param name
      */
-    public static void deleteConnection(String name)
+    public static void deleteConnection(String deleteName)
     {
-        new File("connections/" + name + ".properties").delete();
+        Properties properties = new Properties();
+
+        try
+        {
+            properties.load(new FileInputStream("connections.properties"));
+        }
+        catch (IOException ex)
+        { /*connections file not found*/ }
+
+        Enumeration keys = properties.keys();
+
+        while (keys.hasMoreElements())
+        {
+            String key = (String) keys.nextElement();
+            String name = null;
+
+            if (key.endsWith("-port"))
+            {
+                name = key.substring(0, key.length() - 5);
+                if(name.equals(deleteName)) properties.remove(name + "-port");
+            }
+            if (key.endsWith("-host"))
+            {
+                name = key.substring(0, key.length() - 5);
+                if(name.equals(deleteName)) properties.remove(name + "-host");
+            }
+            if (key.endsWith("-username"))
+            {
+                name = key.substring(0, key.length() - 9);
+                if(name.equals(deleteName)) properties.remove(name + "-username");
+            }
+            if (key.endsWith("-resource"))
+            {
+                name = key.substring(0, key.length() - 9);
+                if(name.equals(deleteName)) properties.remove(name + "-resource");
+            }
+        }
+
+        try
+        {
+            properties.store(new FileOutputStream("connections.properties"), CONNECTIONS_DESC);
+        }
+        catch (IOException ex)
+        {
+        }
     }
 
     /**

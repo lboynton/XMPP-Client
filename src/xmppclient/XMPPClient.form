@@ -126,7 +126,7 @@
                       <Component id="resourceTextField" alignment="0" pref="176" max="32767" attributes="1"/>
                       <Component id="passwordTextField" alignment="0" pref="176" max="32767" attributes="1"/>
                       <Component id="usernameTextField" alignment="0" pref="176" max="32767" attributes="3"/>
-                      <Component id="storedConnectionComboBox" alignment="0" pref="176" max="32767" attributes="3"/>
+                      <Component id="connectionComboBox" alignment="0" pref="176" max="32767" attributes="3"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -155,7 +155,7 @@
                   <EmptySpace pref="113" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="connectionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="storedConnectionComboBox" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                      <Component id="connectionComboBox" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -214,11 +214,11 @@
             <Property name="text" type="java.lang.String" value="Host"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="storedConnectionComboBox">
+        <Component class="javax.swing.JComboBox" name="connectionComboBox">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
               <FontInfo relative="true">
-                <Font component="storedConnectionComboBox" property="font" relativeSize="true" size="0"/>
+                <Font component="connectionComboBox" property="font" relativeSize="true" size="0"/>
               </FontInfo>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Select a previously stored connection, or select new connection to create a new connection"/>
@@ -226,7 +226,7 @@
             <Property name="opaque" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="storedConnectionComboBoxActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="connectionComboBoxActionPerformed"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox(Utils.getConnections().toArray())"/>
@@ -260,7 +260,7 @@
               <Font name="Tahoma" size="10" style="0"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Save connection"/>
-            <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;If this checkbox is selected, upon a successful login&lt;br&gt;&#xa; the connection details (except password) will be stored to&lt;br&gt;&#xa;make future logins quicker.&lt;/html&gt;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;If this checkbox is selected, upon a successful login&lt;br&gt;&#xa; the connection details (except password) will be stored to&lt;br&gt;&#xa;make future logins quicker. Stored connections can be &lt;br&gt;&#xa;overwritten by this function by entering the same name.&lt;/html&gt;"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="null"/>
             </Property>

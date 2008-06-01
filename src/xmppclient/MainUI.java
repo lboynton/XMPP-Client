@@ -478,7 +478,7 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
         });
         toolBar.add(viewReceivedFilesButton);
 
-        viewAudioFilesButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/audio-x-generic.png"))); // NOI18N
+        viewAudioFilesButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/audio-x-generic16x16.png"))); // NOI18N
         viewAudioFilesButton.setToolTipText("Open audio folder");
         viewAudioFilesButton.setFocusable(false);
         viewAudioFilesButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -490,7 +490,7 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
         });
         toolBar.add(viewAudioFilesButton);
 
-        nicknameTextField.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        nicknameTextField.setFont(new java.awt.Font("Tahoma", 1, 12));
         nicknameTextField.setText(Utils.getNickname());
         nicknameTextField.setToolTipText("Press enter to set the nickname");
         nicknameTextField.setOpaque(false);
@@ -542,16 +542,16 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contentPanelLayout.createSequentialGroup()
-                        .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(nicknameTextField)
-                            .addComponent(statusComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                            .addComponent(statusComboBox, 0, 140, Short.MAX_VALUE)
+                            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(avatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -661,7 +661,7 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(contentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
