@@ -12,8 +12,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
@@ -39,7 +41,8 @@ import xmppclient.images.Icons;
  */
 public class Utils
 {
-    private static final String PROPERTIES_DESC = "This file contains properties for the specified account name";
+    private static final String CONNECTIONS_DESC = "This file contains properties " +
+            "for stored XMPP connections. Each key should be prefixed by the account name.";
 
     /**
      * 
@@ -342,47 +345,73 @@ public class Utils
 
     /**
      * Gets all the stored connections
-     * @return An array of connections
+     * @return A list of connections
      */
-    public static Connection[] getConnections()
+    public static List<Connection> getConnections()
     {
         Properties properties = new Properties();
-        File connectionsDir = new File("connections");
-
-        if (!connectionsDir.isDirectory())
+        List<Connection> connections = new ArrayList<Connection>();
+        
+        try
         {
-            return new Connection[0];
+            properties.load(new FileInputStream("connections.properties"));
         }
-        String[] connections = connectionsDir.list(new FilenameFilter()
+        catch (IOException ex)
         {
-            @Override
-            public boolean accept(File file, String name)
-            {
-                return name.contains(".properties");
-            }
-        });
-
-        Connection[] connectionsArray = new Connection[connections.length];
-        int i = 0;
-
-        for (String connection : connections)
+            ex.printStackTrace();
+            return connections;
+        }
+        
+        Enumeration keys = properties.keys();
+        
+        while(keys.hasMoreElements())
         {
-            try
+            String key = (String) keys.nextElement();
+            
+            if(key.endsWith("-port"))
             {
-                properties.load(new FileInputStream("connections/" + connection));
-                connectionsArray[i] = new Connection(properties.getProperty("name"),
-                        properties.getProperty("username"),
-                        properties.getProperty("resource"),
-                        properties.getProperty("host"),
-                        properties.getProperty("port"));
-                i++;
+                String name = key.substring(0, key.length() - 5);
+                getConnection(connections, name).setPort(properties.getProperty(name + "-port"));
             }
-            catch (Exception ex)
+            if(key.endsWith("-host"))
             {
+                String name = key.substring(0, key.length() - 5);
+                getConnection(connections, name).setHost(properties.getProperty(name + "-host"));
+            }
+            if(key.endsWith("-username"))
+            {
+                String name = key.substring(0, key.length() - 9);
+                getConnection(connections, name).setUsername(properties.getProperty(name + "-username"));
+            }
+            if(key.endsWith("-resource"))
+            {
+                String name = key.substring(0, key.length() - 9);
+                getConnection(connections, name).setResource(properties.getProperty(name + "-resource"));
             }
         }
 
-        return connectionsArray;
+        return connections;
+    }
+    
+    /**
+     * Gets the connection matching the given name if it exists in the list, otherwise
+     * creates the connection, adds it to the list and returns the connection
+     * @param connections The list of connections
+     * @param name The name of the connection to create/get
+     * @return The connection
+     */
+    public static Connection getConnection(List<Connection> connections, String name)
+    {
+        for(Connection c:connections)
+        {
+            if(c.getName().equals(name)) return c;
+        }
+        
+        Connection connection = new Connection();
+        connection.setName(name);
+        connections.add(connection);
+        
+        return connection;
     }
 
     /**
@@ -396,15 +425,13 @@ public class Utils
     public static void saveConnection(String username, String resource, String host, String port, String name) throws FileNotFoundException, IOException
     {
         Properties properties = new Properties();
-        properties.setProperty("username", username);
-        properties.setProperty("resource", resource);
-        properties.setProperty("host", host);
-        properties.setProperty("port", port);
-        properties.setProperty("name", name);
+        properties.load(new FileInputStream("connections.properties"));
+        properties.setProperty(name + "-username", username);
+        properties.setProperty(name + "-resource", resource);
+        properties.setProperty(name + "-host", host);
+        properties.setProperty(name + "-port", port);
 
-        (new File("connections")).mkdir();
-
-        properties.store(new FileOutputStream("connections/" + name + ".properties"), PROPERTIES_DESC);
+        properties.store(new FileOutputStream("connections.properties"), CONNECTIONS_DESC);
     }
 
     /**
@@ -470,7 +497,7 @@ public class Utils
         {
             properties.load(new FileInputStream("connections/" + accountName + ".properties"));
             properties.setProperty(property, value);
-            properties.store(new FileOutputStream("connections/" + accountName + ".properties"), PROPERTIES_DESC);
+            properties.store(new FileOutputStream("connections/" + accountName + ".properties"), CONNECTIONS_DESC);
         }
         catch (IOException ex)
         {

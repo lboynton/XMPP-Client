@@ -341,7 +341,6 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
         joinConferenceButton = new javax.swing.JButton();
         vCardButton = new javax.swing.JButton();
         avatarButton = new javax.swing.JButton();
-        preferencesButton = new javax.swing.JButton();
         viewReceivedFilesButton = new javax.swing.JButton();
         viewAudioFilesButton = new javax.swing.JButton();
         nicknameTextField = new javax.swing.JTextField();
@@ -467,13 +466,6 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
         });
         toolBar.add(avatarButton);
 
-        preferencesButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/preferences-desktop.png"))); // NOI18N
-        preferencesButton.setToolTipText("Edit preferences");
-        preferencesButton.setFocusable(false);
-        preferencesButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        preferencesButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        toolBar.add(preferencesButton);
-
         viewReceivedFilesButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/document-save-16x16.png"))); // NOI18N
         viewReceivedFilesButton.setToolTipText("View received files");
         viewReceivedFilesButton.setFocusable(false);
@@ -498,7 +490,7 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
         });
         toolBar.add(viewAudioFilesButton);
 
-        nicknameTextField.setFont(new java.awt.Font("Tahoma", 1, 12));
+        nicknameTextField.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         nicknameTextField.setText(Utils.getNickname());
         nicknameTextField.setToolTipText("Press enter to set the nickname");
         nicknameTextField.setOpaque(false);
@@ -550,32 +542,30 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-                    .addGroup(contentPanelLayout.createSequentialGroup()
-                        .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(statusComboBox, 0, 163, Short.MAX_VALUE)
-                            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contentPanelLayout.createSequentialGroup()
+                        .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(nicknameTextField)
+                            .addComponent(statusComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(avatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(contentPanelLayout.createSequentialGroup()
                         .addComponent(nicknameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(8, 8, 8))
-                    .addGroup(contentPanelLayout.createSequentialGroup()
-                        .addComponent(avatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(avatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -671,7 +661,7 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(contentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1284,7 +1274,6 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem minimiseMenuItem;
     private javax.swing.JTextField nicknameTextField;
-    private javax.swing.JButton preferencesButton;
     private javax.swing.JMenuItem signOutMenuItem;
     private javax.swing.ButtonGroup sortContactsButtonGroup;
     private javax.swing.JComboBox statusComboBox;

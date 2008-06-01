@@ -30,17 +30,15 @@ public class AccountManagerUI extends javax.swing.JFrame
      */
     private void initTable()
     {
-        Connection[] connections = Utils.getConnections();
-
-        for (int i = 0; i < connections.length; i++)
+        for (Connection connection:Utils.getConnections())
         {
             Object[] row = new Object[]
             {
-                connections[i].getName(),
-                connections[i].getUsername(),
-                connections[i].getResource(),
-                connections[i].getHost(),
-                connections[i].getPort(),
+                connection.getName(),
+                connection.getUsername(),
+                connection.getResource(),
+                connection.getHost(),
+                connection.getPort(),
                 new Boolean(false)
             };
 

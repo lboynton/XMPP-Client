@@ -84,28 +84,27 @@ public class XMPPClient extends javax.swing.JFrame
                 super.paintComponent(g);
             }
         };//);
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        storedConnectionComboBox = new javax.swing.JComboBox(Utils.getConnections());
+        usernameLabel = new javax.swing.JLabel();
+        passwordLabel = new javax.swing.JLabel();
+        resourceLabel = new javax.swing.JLabel();
+        hostLabel = new javax.swing.JLabel();
+        storedConnectionComboBox = new javax.swing.JComboBox(Utils.getConnections().toArray());
         usernameTextField = new javax.swing.JTextField();
         resourceTextField = new javax.swing.JTextField();
         hostTextField = new javax.swing.JTextField();
         storeConnectionCheckBox = new javax.swing.JCheckBox();
         passwordTextField = new javax.swing.JPasswordField();
         portTextField = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        portLabel = new javax.swing.JLabel();
+        nameLabel = new javax.swing.JLabel();
         nameTextField = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        connectionLabel = new javax.swing.JLabel();
         signInButton = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        menuBar = new javax.swing.JMenuBar();
+        fileMenu = new javax.swing.JMenu();
+        registerMenuItem = new javax.swing.JMenuItem();
+        accountManagerMenuItem = new javax.swing.JMenuItem();
+        exitMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("XMPPClient");
@@ -116,13 +115,13 @@ public class XMPPClient extends javax.swing.JFrame
 
         containerPanel.setOpaque(false);
 
-        jLabel2.setText("Username");
+        usernameLabel.setText("Username");
 
-        jLabel3.setText("Password");
+        passwordLabel.setText("Password");
 
-        jLabel4.setText("Resource");
+        resourceLabel.setText("Resource");
 
-        jLabel5.setText("Host");
+        hostLabel.setText("Host");
 
         storedConnectionComboBox.setFont(storedConnectionComboBox.getFont());
         storedConnectionComboBox.setToolTipText("Select a previously stored connection, or select new connection to create a new connection");
@@ -151,9 +150,9 @@ public class XMPPClient extends javax.swing.JFrame
             }
         });
 
-        storeConnectionCheckBox.setFont(new java.awt.Font("Tahoma", 0, 10));
+        storeConnectionCheckBox.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         storeConnectionCheckBox.setText("Save connection");
-        storeConnectionCheckBox.setToolTipText("Tick this box to store this connection for future use");
+        storeConnectionCheckBox.setToolTipText("<html>If this checkbox is selected, upon a successful login<br>\n the connection details (except password) will be stored to<br>\nmake future logins quicker.</html>");
         storeConnectionCheckBox.setBorder(null);
         storeConnectionCheckBox.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         storeConnectionCheckBox.addActionListener(new java.awt.event.ActionListener() {
@@ -178,14 +177,14 @@ public class XMPPClient extends javax.swing.JFrame
             }
         });
 
-        jLabel7.setText("Port");
+        portLabel.setText("Port");
 
-        jLabel8.setText("Name:");
+        nameLabel.setText("Name:");
 
         nameTextField.setToolTipText("<html>\n<p>Give a name to the connection. This name will be used in the connection drop down box.</p>\n</html>");
         nameTextField.setEnabled(false);
 
-        jLabel1.setText("Connection");
+        connectionLabel.setText("Connection");
 
         signInButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/go-next.png"))); // NOI18N
         signInButton.setText("Sign in");
@@ -203,66 +202,66 @@ public class XMPPClient extends javax.swing.JFrame
             .addGroup(containerPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
+                    .addComponent(hostLabel)
+                    .addComponent(resourceLabel)
+                    .addComponent(passwordLabel)
+                    .addComponent(usernameLabel)
+                    .addComponent(connectionLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(containerPanelLayout.createSequentialGroup()
-                        .addComponent(hostTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
+                        .addComponent(hostTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel7)
+                        .addComponent(portLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(portTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(resourceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                    .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                    .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                    .addComponent(storedConnectionComboBox, 0, 168, Short.MAX_VALUE))
+                    .addComponent(resourceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                    .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                    .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                    .addComponent(storedConnectionComboBox, 0, 176, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerPanelLayout.createSequentialGroup()
-                .addContainerGap(153, Short.MAX_VALUE)
+                .addContainerGap(161, Short.MAX_VALUE)
                 .addComponent(signInButton)
                 .addGap(10, 10, 10))
             .addGroup(containerPanelLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(containerPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(storeConnectionCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                .addComponent(storeConnectionCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        containerPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5});
+        containerPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {connectionLabel, hostLabel, passwordLabel, resourceLabel, usernameLabel});
 
         containerPanelLayout.setVerticalGroup(
             containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerPanelLayout.createSequentialGroup()
-                .addContainerGap(84, Short.MAX_VALUE)
+                .addContainerGap(113, Short.MAX_VALUE)
                 .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                    .addComponent(connectionLabel)
                     .addComponent(storedConnectionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                    .addComponent(usernameLabel)
                     .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
+                    .addComponent(passwordLabel)
                     .addComponent(passwordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
+                    .addComponent(resourceLabel)
                     .addComponent(resourceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
+                    .addComponent(hostLabel)
                     .addComponent(portTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
+                    .addComponent(portLabel)
                     .addComponent(hostTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(signInButton)
@@ -270,51 +269,48 @@ public class XMPPClient extends javax.swing.JFrame
                 .addComponent(storeConnectionCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
+                    .addComponent(nameLabel)
                     .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
-        containerPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel8, nameTextField, storeConnectionCheckBox});
+        containerPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {nameLabel, nameTextField, storeConnectionCheckBox});
 
-        jMenu1.setText("File");
+        fileMenu.setText("File");
 
-        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem3.setText("Register");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        registerMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        registerMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/list-add.png"))); // NOI18N
+        registerMenuItem.setText("Register");
+        registerMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                registerMenuItemActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem3);
+        fileMenu.add(registerMenuItem);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/system-shutdown-22x22.png"))); // NOI18N
-        jMenuItem1.setText("Exit");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        accountManagerMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        accountManagerMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/network-server-22x22.png"))); // NOI18N
+        accountManagerMenuItem.setText("Account manager");
+        accountManagerMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                accountManagerMenuItemActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        fileMenu.add(accountManagerMenuItem);
 
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Tools");
-
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/network-server-22x22.png"))); // NOI18N
-        jMenuItem2.setText("Account manager");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
+        exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/system-shutdown-22x22.png"))); // NOI18N
+        exitMenuItem.setText("Exit");
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                exitMenuItemActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        fileMenu.add(exitMenuItem);
 
-        jMenuBar1.add(jMenu2);
+        menuBar.add(fileMenu);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -375,17 +371,17 @@ private void signInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     (new ConnectSwingWorker()).execute();
 }//GEN-LAST:event_signInButtonActionPerformed
 
-private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+private void accountManagerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accountManagerMenuItemActionPerformed
     new AccountManagerUI().setVisible(true);
-}//GEN-LAST:event_jMenuItem2ActionPerformed
+}//GEN-LAST:event_accountManagerMenuItemActionPerformed
 
-private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
     dispose();
-}//GEN-LAST:event_jMenuItem1ActionPerformed
+}//GEN-LAST:event_exitMenuItemActionPerformed
 
-private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+private void registerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerMenuItemActionPerformed
     new RegistrationUI(this).setVisible(true);
-}//GEN-LAST:event_jMenuItem3ActionPerformed
+}//GEN-LAST:event_registerMenuItemActionPerformed
 
     /**
      * @param args an argument of debug starts the program in debug mode
@@ -515,28 +511,27 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem accountManagerMenuItem;
+    private javax.swing.JLabel connectionLabel;
     private javax.swing.JPanel containerPanel;
+    private javax.swing.JMenuItem exitMenuItem;
+    private javax.swing.JMenu fileMenu;
+    private javax.swing.JLabel hostLabel;
     private javax.swing.JTextField hostTextField;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField nameTextField;
+    private javax.swing.JLabel passwordLabel;
     private javax.swing.JPasswordField passwordTextField;
+    private javax.swing.JLabel portLabel;
     private javax.swing.JTextField portTextField;
+    private javax.swing.JMenuItem registerMenuItem;
+    private javax.swing.JLabel resourceLabel;
     private javax.swing.JTextField resourceTextField;
     private javax.swing.JButton signInButton;
     private javax.swing.JCheckBox storeConnectionCheckBox;
     private javax.swing.JComboBox storedConnectionComboBox;
+    private javax.swing.JLabel usernameLabel;
     private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
 }

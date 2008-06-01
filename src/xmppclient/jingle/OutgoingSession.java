@@ -111,9 +111,7 @@ public class OutgoingSession extends Session implements PacketListener
     {
         Jingle jingle = (Jingle) packet;
         System.out.printf("%s: Jingle packet received\n", this.getClass().getName());
-        System.out.println(jingle.getChildElementXML());
 
-        // sending a session accept triggers this listener on the sender for some reason
         if (jingle.getAction() == Jingle.Action.SESSIONACCEPT)
         {
             port = getFreePort();
