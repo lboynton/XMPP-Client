@@ -52,7 +52,14 @@ public class EmoticonsUI extends javax.swing.JDialog
         
         model.addElement(new Emoticon("Add emoticon", Icons.add, ""));
         
-        for(Emoticon e:Emoticons.getEmoticons())
+        // get default emoticons
+        for(Emoticon e:Emoticons.getDefaultEmoticons())
+        {
+            model.addElement(e);
+        }
+        
+        // get custom emoticons
+        for(Emoticon e:MainUI.settingsManager.getEmoticons())
         {
             model.addElement(e);
         }

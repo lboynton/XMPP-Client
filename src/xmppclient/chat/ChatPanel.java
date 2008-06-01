@@ -29,7 +29,7 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.packet.VCard;
-import xmppclient.ContactListUI;
+import xmppclient.MainUI;
 import xmppclient.ContactToolTip;
 import xmppclient.EmoticonsUI;
 import xmppclient.FileTransferChooser;
@@ -57,13 +57,13 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
      */
     public ChatPanel(Chat chat, JFrame parent)
     {
-        this.presence = ContactListUI.connection.getRoster().getPresence(chat.getParticipant());
+        this.presence = MainUI.connection.getRoster().getPresence(chat.getParticipant());
         this.parent = parent;
         this.chat = chat;
-        ContactListUI.connection.getRoster().addRosterListener(this);
+        MainUI.connection.getRoster().addRosterListener(this);
         initComponents();
         initTextPane();
-        if (!ContactListUI.connection.getRoster().getPresence(chat.getParticipant()).isAvailable())
+        if (!MainUI.connection.getRoster().getPresence(chat.getParticipant()).isAvailable())
         {
             sendFileButton.setEnabled(false);
         }
@@ -99,7 +99,7 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
         }
         try
         {
-            vCard.load(ContactListUI.connection, chat.getParticipant());
+            vCard.load(MainUI.connection, chat.getParticipant());
             if (vCard.getNickName() != null)
             {
                 return vCard.getNickName();
@@ -156,7 +156,8 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
             int start = doc.getLength();
             doc.insertString(doc.getLength(), message.getBody(), doc.getStyle("newStyle"));
 
-            List<Emoticon> emoticons = Emoticons.getEmoticons();
+            List<Emoticon> emoticons = MainUI.settingsManager.getEmoticons();
+            emoticons.addAll(Emoticons.getDefaultEmoticons());
 
             if (message.getProperty("emoticons") != null &&
                     message.getProperty("emoticons") instanceof List)
@@ -171,7 +172,7 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
 
             for (int i = start; i < doc.getLength(); i++)
             {
-                for (Emoticon e : Emoticons.getEmoticons())
+                for (Emoticon e : emoticons)
                 {
                     if ((i + e.getSequence().length()) > doc.getLength())
                     {
@@ -204,7 +205,7 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
 
     public void saveChat()
     {
-        ContactListUI.settingsManager.logConversation(messageTextPane, chat.getParticipant());
+        MainUI.settingsManager.logConversation(messageTextPane, chat.getParticipant());
     }
 
     /**
@@ -218,7 +219,7 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
          * chat.getParticipant() returns the JID with the resource
          * The roster JID does not have the resource
          */
-        return ContactListUI.connection.getRoster().getEntry(chat.getParticipant());
+        return MainUI.connection.getRoster().getEntry(chat.getParticipant());
     }
 
     /** This method is called from within the constructor to
@@ -386,7 +387,7 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
         {
             for (int i = 0; i < sendTextArea.getText().length(); i++)
             {
-                for (Emoticon e : Emoticons.getEmoticons())
+                for (Emoticon e : MainUI.settingsManager.getEmoticons())
                 {
                     if ((i + e.getSequence().length()) > sendTextArea.getText().length())
                     {
@@ -488,7 +489,7 @@ private void sendTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
         if(StringUtils.parseBareAddress(presence.getFrom()).equals(StringUtils.parseBareAddress(this.presence.getFrom())))
         {
             // get the presence value for the user with the highest priority and availability
-            this.presence = ContactListUI.connection.getRoster().getPresence(presence.getFrom());
+            this.presence = MainUI.connection.getRoster().getPresence(presence.getFrom());
             statusLabel.setText("(" + Utils.getStatusMessage(this.presence) + ")");
             if(this.presence.isAvailable()) sendFileButton.setEnabled(true);
             else sendFileButton.setEnabled(false);

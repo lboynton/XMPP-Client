@@ -92,13 +92,13 @@ private void fileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         return;
     }
     
-    FileTransferManager manager = new FileTransferManager(ContactListUI.connection);
+    FileTransferManager manager = new FileTransferManager(MainUI.connection);
     OutgoingFileTransfer transfer = null;
     
     try
     {
         transfer = manager.createOutgoingFileTransfer(
-                ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
+                MainUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
     }
     catch(IllegalArgumentException e)
     {

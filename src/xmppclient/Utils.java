@@ -168,7 +168,7 @@ public class Utils
         }
         try
         {
-            vCard.load(ContactListUI.connection, rosterEntry.getUser());
+            vCard.load(MainUI.connection, rosterEntry.getUser());
             if (vCard.getNickName() != null && !vCard.getNickName().equals(""))
             {
                 return vCard.getNickName();
@@ -194,7 +194,7 @@ public class Utils
     public static String getNickname(String JID)
     {
         JID = StringUtils.parseBareAddress(JID);
-        return getNickname(ContactListUI.connection.getRoster().getEntry(JID));
+        return getNickname(MainUI.connection.getRoster().getEntry(JID));
     }
 
     /**
@@ -208,7 +208,7 @@ public class Utils
 
         try
         {
-            vCard.load(ContactListUI.connection);
+            vCard.load(MainUI.connection);
             if (vCard.getNickName() != null && !vCard.getNickName().equals(""))
             {
                 return vCard.getNickName();
@@ -218,7 +218,7 @@ public class Utils
         {
         }
 
-        return ContactListUI.connection.getUser();
+        return MainUI.connection.getUser();
     }
 
     /**
@@ -266,7 +266,7 @@ public class Utils
 
         try
         {
-            vCard.load(ContactListUI.connection, rosterEntry.getUser());
+            vCard.load(MainUI.connection, rosterEntry.getUser());
             return Utils.resizeImage(new ImageIcon(vCard.getAvatar()), size);
         }
         catch (XMPPException ex)
@@ -292,7 +292,7 @@ public class Utils
 
         try
         {
-            vCard.load(ContactListUI.connection);
+            vCard.load(MainUI.connection);
             return Utils.resizeImage(new ImageIcon(vCard.getAvatar()), size);
         }
         catch (XMPPException ex)
@@ -314,7 +314,7 @@ public class Utils
      */
     public static Icon getAvatar(String JID, int size)
     {
-        return getAvatar(ContactListUI.connection.getRoster().getEntry(StringUtils.parseBareAddress(JID)), size);
+        return getAvatar(MainUI.connection.getRoster().getEntry(StringUtils.parseBareAddress(JID)), size);
     }
 
     /**

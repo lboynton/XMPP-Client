@@ -21,6 +21,7 @@ import javax.swing.JTextPane;
 import javax.swing.text.StyledDocument;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.util.StringUtils;
+import xmppclient.emoticons.Emoticon;
 
 /**
  *
@@ -200,5 +201,35 @@ public class SettingsManager
     public void savePresences(List<Presence> presences)
     {
         saveObject(presences, "presences");
+    }
+    
+    public List<Emoticon> getEmoticons()
+    {
+        List<Emoticon> emoticons = new ArrayList<Emoticon>();
+        List storedEmoticons = (List) loadObject(ArrayList.class, "emoticons");
+        
+        if(storedEmoticons == null) return emoticons;
+        
+        for(Object o:storedEmoticons)
+        {
+            if(o instanceof Emoticon)
+            {
+                emoticons.add((Emoticon) o);
+            }
+        }
+        
+        return emoticons;
+    }
+    
+    public void addEmoticon(Emoticon emoticon)
+    {
+        List<Emoticon> emoticons = getEmoticons();
+        emoticons.add(emoticon);
+        saveEmoticons(emoticons);
+    }
+
+    private void saveEmoticons(List<Emoticon> emoticons)
+    {
+        saveObject(emoticons, "emoticons");
     }
 }

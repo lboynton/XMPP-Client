@@ -30,7 +30,7 @@ import org.jivesoftware.smackx.packet.VCard;
  */
 public class AvatarChooser extends javax.swing.JDialog
 {
-    private ContactListUI clientUI;
+    private MainUI clientUI;
 
     /**
      * Creates new form AvatarChooser 
@@ -40,7 +40,7 @@ public class AvatarChooser extends javax.swing.JDialog
     public AvatarChooser(JFrame owner, boolean modal)
     {
         super(owner, "Choose Avatar", modal);
-        clientUI = (ContactListUI) owner;
+        clientUI = (MainUI) owner;
         initComponents();
         setVisible(true);
     }
@@ -275,7 +275,7 @@ private void avatarFileChooserActionPerformed(java.awt.event.ActionEvent evt) {/
             try
             {
                 VCard vCard = new VCard();
-                vCard.load(ContactListUI.connection);
+                vCard.load(MainUI.connection);
                 ImageIcon image = new ImageIcon(avatarFileChooser.getSelectedFile().toURI().toURL());
                 image = (ImageIcon) Utils.resizeImage(image, 100);
                 clientUI.setAvatar(image);
@@ -286,7 +286,7 @@ private void avatarFileChooserActionPerformed(java.awt.event.ActionEvent evt) {/
                 SmackConfiguration.setPacketReplyTimeout(15000);
 
                 // save vcard
-                vCard.save(ContactListUI.connection);
+                vCard.save(MainUI.connection);
 
                 // reset packet reply timeout
                 SmackConfiguration.setPacketReplyTimeout(oldTimeout);

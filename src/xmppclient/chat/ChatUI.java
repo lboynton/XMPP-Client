@@ -30,7 +30,7 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener, ChatM
         {
             chat.addMessageListener(this);
             tabs.addTab(Utils.getNickname(chat.getParticipant()), 
-                    Utils.getUserIcon(ContactListUI.connection.getRoster().getPresence(chat.getParticipant())),
+                    Utils.getUserIcon(MainUI.connection.getRoster().getPresence(chat.getParticipant())),
                     new ChatPanel(chat, this));
         }
     }

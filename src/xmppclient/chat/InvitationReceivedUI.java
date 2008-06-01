@@ -14,7 +14,7 @@ import org.jivesoftware.smackx.muc.InvitationListener;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import xmppclient.chat.MultiUserChatUI;
 import xmppclient.Utils;
-import xmppclient.ContactListUI;
+import xmppclient.MainUI;
 
 /**
  *
@@ -209,7 +209,7 @@ private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     }
     else
     {
-        MultiUserChat.decline(ContactListUI.connection, room, inviter, declineReasonTextArea.getText());
+        MultiUserChat.decline(MainUI.connection, room, inviter, declineReasonTextArea.getText());
     }
     dispose();
 }//GEN-LAST:event_okButtonActionPerformed

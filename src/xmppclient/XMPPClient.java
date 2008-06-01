@@ -22,7 +22,7 @@ public class XMPPClient extends javax.swing.JFrame
 {
     private XMPPConnection XMPPConnection;
     private ImageIcon icon = new ImageIcon(getClass().getResource("images/bg.jpg"));
-    private static boolean DEBUG = true;
+    private static boolean DEBUG = false;
 
     /** Creates new form XMPPClient */
     public XMPPClient()
@@ -500,7 +500,7 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         {
             try
             {
-                new ContactListUI(get(), nameTextField.getText()).setVisible(true);
+                new MainUI(get(), nameTextField.getText()).setVisible(true);
                 XMPPClient.this.dispose();
             }
             catch (Exception ex)

@@ -10,7 +10,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import xmppclient.emoticons.Emoticon;
-import xmppclient.emoticons.Emoticons;
 
 /**
  *
@@ -193,7 +192,7 @@ private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     Emoticon emoticon = new Emoticon(nameTextField.getText(),
             (ImageIcon) Utils.resizeImage(new ImageIcon(imageTextField.getText()), 22),
             keySequenceTextField.getText());
-    Emoticons.addEmoticon(emoticon);
+    MainUI.settingsManager.addEmoticon(emoticon);
     dispose();
 }//GEN-LAST:event_okButtonActionPerformed
 

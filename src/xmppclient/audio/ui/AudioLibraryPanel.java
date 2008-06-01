@@ -21,7 +21,7 @@ import javazoom.jlgui.basicplayer.BasicPlayer;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
 import javazoom.jlgui.basicplayer.BasicPlayerListener;
 import org.jivesoftware.smack.RosterEntry;
-import xmppclient.ContactListUI;
+import xmppclient.MainUI;
 import xmppclient.audio.AudioManager;
 import xmppclient.images.tango.TangoIcons;
 import xmppclient.jingle.IncomingSession;
@@ -72,7 +72,7 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
 
     public void refresh()
     {
-        audioManager.sendRequest(ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
+        audioManager.sendRequest(MainUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
     }
 
     /** This method is called from within the constructor to
@@ -381,7 +381,7 @@ private void volumeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-
         }
         System.out.printf("Requesting file: %s\n", file.toString());
 
-        audioManager.sendFileRequest(file, ContactListUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
+        audioManager.sendFileRequest(file, MainUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
     }
 
     public class LibraryListRenderer extends DefaultListCellRenderer

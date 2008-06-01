@@ -50,7 +50,7 @@ public class MultiUserChatUI extends javax.swing.JFrame implements PacketListene
      */
     public MultiUserChatUI(String room)
     {
-        muc = new MultiUserChat(ContactListUI.connection, room + "@conference.192.168.0.8");
+        muc = new MultiUserChat(MainUI.connection, room + "@conference.192.168.0.8");
         initComponents();
         doc = (ChatTextPaneStyledDocument) messageTextPane.getStyledDocument();
     }
@@ -553,7 +553,7 @@ private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:even
 
     if (option == JOptionPane.YES_OPTION)
     {
-        ContactListUI.settingsManager.logConversation(messageTextPane, muc.getRoom());
+        MainUI.settingsManager.logConversation(messageTextPane, muc.getRoom());
         muc.leave();
         dispose();
     }

@@ -35,7 +35,7 @@ public class ContactToolTip extends JToolTip
     public void show(RosterEntry rosterEntry, int x, int y)
     {
         this.rosterEntry = rosterEntry;
-        presence = ContactListUI.connection.getRoster().getPresence(rosterEntry.getUser());
+        presence = MainUI.connection.getRoster().getPresence(rosterEntry.getUser());
 
         nameLabel.setText(Utils.getNickname(rosterEntry));
         statusLabel.setText(Utils.getStatus(presence));

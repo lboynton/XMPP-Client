@@ -32,9 +32,9 @@ public class ContactTreeRenderer extends DefaultTreeCellRenderer
         if(node.getUserObject() instanceof RosterEntry)
         {
             final RosterEntry entry = (RosterEntry) node.getUserObject();
-            Presence presence = ContactListUI.connection.getRoster().getPresence(entry.getUser());
+            Presence presence = MainUI.connection.getRoster().getPresence(entry.getUser());
             JLabel lbl = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-            lbl.setIcon(Utils.getUserIcon(ContactListUI.connection.getRoster().getPresence(entry.getUser())));
+            lbl.setIcon(Utils.getUserIcon(MainUI.connection.getRoster().getPresence(entry.getUser())));
             lbl.setText(Utils.getNickname(entry));
             if(presence.getStatus() != null) lbl.setText(lbl.getText() + " (" + presence.getStatus() + ")");
             return lbl;

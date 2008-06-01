@@ -286,7 +286,7 @@ private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
     try
     {
-        vCard.save(ContactListUI.connection);
+        vCard.save(MainUI.connection);
     }
     catch (XMPPException ex)
     {

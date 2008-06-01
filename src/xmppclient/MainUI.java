@@ -1,5 +1,5 @@
 /*
- * ContactListUI.java
+ * MainUI.java
  *
  * Created on 10 April 2008, 17:25
  */
@@ -71,7 +71,7 @@ import xmppclient.jingle.JingleSessionRequestListener;
  *
  * @author Lee Boynton (323326)
  */
-public class ContactListUI extends javax.swing.JFrame implements FileTransferListener, JingleSessionRequestListener, RosterListener
+public class MainUI extends javax.swing.JFrame implements FileTransferListener, JingleSessionRequestListener, RosterListener
 {
     /** The XMPP connection to the server */
     public static XMPPConnection connection;
@@ -94,9 +94,9 @@ public class ContactListUI extends javax.swing.JFrame implements FileTransferLis
      * @param accountName The name of the account the connection is associated with,
      * so that configuration information can be stored with the specified account.
      */
-    public ContactListUI(XMPPConnection connection, String accountName)
+    public MainUI(XMPPConnection connection, String accountName)
     {
-        ContactListUI.connection = connection;
+        MainUI.connection = connection;
         this.accountName = accountName;
         jingleManager = new JingleManager(connection);
         settingsManager = new SettingsManager(connection.getUser());
@@ -315,13 +315,13 @@ public class ContactListUI extends javax.swing.JFrame implements FileTransferLis
 
     private void toggleWindowVisibility()
     {
-        if (ContactListUI.this.isVisible())
+        if (MainUI.this.isVisible())
         {
-            ContactListUI.this.setVisible(false);
+            MainUI.this.setVisible(false);
         }
         else
         {
-            ContactListUI.this.setVisible(true);
+            MainUI.this.setVisible(true);
         }
     }
 
@@ -875,13 +875,13 @@ private void viewReceivedFilesButtonActionPerformed(java.awt.event.ActionEvent e
     {
         Utils.openFileBrowser(settingsManager.getRootDir() + File.separator + SettingsManager.RECEIVED_DIR, true);
     }
+
     catch (IOException ex)
     {
-        Logger.getLogger(ContactListUI.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    catch (SecurityException ex)
+        Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+    }    catch (SecurityException ex)
     {
-        Logger.getLogger(ContactListUI.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
     }
     }//GEN-LAST:event_viewReceivedFilesButtonActionPerformed
 private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAudioFilesButtonActionPerformed
@@ -891,7 +891,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
     }
     catch (Exception ex)
     {
-        Logger.getLogger(ContactListUI.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
     }
 }//GEN-LAST:event_viewAudioFilesButtonActionPerformed
 
@@ -950,7 +950,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                     }
                     catch (XMPPException ex)
                     {
-                        Logger.getLogger(ContactListUI.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             });
@@ -996,7 +996,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
-                    new FileTransferChooser(ContactListUI.this, true, entry).setVisible(true);
+                    new FileTransferChooser(MainUI.this, true, entry).setVisible(true);
                 }
             });
             menu.add(sendFileMenuItem);
@@ -1007,7 +1007,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                 public void actionPerformed(ActionEvent e)
                 {
                     String groups =
-                            JOptionPane.showInputDialog(ContactListUI.this,
+                            JOptionPane.showInputDialog(MainUI.this,
                             "Insert group names, separated by commas",
                             Utils.getGroupsCSV(entry));
                     if (groups == null)
@@ -1023,7 +1023,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                         }
                         catch (XMPPException ex)
                         {
-                            JOptionPane.showMessageDialog(ContactListUI.this,
+                            JOptionPane.showMessageDialog(MainUI.this,
                                     "Could not remove user from group" +
                                     ex.getMessage(),
                                     "Error removing user from group",
@@ -1054,7 +1054,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                         }
                         catch (XMPPException ex)
                         {
-                            JOptionPane.showMessageDialog(ContactListUI.this,
+                            JOptionPane.showMessageDialog(MainUI.this,
                                     "Could not add user to group" +
                                     ex.getMessage(),
                                     "Error adding user to group",
@@ -1072,7 +1072,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
-                    String name = JOptionPane.showInputDialog(ContactListUI.this,
+                    String name = JOptionPane.showInputDialog(MainUI.this,
                             "Enter a name for this user, or leave blank to remove");
                     if (name == null)
                     {
@@ -1089,7 +1089,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
-                    new StreamUI(ContactListUI.this, entry, jingleManager).setVisible(true);
+                    new StreamUI(MainUI.this, entry, jingleManager).setVisible(true);
                 }
             });
             menu.add(streamMenuItem);
@@ -1099,7 +1099,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
-                    new AudioLibraryUI(ContactListUI.this, audioManager, entry, jingleManager).setVisible(true);
+                    new AudioLibraryUI(MainUI.this, audioManager, entry, jingleManager).setVisible(true);
                 }
             });
             menu.add(viewLibraryMenuItem);
@@ -1122,7 +1122,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                     }
                     catch (XMPPException ex)
                     {
-                        Logger.getLogger(ContactListUI.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             });
@@ -1135,7 +1135,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                 public void actionPerformed(ActionEvent e)
                 {
                     // confirm removal
-                    if (JOptionPane.showConfirmDialog(ContactListUI.this,
+                    if (JOptionPane.showConfirmDialog(MainUI.this,
                             "Remove this user from the roster? This user will\n" +
                             "be removed from all groups and will no longer be\n" +
                             "able to communicate with you.",
@@ -1153,7 +1153,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                     }
                     catch (XMPPException ex)
                     {
-                        JOptionPane.showMessageDialog(ContactListUI.this,
+                        JOptionPane.showMessageDialog(MainUI.this,
                                 "Error deleting contact: " + entry.getUser() +
                                 "\n" + ex.getMessage(),
                                 "Error Removing Contact",
@@ -1361,7 +1361,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                     "Accept", "Reject"
                 };
 
-                int selection = JOptionPane.showOptionDialog(ContactListUI.this,
+                int selection = JOptionPane.showOptionDialog(MainUI.this,
                         "The user " + presence.getFrom() + " wishes to subscribe" +
                         "\nto your presence information. Do you accept or reject?",
                         "Subscription Request",
@@ -1410,11 +1410,11 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
             XMPPConnection connection2 = new XMPPConnection("192.168.0.8");
             connection2.connect();
             connection2.login("lee", "password", "home");
-            new ContactListUI(connection2, "Fef");
+            new MainUI(connection2, "Fef");
         }
         catch (XMPPException ex)
         {
-            Logger.getLogger(ContactListUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

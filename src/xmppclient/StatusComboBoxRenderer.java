@@ -43,7 +43,7 @@ public class StatusComboBoxRenderer extends BasicComboBoxRenderer
         if(value instanceof JDialog)
         {
             lbl.setOpaque(true);
-            lbl.setIcon(null);
+            lbl.setIcon(Icons.add);
             return lbl;
         }
         
