@@ -13,7 +13,9 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 
 /**
- *
+ * A dialog allowing the user to create a new #Format, which includes a font
+ * and colour. The user can select the font type, font size, bold, italic and
+ * colour in the user interface.
  * @author  Lee Boynton (323326)
  */
 public class FormatterUI extends javax.swing.JDialog 

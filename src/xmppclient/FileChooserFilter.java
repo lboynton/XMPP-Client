@@ -11,7 +11,7 @@ import java.util.List;
 import javax.swing.filechooser.FileFilter;
 
 /**
- *
+ * Makes it easier to create filters for use with JFileChoosers.
  * @author Lee Boynton (323326)
  */
 public class FileChooserFilter extends FileFilter

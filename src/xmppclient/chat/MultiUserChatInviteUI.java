@@ -33,7 +33,8 @@ public class MultiUserChatInviteUI extends javax.swing.JDialog
      * If the dialog is modal, this will show the dialog and wait for the user
      * to close the dialog in some way before returning the JID of the user to 
      * invite and the reason message.
-     * @return
+     * @return The JID of the user to invite, and the reason why they are being
+     * invited in a two element string array
      */
     public String[] showDialog()
     {

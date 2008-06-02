@@ -14,7 +14,7 @@ import xmppclient.MainUI;
 import xmppclient.jingle.JingleManager;
 
 /**
- *
+ * Not used anymore
  * @author  Lee Boynton (323326)
  */
 public class StreamUI extends javax.swing.JDialog
@@ -22,7 +22,10 @@ public class StreamUI extends javax.swing.JDialog
     private RosterEntry entry;
     private JingleManager jingleManager;
 
-    /** Creates new form StreamUI */
+    /** Creates new form StreamUI
+     * @param parent
+     * @param modal 
+     */
     public StreamUI(java.awt.Frame parent, boolean modal)
     {
         super(parent, modal);
@@ -30,6 +33,12 @@ public class StreamUI extends javax.swing.JDialog
         setLocationRelativeTo(parent);
     }
 
+    /**
+     * 
+     * @param parent
+     * @param entry
+     * @param jingleManager
+     */
     public StreamUI(java.awt.Frame parent, RosterEntry entry, JingleManager jingleManager)
     {
         this(parent, false);
@@ -59,8 +68,6 @@ public class StreamUI extends javax.swing.JDialog
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("File");
-
-        fileTextField.setText("F:\\Music\\Agalloch\\Ashes Against The Grain\\01 Limbs.mp3");
 
         browseButton.setText("Browse");
         browseButton.addActionListener(new java.awt.event.ActionListener() {

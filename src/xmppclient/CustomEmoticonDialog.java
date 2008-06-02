@@ -12,7 +12,7 @@ import javax.swing.JFileChooser;
 import xmppclient.emoticons.Emoticon;
 
 /**
- *
+ * A dialog allowing the user to create a custom emoticon.
  * @author  Lee Boynton (323326)
  */
 public class CustomEmoticonDialog extends javax.swing.JDialog

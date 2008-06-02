@@ -8,7 +8,8 @@ package xmppclient.vcard;
 import org.jivesoftware.smackx.packet.VCard;
 
 /**
- *
+ * A panel containing all the fields of a users VCard relevant to the users
+ * home address.
  * @author Lee Boynton (323326)
  */
 public class HomePanel extends javax.swing.JPanel

@@ -10,7 +10,9 @@ import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.packet.Presence;
 
 /**
- *
+ * This class is intended to be used to override the tool tip for contacts. It
+ * should display information about the user including nickname, status and 
+ * avatar.
  * @author Lee Boynton (323326)
  */
 public class ContactToolTip extends JToolTip

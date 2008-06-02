@@ -12,8 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 /**
- *
- * @author Lee
+ * A horizontal renderer for JLists to be used as tabs.
+ * @author Lee Boynton (323326)
  */
 public class Renderer extends DefaultListCellRenderer
 {

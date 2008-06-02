@@ -10,7 +10,8 @@ import java.util.List;
 import org.jivesoftware.smack.packet.IQ;
 
 /**
- *
+ * An audio packet, used for sending audio library requests and reponses, and also
+ * requests for file streams.
  * @author Lee Boynton (323326)
  */
 public class Audio extends IQ
@@ -98,7 +99,7 @@ public class Audio extends IQ
 
     /**
      * Gets the list of audio files in this packet
-     * @return
+     * @return The list of audio files
      */
     public List<AudioFile> getAudioFiles()
     {
@@ -108,7 +109,7 @@ public class Audio extends IQ
     /**
      * Gets the first audio file in this packet. Useful for file requests when
      * there is only one file.
-     * @return
+     * @return The first audio file
      */
     public AudioFile getAudioFile()
     {
@@ -184,8 +185,8 @@ public class Audio extends IQ
 
         /**
          * Returns the AudioType for a String value.
-         * @param str
-         * @return 
+         * @param str The string to get the audio type from
+         * @return The audio type, or null if unrecognised
          */
         public static AudioType getAudioType(String str)
         {

@@ -23,7 +23,10 @@ import xmppclient.jingle.provider.DescriptionProvider;
 import xmppclient.jingle.provider.FileProvider;
 
 /**
- *
+ * The Jingle Manager controls requests and responses to Jingle file transfers.
+ * Provides methods for adding listeners for both of these events. The manager
+ * also enables support for parsing Jingle packets.
+ * Based on XEP-0234: Jingle File Transfer - http://www.xmpp.org/extensions/xep-0234.html
  * @author Lee Boynton (323326)
  */
 public class JingleManager
@@ -31,6 +34,10 @@ public class JingleManager
     private XMPPConnection connection;
     private List<JingleSessionRequestListener> sessionRequestListeners;
 
+    /**
+     * 
+     * @param connection
+     */
     public JingleManager(XMPPConnection connection)
     {
         this.connection = connection;
@@ -54,6 +61,11 @@ public class JingleManager
         });
     }
 
+    /**
+     * Enables or disables support for Jingle and Bytestream packets.
+     * @param connection The connection to enable/disable on
+     * @param enabled True enables, false disables
+     */
     public synchronized static void setServiceEnabled(XMPPConnection connection, boolean enabled)
     {
         if (isServiceEnabled(connection) == enabled)
@@ -73,17 +85,34 @@ public class JingleManager
         }
     }
 
+    /**
+     * Gets the XMPP connection associated with the manager
+     * @return The XMPP connection
+     */
     public XMPPConnection getConnection()
     {
         return connection;
     }
 
+    /**
+     * Finds out if support for Jingle packets and Streamhost Bytestream packets 
+     * is enabled on the given XMPP connection
+     * @param connection The XMPP connection
+     * @return True if enabled, false otherwise
+     */
     public static boolean isServiceEnabled(XMPPConnection connection)
     {
         return ServiceDiscoveryManager.getInstanceFor(connection).includesFeature(
-                Jingle.NAMESPACE);
+                Jingle.NAMESPACE) &&
+                ServiceDiscoveryManager.getInstanceFor(connection).includesFeature(
+                Bytestream.StreamHost.NAMESPACE);
     }
 
+    /**
+     * Adds the given request listener to the list of Jingle file transfer requests.
+     * These will all be notified when a request is received.
+     * @param sessionRequestListener The request listener to add
+     */
     public void addSessionRequestListener(JingleSessionRequestListener sessionRequestListener)
     {
         if (sessionRequestListener != null)
@@ -162,6 +191,12 @@ public class JingleManager
         }, initRequestFilter);
     }
 
+    /**
+     * Creates a new incoming session by sending a session acceptance to the
+     * remote user who sent the request
+     * @param request The request from the remote user
+     * @return The incoming session
+     */
     public IncomingSession createIncomingSession(JingleSessionRequest request)
     {
         triggerSessionCreated(request);
@@ -177,6 +212,10 @@ public class JingleManager
         return new IncomingSession(connection, request.getFrom(), request.getSid());
     }
 
+    /**
+     * Currently incoming sessions can not be rejected
+     * @param request The request to reject
+     */
     public void rejectIncomingSession(JingleSessionRequest request)
     {
         /*Jingle initiation = request.getJingle();
@@ -186,6 +225,15 @@ public class JingleManager
         connection.sendPacket(rejection);*/
     }
 
+    /**
+     * Creates an outgoing Jingle file transfer session. The JID must be fully
+     * qualified, that is the JID must include the username, host and resource.
+     * @param responder The receiver of the session
+     * @param filePath The file to send
+     * @return The outgoing session
+     * @throws org.jivesoftware.smack.XMPPException If the JID was not fully qualified
+     * @throws java.io.FileNotFoundException If the file to be sent cannot be found
+     */
     public OutgoingSession createOutgoingSession(String responder, String filePath) throws XMPPException, FileNotFoundException
     {
         if (StringUtils.parseResource(responder).equals(""))

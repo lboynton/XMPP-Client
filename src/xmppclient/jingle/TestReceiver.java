@@ -12,6 +12,9 @@ import org.jivesoftware.smack.XMPPConnection;
  */
 public class TestReceiver implements JingleSessionRequestListener
 {
+    /**
+     * Logs into the server, awaits jingle session requests
+     */
     public TestReceiver()
     {
         try
@@ -29,11 +32,19 @@ public class TestReceiver implements JingleSessionRequestListener
         }
     }
 
+    /**
+     * Creates a new test receiver
+     * @param args not used
+     */
     public static void main(String args[])
     {
         new TestReceiver();
     }
 
+    /**
+     * Called when a jingle session has been requested
+     * @param request The request
+     */
     @Override
     public void sessionRequested(JingleSessionRequest request)
     {

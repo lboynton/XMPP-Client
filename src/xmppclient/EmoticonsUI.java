@@ -18,7 +18,7 @@ import xmppclient.emoticons.Emoticons;
 import xmppclient.images.Icons;
 
 /**
- *
+ * An undecorated dialog containing a list of emoticons, to be used as a popup menu.
  * @author  Lee Boynton (323326)
  */
 public class EmoticonsUI extends javax.swing.JDialog

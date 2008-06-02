@@ -14,11 +14,17 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 /**
- *
+ * The file provider parses XML file elements used in Jingle file transfers
  * @author Lee Boynton (323326)
  */
 public class FileProvider implements PacketExtensionProvider
 {
+    /**
+     * Parses the file element XML
+     * @param parser The XML parser
+     * @return The file element packet extension
+     * @throws java.lang.Exception If parsing went wrong
+     */
     @Override
     public PacketExtension parseExtension(XmlPullParser parser) throws Exception
     {
@@ -51,6 +57,10 @@ public class FileProvider implements PacketExtensionProvider
         return file;
     }
 
+    /**
+     * Used for testing the file parser
+     * @param args not used
+     */
     public static void main(String args[])
     {
         try

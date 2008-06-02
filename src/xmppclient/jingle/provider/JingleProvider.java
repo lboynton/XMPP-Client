@@ -14,16 +14,17 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 /**
- *
+ * Parses Jingle packets
  * @author Lee Boynton (323326)
  */
 public class JingleProvider implements IQProvider
 {
-    public JingleProvider()
-    {
-        super();
-    }
-
+    /**
+     * Parses Jingle packets
+     * @param parser The XML parser
+     * @return The Jingle packet that was parsed
+     * @throws java.lang.Exception If parsing went wrong
+     */
     @Override
     public IQ parseIQ(XmlPullParser parser) throws Exception
     {
@@ -68,6 +69,10 @@ public class JingleProvider implements IQProvider
         return jingle;
     }
 
+    /**
+     * Used to test the output of the jingle provider
+     * @param args not used
+     */
     public static void main(String args[])
     {
         try

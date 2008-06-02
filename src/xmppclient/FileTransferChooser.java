@@ -14,8 +14,9 @@ import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 
 /**
- *
- * @author  Lee
+ * A dialog containing a file chooser for choosing a file to transfer to another
+ * XMPP user. This class does validation before sending the file to the user.
+ * @author  Lee Boynton (323326)
  */
 public class FileTransferChooser extends javax.swing.JDialog 
 {

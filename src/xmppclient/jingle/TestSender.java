@@ -11,6 +11,9 @@ import org.jivesoftware.smack.XMPPConnection;
  */
 public class TestSender
 {
+    /**
+     * Logs into the server, sends a session request to a user
+     */
     public TestSender()
     {
         try
@@ -28,6 +31,10 @@ public class TestSender
         }
     }
 
+    /**
+     * Creates a new test sender
+     * @param args not used
+     */
     public static void main(String args[])
     {
         new TestSender();

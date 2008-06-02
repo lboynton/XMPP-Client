@@ -57,7 +57,7 @@ public class AudioLibrary
      * if this method is to return any files.
      * @see #generateListing() 
      * @see #generateListing(java.io.File) 
-     * @return
+     * @return The list of audio files
      */
     public List<AudioFile> getAudioFiles()
     {

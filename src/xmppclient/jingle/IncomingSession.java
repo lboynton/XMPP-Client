@@ -13,7 +13,6 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smackx.packet.Bytestream;
-import xmppclient.jingle.packet.File;
 
 /**
  * An incoming file transfer jingle session.
@@ -26,21 +25,37 @@ public class IncomingSession extends Session
     private BufferedInputStream bis;
     private String host;
     private int received = 0;
-    private File file;
     private BasicPlayer player;
     private BasicController control;
     private BytestreamListener listener;
 
+    /**
+     * Return the control for the audio player. This can play, pause, stop, etc the
+     * playback
+     * @return The controller
+     */
     public BasicController getControl()
     {
         return control;
     }
 
+    /**
+     * Get the audio player. This can be used for adding status listeners to the
+     * player, getting the status of the player, or changing the volume of the player
+     * @return The audio player
+     */
     public BasicPlayer getPlayer()
     {
         return player;
     }
 
+    /**
+     * Creates a new incoming Jingle file transfer session. Sets the parameters,
+     * adds a bytestream listener, and initialises the audio player.
+     * @param connection The XMPP connection to use
+     * @param responder The user who will be sending
+     * @param sid The ID identifying this session
+     */
     public IncomingSession(XMPPConnection connection, String responder, String sid)
     {
         super(connection, responder, sid);
@@ -50,11 +65,10 @@ public class IncomingSession extends Session
         control = (BasicController) player;
     }
 
-    public File getFile()
-    {
-        return file;
-    }
-
+    /**
+     * Attempts to connect to the remtoe user using the host address and port
+     * received in the bytestream packet.
+     */
     @Override
     public void start()
     {
@@ -77,6 +91,11 @@ public class IncomingSession extends Session
         }
     }
 
+    /**
+     * Listens for bytestream packets, which inform the receiver of the address
+     * and port to connect to. When receiving a bytestream packet this will call
+     * #start()
+     */
     public class BytestreamListener implements PacketListener
     {
         @Override
@@ -90,6 +109,10 @@ public class IncomingSession extends Session
         }
     }
 
+    /**
+     * Removes the bytestream listener and closes the socket connection and
+     * input stream
+     */
     @Override
     public void terminate()
     {

@@ -13,7 +13,10 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
 /**
- *
+ * Incomplete JFrame for managing privacy lists. This frame should allow users
+ * to view their privacy lists, add, remove or modify them, and set a list
+ * as the active list.
+ * See http://www.xmpp.org/extensions/xep-0016.html for details.
  * @author  Lee Boynton (323326)
  */
 public class PrivacyUI extends javax.swing.JFrame
@@ -21,8 +24,9 @@ public class PrivacyUI extends javax.swing.JFrame
     private XMPPConnection connection;
     private PrivacyListManager manager;
 
-    /** Creates new form PrivacyUI
-     * @param connection 
+    /** 
+     * Initialises the user interface
+     * @param connection The XMPP connection to use
      */
     public PrivacyUI(XMPPConnection connection)
     {

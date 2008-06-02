@@ -47,6 +47,10 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
     /** 
      * Initialises the panel, and adds listeners for audio library responses
      * and Jingle streaming requests
+     * @param audioManager The audio manager that controls audio library requests,
+     * responses and file requests
+     * @param entry The remote user
+     * @param jingleManager The jingle manager that controls the audio streaming
      */
     public AudioLibraryPanel(AudioManager audioManager, RosterEntry entry, JingleManager jingleManager)
     {
@@ -391,6 +395,10 @@ private void volumeSliderStateChanged(javax.swing.event.ChangeEvent evt) {
         audioManager.sendFileRequest(file, MainUI.connection.getRoster().getPresence(entry.getUser()).getFrom());
     }
 
+    /**
+     * Renders the list appropriately. If the list is showing audio files then
+     * they will be represented by an audio icon.
+     */
     public class LibraryListRenderer extends DefaultListCellRenderer
     {
         @Override

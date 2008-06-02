@@ -8,7 +8,7 @@ package xmppclient.vcard;
 import org.jivesoftware.smackx.packet.VCard;
 
 /**
- *
+ * A panel containing vCard fields relevant to a users work details.
  * @author Lee Boynton (323326)
  */
 public class WorkPanel extends javax.swing.JPanel

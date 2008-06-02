@@ -134,11 +134,11 @@ public class Utils
     }
 
     /**
-     * 
-     * @param image
-     * @return
-     * @throws java.lang.InterruptedException
-     * @throws java.io.IOException
+     * Converts an image to a buffered image
+     * @param image The image to convert
+     * @return The buffered image
+     * @throws java.lang.InterruptedException If something went wrong
+     * @throws java.io.IOException If something went wrong
      */
     public static BufferedImage convert(Image image) throws InterruptedException, IOException
     {
@@ -191,7 +191,7 @@ public class Utils
      * Gets the nickname of the user with the specified JID
      * @param JID The JID to get the nickname of
      * @return The nickname
-     * @see getNickname(RosterEntry rosterEntry)
+     * @see #getNickname(RosterEntry rosterEntry)
      */
     public static String getNickname(String JID)
     {
@@ -225,7 +225,7 @@ public class Utils
 
     /**
      * Gets the custom status message of the given presence. If there is none, this
-     * will call the {@link getStatus(Presence presence)} method to get the textual
+     * will call the #getStatus(Presence presence) method to get the textual
      * status of the user
      * @param presence The presence
      * @return The status message
@@ -505,7 +505,7 @@ public class Utils
     /**
      * Gets the system icon of a file
      * @param filename
-     * @return
+     * @return The system icon
      */
     public static Icon getFileIcon(String filename)
     {
@@ -584,8 +584,8 @@ public class Utils
     }
 
     /**
-     * 
-     * @return
+     * Gets all the modes used in presences. Can be available, away, busy etc
+     * @return An array of modes
      */
     public static Presence.Mode[] getPresenceModes()
     {
@@ -598,8 +598,8 @@ public class Utils
     }
 
     /**
-     * 
-     * @return
+     * Gets the presence types. Either available of unavailable.
+     * @return An array of presence types.
      */
     public static Presence.Type[] getPresenceTypes()
     {
@@ -668,8 +668,8 @@ public class Utils
     }
 
     /**
-     * 
-     * @return
+     * Gets the name of the operating system
+     * @return The operating system, or null if unrecognised
      */
     public static String getSystem()
     {

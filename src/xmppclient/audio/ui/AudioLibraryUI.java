@@ -13,12 +13,19 @@ import org.jivesoftware.smack.RosterEntry;
 import xmppclient.jingle.JingleManager;
 
 /**
- *
+ * This class is used to contain the audio library panel
+ * @see AudioLibraryPanel
  * @author  Lee Boynton (323326)
  */
 public class AudioLibraryUI extends javax.swing.JFrame
 {  
-    /** Creates new form AudioLibraryUI */
+    /** 
+     * Initialises the JFrame, adds the audio library panel to itself
+     * @param parent The parent JFrame
+     * @param audioManager The audio manager
+     * @param entry The remote user
+     * @param jingleManager The Jingle manager
+     */
     public AudioLibraryUI(JFrame parent, AudioManager audioManager, RosterEntry entry, JingleManager jingleManager)
     {
         AudioLibraryPanel panel = new AudioLibraryPanel(audioManager, entry, jingleManager);

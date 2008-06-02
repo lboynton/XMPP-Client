@@ -77,9 +77,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="fileTextField">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="F:\Music\Agalloch\Ashes Against The Grain\01 Limbs.mp3"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="browseButton">
       <Properties>

@@ -36,14 +36,20 @@ public class OutgoingSession extends Session implements PacketListener
     private ServerSocket serverSocket;
     private byte[] buffer;
 
-    public OutgoingSession(XMPPConnection xmppConnection, String responder, java.io.File file)
+    /**
+     * Creates a new outgoing file transfer session
+     * @param connection The XMPP connection to use to send control information
+     * @param responder The remote user who should receive the file
+     * @param file The file to be sent
+     */
+    public OutgoingSession(XMPPConnection connection, String responder, java.io.File file)
     {
-        super(xmppConnection, responder);
+        super(connection, responder);
         this.file = file;
         Jingle jingle = new Jingle();
-        jingle.setFrom(xmppConnection.getUser());
+        jingle.setFrom(connection.getUser());
         jingle.setTo(responder);
-        jingle.setInitiator(xmppConnection.getUser());
+        jingle.setInitiator(connection.getUser());
         jingle.setResponder(responder);
         jingle.setSid(StringUtils.randomString(5));
         jingle.setAction(Jingle.Action.SESSIONINITIATE);
@@ -52,10 +58,15 @@ public class OutgoingSession extends Session implements PacketListener
                 new xmppclient.jingle.packet.File(file.getName(),
                 String.valueOf(file.length()),
                 String.valueOf(file.hashCode()))));
-        xmppConnection.sendPacket(jingle);
-        xmppConnection.addPacketListener(this, new PacketTypeFilter(Jingle.class));
+        connection.sendPacket(jingle);
+        connection.addPacketListener(this, new PacketTypeFilter(Jingle.class));
     }
 
+    /**
+     * Opens a server socket on a free port. Waits for the remtoe user to connect,
+     * and starts sending the file byte stream. If the remote user closes the
+     * connection then it will also close the connection.
+     */
     @Override
     public void start()
     {
@@ -90,6 +101,11 @@ public class OutgoingSession extends Session implements PacketListener
         }
     }
 
+    /**
+     * Terminates the outgoing file transfer by removing the Jingle session accept
+     * listener, and closing the file input stream, the file output stream and 
+     * finally the socket.
+     */
     @Override
     public void terminate()
     {

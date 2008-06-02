@@ -13,7 +13,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.util.StringUtils;
 
 /**
- *
+ * Incomplete dialog for adding entries to a privacy list.
  * @author  Lee Boynton (323326)
  */
 public class PrivacyListUI extends javax.swing.JDialog

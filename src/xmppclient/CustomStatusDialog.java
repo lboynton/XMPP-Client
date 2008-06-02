@@ -13,7 +13,7 @@ import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Presence.Mode;
 
 /**
- *
+ * A dialog allowing the user to create a custom status.
  * @author  Lee Boynton (323326)
  */
 public class CustomStatusDialog extends javax.swing.JDialog

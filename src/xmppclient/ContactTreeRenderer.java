@@ -13,7 +13,7 @@ import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.packet.Presence;
 
 /**
- *
+ * Used for rendering the JTree contact list.
  * @author Lee Boynton (323326)
  */
 public class ContactTreeRenderer extends DefaultTreeCellRenderer

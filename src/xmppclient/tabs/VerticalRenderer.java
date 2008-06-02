@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 /**
- *
+ * A renderer for vertical JLists to be used as tabs.
  * @author Lee Boynton (323326)
  */
 public class VerticalRenderer extends DefaultListCellRenderer

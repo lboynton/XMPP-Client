@@ -17,7 +17,7 @@ import javazoom.jlgui.basicplayer.BasicPlayerException;
 import javazoom.jlgui.basicplayer.BasicPlayerListener;
 
 /**
- *
+ * Not used anymore.
  * @author  Lee Boynton (323326)
  */
 public class IncomingSessionUI extends javax.swing.JDialog implements BasicPlayerListener
@@ -25,7 +25,11 @@ public class IncomingSessionUI extends javax.swing.JDialog implements BasicPlaye
     private JingleSessionRequest request;
     private IncomingSession session;
 
-    /** Creates new form IncomingSessionUI */
+    /** Creates new form IncomingSessionUI
+     * @param parent
+     * @param modal
+     * @param request 
+     */
     public IncomingSessionUI(java.awt.Frame parent, boolean modal, JingleSessionRequest request)
     {
         super(parent, modal);
