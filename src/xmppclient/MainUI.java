@@ -110,11 +110,13 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
      * @param connection The XMPP connection the server to use
      * @param accountName The name of the account the connection is associated with,
      * so that configuration information can be stored with the specified account.
+     * If this is null then the account name will be set to the JID of the user.
      */
     public MainUI(XMPPConnection connection, String accountName)
     {
         MainUI.connection = connection;
         this.accountName = accountName;
+        if(accountName == null) this.accountName = connection.getUser();
         jingleManager = new JingleManager(connection);
         settingsManager = new SettingsManager(connection.getUser());
         audioManager = new AudioManager(connection, settingsManager.createDirectory(SettingsManager.AUDIO_DIR).getAbsolutePath(), jingleManager);

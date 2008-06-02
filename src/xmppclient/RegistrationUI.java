@@ -253,6 +253,7 @@ private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         {
             accountManager.createAccount(usernameTextField.getText(), new String (passwordTextField.getPassword()));
             JOptionPane.showMessageDialog(this, "Account created!", "Account Created", JOptionPane.INFORMATION_MESSAGE);
+            connection.disconnect();
             dispose();
         }
         catch (XMPPException ex)

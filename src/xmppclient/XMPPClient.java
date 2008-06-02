@@ -509,7 +509,14 @@ private void registerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         {
             try
             {
-                new MainUI(get(), nameTextField.getText()).setVisible(true);
+                if(storeConnectionCheckBox.isSelected())
+                {
+                    new MainUI(get(), nameTextField.getText()).setVisible(true);
+                }
+                else
+                {
+                    new MainUI(get(), null).setVisible(true);
+                }
                 XMPPClient.this.dispose();
             }
             catch (Exception ex)

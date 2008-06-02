@@ -542,19 +542,21 @@ public class Utils
     }
 
     /**
-     * 
-     * @param accountName
-     * @param property
-     * @param value
+     * Saves a property for the given account name. Property values are stored
+     * in the form accountName-property, and are stored in the connections.properties
+     * file.
+     * @param accountName The name of the account to retrieve the property for
+     * @param property The property to retrieve
+     * @param value The property value
      */
     public static void saveProperty(String accountName, String property, String value)
     {
         Properties properties = new Properties();
         try
         {
-            properties.load(new FileInputStream("connections/" + accountName + ".properties"));
-            properties.setProperty(property, value);
-            properties.store(new FileOutputStream("connections/" + accountName + ".properties"), CONNECTIONS_DESC);
+            properties.load(new FileInputStream("connections.properties"));
+            properties.setProperty(accountName + "-" + property, value);
+            properties.store(new FileOutputStream("connections.properties"), CONNECTIONS_DESC);
         }
         catch (IOException ex)
         {
@@ -563,24 +565,25 @@ public class Utils
     }
 
     /**
-     * 
-     * @param accountName
-     * @param property
-     * @return
+     * Loads a property for the given account name
+     * @param accountName The name of the account
+     * @param property The property to retrieve
+     * @return The property value
      */
     public static String loadProperty(String accountName, String property)
     {
         Properties properties = new Properties();
+        
         try
         {
-            properties.load(new FileInputStream("connections/" + accountName + ".properties"));
+            properties.load(new FileInputStream("connections.properties"));
         }
         catch (IOException ex)
         {
             ex.printStackTrace();
         }
 
-        return properties.getProperty(property, "true");
+        return properties.getProperty(accountName + "-" + property, "true");
     }
 
     /**
