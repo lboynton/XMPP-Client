@@ -28,7 +28,7 @@ public class BasicPlayerTest implements BasicPlayerListener
     public static void main(String[] args)
     {
         BasicPlayerTest test = new BasicPlayerTest();
-        test.play("F:\\Music\\Broadcast 2000\\Building Blocks\\04 Get up and Go.mp3");
+        test.play("file.mp3");
     }
 
     /** * Contructor. */
@@ -37,6 +37,10 @@ public class BasicPlayerTest implements BasicPlayerListener
         out = System.out;
     }
 
+    /**
+     * Plays a file
+     * @param filename The name of the file to play
+     */
     public void play(String filename)
     {
 // Instantiate BasicPlayer.
@@ -128,6 +132,10 @@ public class BasicPlayerTest implements BasicPlayerListener
         display("setController : " + controller);
     }
 
+    /**
+     * Outputs a message
+     * @param msg The message to output
+     */
     public void display(String msg)
     {
         if (out != null)

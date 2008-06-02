@@ -44,9 +44,9 @@ public class Utils
             "for stored XMPP connections. Each key should be prefixed by the account name.";
 
     /**
-     * 
-     * @param f
-     * @return
+     * Gets the lowercase extension of a file
+     * @param f The file
+     * @return The extension
      */
     public static String getExtension(File f)
     {
@@ -503,7 +503,7 @@ public class Utils
     }
 
     /**
-     * 
+     * Gets the system icon of a file
      * @param filename
      * @return
      */
@@ -514,7 +514,7 @@ public class Utils
         try
         {
             //Create a temporary file with the specified extension
-            File file = File.createTempFile("file", "." + getFileExtension(filename));
+            File file = File.createTempFile("file", "." + getExtension(filename));
 
             System.out.println(file.getName());
 
@@ -532,15 +532,13 @@ public class Utils
     }
 
     /**
-     * 
-     * @param filename
-     * @return
+     * Gets the lowercase extension of a filename
+     * @param filename The filename
+     * @return The extension
      */
-    public static String getFileExtension(String filename)
+    public static String getExtension(String filename)
     {
-        String[] split = filename.split("\\.");
-
-        return split[split.length - 1];
+        return getExtension(new File(filename));
     }
 
     /**

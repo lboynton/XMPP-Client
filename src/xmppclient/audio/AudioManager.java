@@ -50,6 +50,8 @@ public class AudioManager
      * library requests and responses
      * @param connection The XMPP connection the manager should be associated with
      * @param libraryPath The path to the audio library containing the audio files
+     * @param jingleManager The Jingle Manager that will handle sending and
+     * receiving audio streams
      */
     public AudioManager(final XMPPConnection connection, final String libraryPath, final JingleManager jingleManager)
     {
@@ -298,6 +300,11 @@ public class AudioManager
         }
     }
 
+    /**
+     * Sends a file stream request
+     * @param file The file to request
+     * @param JID The JID to send the request to
+     */
     public void sendFileRequest(AudioFile file, String JID)
     {
         Audio request = new Audio(Audio.AudioType.FILE, IQ.Type.GET);

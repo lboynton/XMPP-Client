@@ -105,6 +105,11 @@ public class Audio extends IQ
         return audioFiles;
     }
     
+    /**
+     * Gets the first audio file in this packet. Useful for file requests when
+     * there is only one file.
+     * @return
+     */
     public AudioFile getAudioFile()
     {
         return audioFiles.get(0);

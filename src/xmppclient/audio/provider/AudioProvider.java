@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package xmppclient.audio.provider;
 
 import xmppclient.audio.*;
@@ -19,11 +15,17 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import xmppclient.audio.packet.Audio.AudioType;
 
 /**
- *
+ * This class is used for parsing the XML of Audio packets into Audio objects
  * @author Lee Boynton (323326)
  */
 public class AudioProvider implements IQProvider
 {
+    /**
+     * Parses the XML from audio packets
+     * @param parser The XML parser
+     * @return The audio packet
+     * @throws java.lang.Exception
+     */
     @Override
     public IQ parseIQ(XmlPullParser parser) throws Exception
     {
@@ -65,13 +67,17 @@ public class AudioProvider implements IQProvider
         return audio;
     }
     
+    /**
+     * Used for testing the parser
+     * @param args Not used
+     */
     public static void main(String args[])
     {
         try
         {
             AudioFile file1 = new AudioFile("test.txt");
             AudioFile file2 = new AudioFile("bleh.mp3");
-            AudioFile file3 = new AudioFile("feftxt");
+            AudioFile file3 = new AudioFile("fef.txt");
             List<AudioFile> files = new ArrayList<AudioFile>();
             files.add(file1);
             files.add(file2);

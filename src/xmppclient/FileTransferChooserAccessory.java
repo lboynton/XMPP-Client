@@ -32,7 +32,7 @@ public class FileTransferChooserAccessory extends javax.swing.JPanel
     /**
      * Gets the user entered description, or null if they didn't enter a 
      * description
-     * @return
+     * @return The file description
      */
     public String getFileDescription()
     {

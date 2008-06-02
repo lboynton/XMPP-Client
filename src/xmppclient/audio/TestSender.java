@@ -9,17 +9,19 @@ import xmppclient.audio.packet.Audio;
 import java.util.List;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.util.StringUtils;
 
 /**
- *
+ * Test class for sending the audio library to another user
  * @author  Lee Boynton (323326)
  */
 public class TestSender
 {
     private XMPPConnection connection;
     
+    /**
+     * Logs the user in, generates the library and sends it to another user
+     */
     public TestSender()
     {
         XMPPConnection.DEBUG_ENABLED = true;

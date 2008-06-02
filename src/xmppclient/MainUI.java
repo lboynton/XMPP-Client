@@ -1422,7 +1422,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
     /**
      * Updates the contact list when an entry is added to the roster
      * @param addresses The addresses which were added
-     * @see updateContacts()
+     * @see #updateContacts()
      */
     @Override
     public void entriesAdded(Collection<String> addresses)
@@ -1433,7 +1433,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
     /**
      * Updates the contact list when an entry on the roster is updated
      * @param addresses The addresses which were updated
-     * @see updateContacts()
+     * @see #updateContacts()
      */
     @Override
     public void entriesUpdated(Collection<String> addresses)
@@ -1444,7 +1444,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
     /**
      * Updates the contact list when a entry is removed from the roster
      * @param addresses The addresses which were removed
-     * @see updateContacts()
+     * @see #updateContacts()
      */
     @Override
     public void entriesDeleted(Collection<String> addresses)
@@ -1456,7 +1456,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
      * Updates the contact list when a presence packet is received from a user
      * on the roster
      * @param presence The presence packet received
-     * @see updateContacts()
+     * @see #updateContacts()
      */
     @Override
     public void presenceChanged(Presence presence)

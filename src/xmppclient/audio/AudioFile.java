@@ -16,11 +16,19 @@ public class AudioFile
     private int id;
     private File file;
 
+    /**
+     * Sets the audio file
+     * @param file The file
+     */
     public void setFile(File file)
     {
         this.file = file;
     }
 
+    /**
+     * Gets the audio file
+     * @return The audio file
+     */
     public File getFile()
     {
         return file;
@@ -44,16 +52,27 @@ public class AudioFile
         return name;
     }
 
+    /**
+     * Sets the ID of this audio file
+     * @param id The new ID
+     */
     public void setId(int id)
     {
         this.id = id;
     }
 
+    /**
+     * Sets the name of this audio file
+     * @param name The name
+     */
     public void setName(String name)
     {
         this.name = name;
     }
     
+    /**
+     * Creates a blank audio file
+     */
     public AudioFile()
     {
     }
@@ -64,6 +83,7 @@ public class AudioFile
      * @param artist The artist
      * @param album The album
      * @param track The track
+     * @param file The audio file itself
      */
     public AudioFile(String name, String artist, String album, String track, File file)
     {

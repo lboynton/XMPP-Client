@@ -23,7 +23,7 @@ public class CustomStatusDialog extends javax.swing.JDialog
     /** Creates new form CustomStatusDialog
      * @param parent The parent JFrame
      * @param modal Dialog needs to be modal for showDialog() to work
-     * @see showDialog()
+     * @see #showDialog()
      */
     public CustomStatusDialog(java.awt.Frame parent, boolean modal)
     {
@@ -42,7 +42,7 @@ public class CustomStatusDialog extends javax.swing.JDialog
      * If the dialog is modal, this will show the dialog and return the new 
      * presence when the ok button is clicked. If cancel is clicked then this
      * will return null
-     * @return
+     * @return The new custom presence
      */
     public Presence showDialog()
     {

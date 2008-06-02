@@ -13,13 +13,16 @@ import org.jivesoftware.smackx.ServiceDiscoveryManager;
 import xmppclient.audio.provider.AudioProvider;
 
 /**
- *
+ * A test class for receiving the audio library from another user
  * @author  Lee Boynton (323326)
  */
 public class TestReceiver
 {
     private XMPPConnection connection;
 
+    /**
+     * Logs in and adds support for the audio packets
+     */
     public TestReceiver()
     {
         XMPPConnection.DEBUG_ENABLED = true;

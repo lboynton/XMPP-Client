@@ -61,8 +61,8 @@ public class SettingsManager
     }
 
     /**
-     * Gets the root settings directory
-     * @return
+     * Gets the accounts directory
+     * @return The accouns directory
      */
     public File getRootDir()
     {
