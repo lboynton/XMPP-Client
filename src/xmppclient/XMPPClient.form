@@ -260,7 +260,7 @@
               <Font name="Tahoma" size="10" style="0"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Save connection"/>
-            <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;If this checkbox is selected, upon a successful login&lt;br&gt;&#xa; the connection details (except password) will be stored to&lt;br&gt;&#xa;make future logins quicker. Stored connections can be &lt;br&gt;&#xa;overwritten by this function by entering the same name.&lt;/html&gt;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;If this checkbox is selected, upon a successful login&lt;br&gt;&#xa; the connection details (except password) will be stored to&lt;br&gt;&#xa;make future logins quicker. Stored connections can be &lt;br&gt;&#xa;overwritten by this function by entering the appropriate &lt;br&gt;&#xa;account name name.&lt;/html&gt;"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="null"/>
             </Property>
@@ -272,10 +272,10 @@
         </Component>
         <Component class="javax.swing.JPasswordField" name="passwordTextField">
           <Properties>
-            <Property name="text" type="java.lang.String" value="password"/>
             <Property name="toolTipText" type="java.lang.String" value="Enter your password for the XMPP connection"/>
           </Properties>
           <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="passwordTextFieldActionPerformed"/>
             <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="passwordTextFieldKeyReleased"/>
           </Events>
         </Component>

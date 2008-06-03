@@ -70,8 +70,6 @@ public class RegistrationUI extends javax.swing.JDialog
         jLabel1.setText("Server");
         jLabel1.setPreferredSize(new java.awt.Dimension(57, 14));
 
-        serverTextField.setText("192.168.0.8");
-
         okButton.setText("OK");
         okButton.setActionCommand("connect");
         okButton.addActionListener(new java.awt.event.ActionListener() {
@@ -90,7 +88,7 @@ public class RegistrationUI extends javax.swing.JDialog
 
         instructionsTextArea.setColumns(20);
         instructionsTextArea.setEditable(false);
-        instructionsTextArea.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        instructionsTextArea.setFont(new java.awt.Font("Tahoma", 0, 10));
         instructionsTextArea.setLineWrap(true);
         instructionsTextArea.setToolTipText("<html>The XMPP server may provide instructions for creating an account on the server</html>");
         jScrollPane1.setViewportView(instructionsTextArea);
@@ -204,7 +202,7 @@ public class RegistrationUI extends javax.swing.JDialog
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(okButton)
                     .addComponent(cancelButton))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         pack();

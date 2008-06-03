@@ -125,18 +125,30 @@ public class ChatUI extends javax.swing.JFrame implements MessageListener, ChatM
     private javax.swing.JTabbedPane tabs;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * This method is triggered every time a chat is created. A message listener
+     * is added to the chat. A chat panel is only added to the tabs if the chat 
+     * was created locally. The #processMessage(Chat chat, Message message) method
+     * displays the tab if the chat participant sends a message.
+     * @param chat
+     * @param createdLocally
+     */
     @Override
     public void chatCreated(Chat chat, boolean createdLocally)
     {
-        chat.addMessageListener(this);
-
+        // if created locally show the tab
         if (createdLocally)
         {
             // add the chat
             addChat(chat);
 
-            // show the window
+            // show the window, if not already visible
             setVisible(true);
+        }
+        else
+        {
+            // wait for a message to be sent before showing the tab
+            chat.addMessageListener(this);
         }
     }
 

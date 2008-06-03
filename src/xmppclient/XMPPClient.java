@@ -153,7 +153,7 @@ public class XMPPClient extends javax.swing.JFrame
 
         storeConnectionCheckBox.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         storeConnectionCheckBox.setText("Save connection");
-        storeConnectionCheckBox.setToolTipText("<html>If this checkbox is selected, upon a successful login<br>\n the connection details (except password) will be stored to<br>\nmake future logins quicker. Stored connections can be <br>\noverwritten by this function by entering the same name.</html>");
+        storeConnectionCheckBox.setToolTipText("<html>If this checkbox is selected, upon a successful login<br>\n the connection details (except password) will be stored to<br>\nmake future logins quicker. Stored connections can be <br>\noverwritten by this function by entering the appropriate <br>\naccount name name.</html>");
         storeConnectionCheckBox.setBorder(null);
         storeConnectionCheckBox.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         storeConnectionCheckBox.addActionListener(new java.awt.event.ActionListener() {
@@ -162,8 +162,12 @@ public class XMPPClient extends javax.swing.JFrame
             }
         });
 
-        passwordTextField.setText("password");
         passwordTextField.setToolTipText("Enter your password for the XMPP connection");
+        passwordTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordTextFieldActionPerformed(evt);
+            }
+        });
         passwordTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 passwordTextFieldKeyReleased(evt);
@@ -395,6 +399,10 @@ private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 private void registerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerMenuItemActionPerformed
     new RegistrationUI(this).setVisible(true);
 }//GEN-LAST:event_registerMenuItemActionPerformed
+
+private void passwordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTextFieldActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event_passwordTextFieldActionPerformed
 
     /**
      * @param args an argument of debug starts the program in debug mode

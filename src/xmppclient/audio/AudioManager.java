@@ -62,6 +62,8 @@ public class AudioManager
             @Override
             public void audioRequested(AudioMessage request)
             {
+                // both audio library and file requests could come through as these
+                // aren't filtered yet
                 if(request.getAudio().getAudioType().equals(Audio.AudioType.LIBRARY))
                 {
                     System.out.println("Audio library requested");
@@ -169,7 +171,7 @@ public class AudioManager
     }
 
     /**
-     * Adds a audio library request listener which will be notified every time
+     * Adds an audio library request listener which will be notified every time
      * a request is received
      * @param requestListener The request listener to add
      */
@@ -214,7 +216,7 @@ public class AudioManager
 
         audioRequestListeners = new ArrayList<AudioRequestListener>();
 
-        // Start a packet listener for session initiation requests
+        // add a packet listener for audio request packets
         connection.addPacketListener(new PacketListener()
         {
             @Override
@@ -251,7 +253,7 @@ public class AudioManager
 
         audioResponseListeners = new ArrayList<AudioResponseListener>();
 
-        // Start a packet listener for session initiation requests
+        // add a packet listener for audio response packets
         connection.addPacketListener(new PacketListener()
         {
             @Override
@@ -266,7 +268,7 @@ public class AudioManager
     {
         AudioRequestListener[] audioRequestListeners = null;
 
-        // Make a synchronized copy of the listenerJingles
+        // Make a synchronized copy of the audio reqest listeners
         synchronized (this.audioRequestListeners)
         {
             audioRequestListeners = new AudioRequestListener[this.audioRequestListeners.size()];
@@ -285,7 +287,7 @@ public class AudioManager
     {
         AudioResponseListener[] audioResponseListeners = null;
 
-        // Make a synchronized copy of the listenerJingles
+        // Make a synchronized copy of the audio response listeners
         synchronized (this.audioResponseListeners)
         {
             audioResponseListeners = new AudioResponseListener[this.audioResponseListeners.size()];

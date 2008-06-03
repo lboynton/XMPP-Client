@@ -411,9 +411,9 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
         minimiseMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
         contactsMenu = new javax.swing.JMenu();
-        jMenu1 = new javax.swing.JMenu();
-        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
-        jRadioButtonMenuItem2 = new javax.swing.JRadioButtonMenuItem();
+        sortMenu = new javax.swing.JMenu();
+        statusRadioButton = new javax.swing.JRadioButtonMenuItem();
+        groupRadioButton = new javax.swing.JRadioButtonMenuItem();
         toolsMenu = new javax.swing.JMenu();
         createChatRoomMenuItem = new javax.swing.JMenuItem();
         joinChatRoomMenuItem = new javax.swing.JMenuItem();
@@ -619,28 +619,28 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
 
         contactsMenu.setText("Contacts");
 
-        jMenu1.setText("Sort by");
+        sortMenu.setText("Sort by");
 
-        sortContactsButtonGroup.add(jRadioButtonMenuItem1);
-        jRadioButtonMenuItem1.setSelected(true);
-        jRadioButtonMenuItem1.setText("Status");
-        jRadioButtonMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        sortContactsButtonGroup.add(statusRadioButton);
+        statusRadioButton.setSelected(true);
+        statusRadioButton.setText("Status");
+        statusRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMenuItem1ActionPerformed(evt);
+                statusRadioButtonActionPerformed(evt);
             }
         });
-        jMenu1.add(jRadioButtonMenuItem1);
+        sortMenu.add(statusRadioButton);
 
-        sortContactsButtonGroup.add(jRadioButtonMenuItem2);
-        jRadioButtonMenuItem2.setText("Group");
-        jRadioButtonMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        sortContactsButtonGroup.add(groupRadioButton);
+        groupRadioButton.setText("Group");
+        groupRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMenuItem2ActionPerformed(evt);
+                groupRadioButtonActionPerformed(evt);
             }
         });
-        jMenu1.add(jRadioButtonMenuItem2);
+        sortMenu.add(groupRadioButton);
 
-        contactsMenu.add(jMenu1);
+        contactsMenu.add(sortMenu);
 
         menuBar.add(contactsMenu);
 
@@ -827,13 +827,6 @@ private void contactTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST
 
     if (node.getUserObject() instanceof RosterEntry)
     {
-        if (evt.isPopupTrigger())
-        {
-            JPopupMenu popup = new JPopupMenu();
-            popup.add(new JMenuItem("Fef"));
-            popup.show(evt.getComponent(), evt.getX(), evt.getY());
-            return;
-        }
         if (evt.getClickCount() == 2)
         {
             RosterEntry rosterEntry = (RosterEntry) node.getUserObject();
@@ -842,15 +835,15 @@ private void contactTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST
     }
 }//GEN-LAST:event_contactTreeMouseClicked
 
-private void jRadioButtonMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem2ActionPerformed
+private void groupRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_groupRadioButtonActionPerformed
     sortMethod = SORT_BY_GROUP;
     updateContacts();
-}//GEN-LAST:event_jRadioButtonMenuItem2ActionPerformed
+}//GEN-LAST:event_groupRadioButtonActionPerformed
 
-private void jRadioButtonMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem1ActionPerformed
+private void statusRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusRadioButtonActionPerformed
     sortMethod = SORT_BY_STATUS;
     updateContacts();
-}//GEN-LAST:event_jRadioButtonMenuItem1ActionPerformed
+}//GEN-LAST:event_statusRadioButtonActionPerformed
 
 private void contactTreeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactTreeMouseReleased
     showContactPopup(evt);
@@ -1087,16 +1080,6 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                 }
             });
             menu.add(setNameMenuItem);
-            JMenuItem streamMenuItem = new JMenuItem("Stream...");
-            streamMenuItem.addActionListener(new ActionListener()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    new StreamUI(MainUI.this, entry, jingleManager).setVisible(true);
-                }
-            });
-            menu.add(streamMenuItem);
             JMenuItem viewLibraryMenuItem = new JMenuItem("View library");
             viewLibraryMenuItem.addActionListener(new ActionListener()
             {
@@ -1274,10 +1257,8 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JMenuItem createChatRoomMenuItem;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JRadioButtonMenuItem groupRadioButton;
     private javax.swing.JButton jButton1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2;
     private javax.swing.JMenuItem joinChatRoomMenuItem;
     private javax.swing.JButton joinConferenceButton;
     private javax.swing.JMenuBar menuBar;
@@ -1285,7 +1266,9 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JTextField nicknameTextField;
     private javax.swing.JMenuItem signOutMenuItem;
     private javax.swing.ButtonGroup sortContactsButtonGroup;
+    private javax.swing.JMenu sortMenu;
     private javax.swing.JComboBox statusComboBox;
+    private javax.swing.JRadioButtonMenuItem statusRadioButton;
     private javax.swing.JToolBar toolBar;
     private javax.swing.JMenu toolsMenu;
     private javax.swing.JButton vCardButton;

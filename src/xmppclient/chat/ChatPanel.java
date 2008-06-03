@@ -377,7 +377,7 @@ public class ChatPanel extends javax.swing.JPanel implements RosterListener
             message.setProperty("format", format);
             message.setProperty("emoticons", getCustomEmoticons());
             chat.sendMessage(message);
-            addMessage(Utils.getAvatar(50), "Me", message);
+            addMessage(Utils.getAvatar(50), Utils.getNickname(), message);
             sendTextArea.setText("");
         }
         catch (XMPPException ex)

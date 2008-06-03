@@ -18,14 +18,14 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="messageScrollPane" alignment="0" pref="359" max="32767" attributes="0"/>
+                  <Component id="messageScrollPane" alignment="0" pref="370" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="formatButton" min="0" pref="0" max="32767" attributes="1"/>
                           <Component id="emoticonsButton" alignment="0" pref="37" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="sendScrollPane" pref="241" max="32767" attributes="0"/>
+                      <Component id="sendScrollPane" pref="252" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="sendButton" min="-2" pref="69" max="-2" attributes="0"/>
                   </Group>
@@ -155,9 +155,6 @@
       <SubComponents>
         <Component class="javax.swing.JTextPane" name="messageTextPane">
           <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="ff" red="ff" type="rgb"/>
-            </Property>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="styledDocument" type="javax.swing.text.StyledDocument" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new ChatTextPaneStyledDocument()" type="code"/>
@@ -175,9 +172,6 @@
       <SubComponents>
         <Component class="javax.swing.JTextArea" name="sendTextArea">
           <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="ff" red="ff" type="rgb"/>
-            </Property>
             <Property name="columns" type="int" value="20"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
               <FontInfo relative="true">
