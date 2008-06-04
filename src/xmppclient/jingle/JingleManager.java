@@ -27,6 +27,7 @@ import xmppclient.jingle.provider.FileProvider;
  * Provides methods for adding listeners for both of these events. The manager
  * also enables support for parsing Jingle packets.
  * Based on XEP-0234: Jingle File Transfer - http://www.xmpp.org/extensions/xep-0234.html
+ * Based on the JingleManager provided by Smack API
  * @author Lee Boynton (323326)
  */
 public class JingleManager
