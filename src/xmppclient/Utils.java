@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -555,12 +557,21 @@ public class Utils
         try
         {
             properties.load(new FileInputStream("connections.properties"));
-            properties.setProperty(accountName + "-" + property, value);
+        }
+        catch (IOException ex)
+        {
+            // file not found, ignore error
+        }
+        
+        properties.setProperty(accountName + "-" + property, value);
+        
+        try
+        {
             properties.store(new FileOutputStream("connections.properties"), CONNECTIONS_DESC);
         }
         catch (IOException ex)
         {
-            ex.printStackTrace();
+            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -580,7 +591,8 @@ public class Utils
         }
         catch (IOException ex)
         {
-            ex.printStackTrace();
+            // file not found
+            // return the default value
         }
 
         return properties.getProperty(accountName + "-" + property, "true");
@@ -660,11 +672,12 @@ public class Utils
         {
             try
             {
-                Runtime.getRuntime().exec("konqueror file:///" + path);
+                Runtime.getRuntime().exec("dolphin file:///" + System.getProperty("user.dir") + path);
+                Runtime.getRuntime().exec("nautilus " + path);
             }
             catch (IOException ex)
             {
-                Runtime.getRuntime().exec("nautilus " + path);
+                Runtime.getRuntime().exec("konqueror file:///" + System.getProperty("user.dir") + path);
             }
             return;
         }
