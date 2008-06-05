@@ -21,6 +21,7 @@ import org.jivesoftware.smackx.packet.Bytestream;
  */
 public class IncomingSession extends Session
 {
+
     private Socket socket;
     private BufferedInputStream bis;
     private String host;
@@ -72,22 +73,46 @@ public class IncomingSession extends Session
     @Override
     public void start()
     {
+        int retries = 5;
+
         super.status = "Connecting...";
 
         System.out.printf("Attempting to connect to %s:%s\n", host, super.port);
-        try
+
+        int i = 1;
+        while (i <= retries)
         {
-            socket = new Socket();
-            socket.connect(new InetSocketAddress(host, super.port), 0);
-            super.status = "Connected";
-            super.connected = true;
-            bis = new BufferedInputStream(socket.getInputStream());
-            control.open(bis);
-            control.play();
-        }
-        catch (Exception ex)
-        {
-            Logger.getLogger(IncomingSession.class.getName()).log(Level.SEVERE, null, ex);
+            try
+            {
+                socket = new Socket();
+                socket.connect(new InetSocketAddress(host, super.port), 0);
+                super.status = "Connected";
+                super.connected = true;
+                bis = new BufferedInputStream(socket.getInputStream());
+                control.open(bis);
+                control.play();
+                break;
+            }
+            catch (java.net.ConnectException ex)
+            {
+                System.out.printf("Could not connect (try %d of %d)", i, retries);
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+                break;
+            }
+            
+            try
+            {
+                Thread.sleep(2000);
+            }
+            catch (InterruptedException ex)
+            {
+                Logger.getLogger(IncomingSession.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            i++;
         }
     }
 
@@ -98,6 +123,7 @@ public class IncomingSession extends Session
      */
     public class BytestreamListener implements PacketListener
     {
+
         @Override
         public void processPacket(Packet packet)
         {
@@ -116,8 +142,10 @@ public class IncomingSession extends Session
     @Override
     public void terminate()
     {
-        super.connection.removePacketListener(listener);
+        System.out.println("Closing incoming session");
         
+        super.connection.removePacketListener(listener);
+
         try
         {
             bis.close();

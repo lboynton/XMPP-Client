@@ -80,6 +80,23 @@ public class CustomEmoticonDialog extends javax.swing.JDialog
                 imageTextFieldCaretUpdate(evt);
             }
         });
+        imageTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                imageTextFieldKeyReleased(evt);
+            }
+        });
+
+        keySequenceTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                keySequenceTextFieldKeyReleased(evt);
+            }
+        });
+
+        nameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                nameTextFieldKeyReleased(evt);
+            }
+        });
 
         browseButton.setText("Browse...");
         browseButton.addActionListener(new java.awt.event.ActionListener() {
@@ -89,6 +106,7 @@ public class CustomEmoticonDialog extends javax.swing.JDialog
         });
 
         okButton.setText("OK");
+        okButton.setEnabled(false);
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
@@ -109,7 +127,7 @@ public class CustomEmoticonDialog extends javax.swing.JDialog
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel1)
@@ -131,7 +149,7 @@ public class CustomEmoticonDialog extends javax.swing.JDialog
                             .addComponent(keySequenceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cancelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 206, Short.MAX_VALUE)
                         .addComponent(okButton)))
                 .addContainerGap())
         );
@@ -174,6 +192,9 @@ public class CustomEmoticonDialog extends javax.swing.JDialog
 
 private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonActionPerformed
     JFileChooser chooser = new JFileChooser();
+    String[] exts = {"jpg", "jpeg", "gif", "png", "bmp"};
+    FileChooserFilter filter = new FileChooserFilter(exts, "Images");
+    chooser.setFileFilter(filter);
     if (chooser.showDialog(this, "Select") == JFileChooser.APPROVE_OPTION)
     {
         imageTextField.setText(chooser.getSelectedFile().getAbsolutePath());
@@ -199,6 +220,18 @@ private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
     dispose();
 }//GEN-LAST:event_cancelButtonActionPerformed
+
+private void imageTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_imageTextFieldKeyReleased
+    validateInputs();
+}//GEN-LAST:event_imageTextFieldKeyReleased
+
+private void keySequenceTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_keySequenceTextFieldKeyReleased
+    validateInputs();
+}//GEN-LAST:event_keySequenceTextFieldKeyReleased
+
+private void nameTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameTextFieldKeyReleased
+    validateInputs();
+}//GEN-LAST:event_nameTextFieldKeyReleased
 
     /**
      * @param args the command line arguments
@@ -238,4 +271,19 @@ private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private javax.swing.JButton okButton;
     private javax.swing.JLabel previewLabel;
     // End of variables declaration//GEN-END:variables
+
+    private void validateInputs()
+    {
+        okButton.setEnabled(false);
+        
+        // check lengths
+        if(nameTextField.getText().length() <= 0) return;
+        if(keySequenceTextField.getText().length() <= 0) return;
+        if(imageTextField.getText().length() <= 0) return;
+        
+        // check file exists
+        if(!new File(imageTextField.getText()).exists()) return;
+        
+        okButton.setEnabled(true);
+    }
 }

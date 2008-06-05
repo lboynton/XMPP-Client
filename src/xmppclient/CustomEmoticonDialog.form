@@ -26,7 +26,7 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jSeparator1" alignment="0" pref="278" max="32767" attributes="0"/>
+                  <Component id="jSeparator1" alignment="0" pref="281" max="32767" attributes="0"/>
                   <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel1" linkSize="1" min="-2" max="-2" attributes="0"/>
@@ -53,7 +53,7 @@
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="cancelButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="166" max="32767" attributes="0"/>
+                      <EmptySpace pref="206" max="32767" attributes="0"/>
                       <Component id="okButton" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -121,11 +121,18 @@
     <Component class="javax.swing.JTextField" name="imageTextField">
       <Events>
         <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="imageTextFieldCaretUpdate"/>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="imageTextFieldKeyReleased"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="keySequenceTextField">
+      <Events>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="keySequenceTextFieldKeyReleased"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="nameTextField">
+      <Events>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="nameTextFieldKeyReleased"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="browseButton">
       <Properties>
@@ -142,6 +149,7 @@
     <Component class="javax.swing.JButton" name="okButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="OK"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="okButtonActionPerformed"/>

@@ -84,11 +84,12 @@ public class OutgoingSession extends Session implements PacketListener
             socket = serverSocket.accept();
             out = new DataOutputStream(socket.getOutputStream());
             in = new BufferedInputStream(new FileInputStream(file));
+            System.out.println("Reading in file");
             in.read(buffer);
+            System.out.println("Writing out file");
             out.write(buffer);
-            out.flush();
-            out.close();
-            in.close();
+            System.out.println("Finished");
+            //out.flush();
         }
         catch(SocketException ex)
         {
@@ -109,13 +110,19 @@ public class OutgoingSession extends Session implements PacketListener
     @Override
     public void terminate()
     {
+        System.out.println("Closing outgoing session");
+        
         super.connection.removePacketListener(this);
         
         try
         {
+            System.out.println("Closing input stream");
             in.close();
+            System.out.println("Closing output stream");
             out.close();
+            System.out.println("Closing socket");
             socket.close();
+            System.out.println("Connection closed");
         }
         catch (IOException ex)
         {

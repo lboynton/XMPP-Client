@@ -174,7 +174,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="contactTreeScrollPane" alignment="0" pref="228" max="32767" attributes="2"/>
+                      <Component id="contactTreeScrollPane" alignment="0" pref="236" max="32767" attributes="2"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="nicknameTextField" pref="140" max="32767" attributes="2"/>

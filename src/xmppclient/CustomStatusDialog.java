@@ -85,7 +85,14 @@ public class CustomStatusDialog extends javax.swing.JDialog
 
         modeComboBox.setRenderer(new ModeComboBoxRenderer());
 
+        statusTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                statusTextFieldKeyReleased(evt);
+            }
+        });
+
         okButton.setText("OK");
+        okButton.setEnabled(false);
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
@@ -106,7 +113,7 @@ public class CustomStatusDialog extends javax.swing.JDialog
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(separator, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+                    .addComponent(separator, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -119,7 +126,7 @@ public class CustomStatusDialog extends javax.swing.JDialog
                             .addComponent(statusTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(cancelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 162, Short.MAX_VALUE)
                         .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -161,6 +168,15 @@ private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
     dispose();
 }//GEN-LAST:event_cancelButtonActionPerformed
+
+private void statusTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_statusTextFieldKeyReleased
+    // enable the ok button if the user enters something
+    if(statusTextField.getText().length() <= 0)
+    {
+        okButton.setEnabled(false);
+    }
+    else okButton.setEnabled(true);
+}//GEN-LAST:event_statusTextFieldKeyReleased
 
     /**
      * @param args the command line arguments

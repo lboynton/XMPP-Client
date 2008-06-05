@@ -672,7 +672,6 @@ public class Utils
         {
             try
             {
-                Runtime.getRuntime().exec("dolphin file:///" + System.getProperty("user.dir") + path);
                 Runtime.getRuntime().exec("nautilus " + path);
             }
             catch (IOException ex)
