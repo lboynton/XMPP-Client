@@ -8,6 +8,7 @@ import xmppclient.audio.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.util.StringUtils;
 
 /**
  * An audio packet, used for sending audio library requests and reponses, and also
@@ -138,10 +139,10 @@ public class Audio extends IQ
             {
                 buf.append("<file");
                 buf.append(" id=\"").append(file.getId()).append("\"");
-                buf.append(" artist=\"").append(file.getArtist()).append("\"");
-                buf.append(" album=\"").append(file.getAlbum()).append("\"");
-                buf.append(" track=\"").append(file.getTrack()).append("\">");
-                buf.append(file.getName());
+                buf.append(" artist=\"").append(StringUtils.escapeForXML(file.getArtist())).append("\"");
+                buf.append(" album=\"").append(StringUtils.escapeForXML(file.getAlbum())).append("\"");
+                buf.append(" track=\"").append(StringUtils.escapeForXML(file.getTrack())).append("\">");
+                buf.append(StringUtils.escapeForXML(file.getName()));
                 buf.append("</file>");
             }
         }

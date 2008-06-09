@@ -1,6 +1,7 @@
 package xmppclient.jingle.packet;
 
 import org.jivesoftware.smack.packet.PacketExtension;
+import org.jivesoftware.smack.util.StringUtils;
 
 /**
  * Represents a file subelement for the description subelement of the Jingle subelement
@@ -169,7 +170,7 @@ public class File implements PacketExtension
         StringBuilder buf = new StringBuilder();
         buf.append("<").append(getElementName());
         buf.append(" xmlns=\"").append(getNamespace()).append("\"");
-        buf.append(" name=\"").append(name).append("\"");
+        buf.append(" name=\"").append(StringUtils.escapeForXML(name)).append("\"");
         buf.append(" size=\"").append(size).append("\"");
         if(hash != null)
             buf.append(" hash=\"").append(hash).append("\"");

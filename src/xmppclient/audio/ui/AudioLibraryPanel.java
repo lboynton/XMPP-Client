@@ -36,6 +36,7 @@ import xmppclient.jingle.JingleSessionRequestListener;
  */
 public class AudioLibraryPanel extends javax.swing.JPanel implements AudioResponseListener, BasicPlayerListener
 {
+
     private RosterEntry entry;
     private AudioManager audioManager;
     private AudioMessage response;
@@ -61,6 +62,7 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
         audioManager.addResponseListener(this);
         jingleManager.addSessionRequestListener(new JingleSessionRequestListener()
         {
+
             @Override
             public void sessionRequested(JingleSessionRequest request)
             {
@@ -73,7 +75,9 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
                 {
                     session.getPlayer().setGain(new Double(volumeSlider.getValue()) / 100);
                 }
-                catch (BasicPlayerException ex){}
+                catch (BasicPlayerException ex)
+                {
+                }
             }
         });
     }
@@ -93,7 +97,8 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                                                    
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         audioList = new javax.swing.JList();
@@ -106,51 +111,72 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
 
         audioList.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 2, 2, 2));
         audioList.setCellRenderer(new LibraryListRenderer());
-        audioList.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        audioList.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 audioListMouseClicked(evt);
             }
         });
-        audioList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+        audioList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
+        {
+
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt)
+            {
                 audioListValueChanged(evt);
             }
         });
         jScrollPane1.setViewportView(audioList);
 
         artistButton.setText("Artist");
-        artistButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        artistButton.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 artistButtonActionPerformed(evt);
             }
         });
 
         albumButton.setText("Album");
-        albumButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        albumButton.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 albumButtonActionPerformed(evt);
             }
         });
 
         allButton.setText("<");
-        allButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        allButton.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 allButtonActionPerformed(evt);
             }
         });
 
         playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/media-playback-start16x16.png"))); // NOI18N
         playButton.setEnabled(false);
-        playButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        playButton.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 playButtonActionPerformed(evt);
             }
         });
 
         stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/media-playback-stop16x16.png"))); // NOI18N
         stopButton.setEnabled(false);
-        stopButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        stopButton.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 stopButtonActionPerformed(evt);
             }
         });
@@ -158,8 +184,11 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
         volumeSlider.setMajorTickSpacing(25);
         volumeSlider.setPaintTicks(true);
         volumeSlider.setToolTipText("Volume");
-        volumeSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        volumeSlider.addChangeListener(new javax.swing.event.ChangeListener()
+        {
+
+            public void stateChanged(javax.swing.event.ChangeEvent evt)
+            {
                 volumeSliderStateChanged(evt);
             }
         });
@@ -167,138 +196,112 @@ public class AudioLibraryPanel extends javax.swing.JPanel implements AudioRespon
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(allButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(artistButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(albumButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(playButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(stopButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(volumeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE).addGroup(layout.createSequentialGroup().addComponent(allButton).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(artistButton).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(albumButton)).addGroup(layout.createSequentialGroup().addComponent(playButton).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(stopButton).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(volumeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))).addContainerGap()));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(artistButton)
-                    .addComponent(albumButton)
-                    .addComponent(allButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(volumeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(artistButton).addComponent(albumButton).addComponent(allButton)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)).addComponent(volumeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)).addContainerGap()));
     }// </editor-fold>                                              
 
-private void allButtonActionPerformed(java.awt.event.ActionEvent evt) {                                          
-    showAll();
-}                                         
+    private void allButtonActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        showAll();
+    }
 
-private void artistButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
-    showArtist(artistButton.getText());
-}                                            
+    private void artistButtonActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        showArtist(artistButton.getText());
+    }
 
-private void albumButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
-    showAlbum(albumButton.getText());
-}                                           
+    private void albumButtonActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        showAlbum(albumButton.getText());
+    }
 
-private void audioListMouseClicked(java.awt.event.MouseEvent evt) {                                       
-    if (evt.getClickCount() == 2)
+    private void audioListMouseClicked(java.awt.event.MouseEvent evt)
+    {
+        if (evt.getClickCount() == 2)
+        {
+            if (audioList.getSelectedValue() instanceof AudioFile)
+            {
+                sendFileRequest();
+                return;
+            }
+            if (show.equals("artist"))
+            {
+                showAlbum((String) audioList.getSelectedValue());
+            }
+            else if (show.equals("all"))
+            {
+                showArtist((String) audioList.getSelectedValue());
+            }
+        }
+    }
+
+    private void audioListValueChanged(javax.swing.event.ListSelectionEvent evt)
     {
         if (audioList.getSelectedValue() instanceof AudioFile)
         {
+            playButton.setEnabled(true);
+        }
+        else
+        {
+            playButton.setEnabled(false);
+        }
+    }
+
+    private void playButtonActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        if (connected)
+        {
+            try
+            {
+                if (session.getPlayer().getStatus() == BasicPlayer.PLAYING)
+                {
+                    session.getControl().pause();
+                }
+                else if (session.getPlayer().getStatus() == BasicPlayer.PAUSED)
+                {
+                    session.getControl().resume();
+                }
+            }
+            catch (BasicPlayerException ex)
+            {
+                Logger.getLogger(AudioLibraryPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else
+        {
             sendFileRequest();
-            return;
-        }
-        if (show.equals("artist"))
-        {
-            showAlbum((String) audioList.getSelectedValue());
-        }
-        else if (show.equals("all"))
-        {
-            showArtist((String) audioList.getSelectedValue());
         }
     }
-}                                      
 
-private void audioListValueChanged(javax.swing.event.ListSelectionEvent evt) {                                       
-    if (audioList.getSelectedValue() instanceof AudioFile)
-    {
-        playButton.setEnabled(true);
-    }
-    else
-    {
-        playButton.setEnabled(false);
-    }
-}                                      
-
-private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
-    if (connected)
+    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt)
     {
         try
         {
-            if (session.getPlayer().getStatus() == BasicPlayer.PLAYING)
-            {
-                session.getControl().pause();
-            }
-            else if (session.getPlayer().getStatus() == BasicPlayer.PAUSED)
-            {
-                session.getControl().resume();
-            }
+            session.getControl().stop();
+            session.terminate();
+            session.getPlayer().removeBasicPlayerListener(this);
         }
         catch (BasicPlayerException ex)
         {
             Logger.getLogger(AudioLibraryPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        connected = false;
+        stopButton.setEnabled(false);
+        playButton.setIcon(TangoIcons.play16x16);
     }
-    else
-    {
-        sendFileRequest();
-    }
-}                                          
 
-private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
-    try
-    {                                          
-        session.getControl().stop();
-        session.terminate();
-        session.getPlayer().removeBasicPlayerListener(this);
-    }
-    catch (BasicPlayerException ex)
+    private void volumeSliderStateChanged(javax.swing.event.ChangeEvent evt)
     {
-        Logger.getLogger(AudioLibraryPanel.class.getName()).log(Level.SEVERE, null, ex);
+        try
+        {
+            session.getControl().setGain(new Double(volumeSlider.getValue()) / 100);
+        }
+        catch (Exception ex)
+        {
+            // not playing
+        }
     }
-    connected = false;
-    stopButton.setEnabled(false);
-    playButton.setIcon(TangoIcons.play16x16);
-}
-
-private void volumeSliderStateChanged(javax.swing.event.ChangeEvent evt) {                                          
-    try
-    {                                         
-        session.getControl().setGain(new Double(volumeSlider.getValue()) / 100);
-    }
-    catch (Exception ex)
-    {
-        // not playing
-    }
-}
     // Variables declaration - do not modify                                    
     private javax.swing.JButton albumButton;
     private javax.swing.JButton allButton;
@@ -401,6 +404,7 @@ private void volumeSliderStateChanged(javax.swing.event.ChangeEvent evt) {
      */
     public class LibraryListRenderer extends DefaultListCellRenderer
     {
+
         @Override
         public Component getListCellRendererComponent(
                 JList list,
@@ -442,6 +446,14 @@ private void volumeSliderStateChanged(javax.swing.event.ChangeEvent evt) {
         }
         if (event.getCode() == BasicPlayerEvent.PAUSED)
         {
+            playButton.setIcon(TangoIcons.play16x16);
+        }
+        if (event.getCode() == BasicPlayerEvent.STOPPED)
+        {
+            session.terminate();
+            session.getPlayer().removeBasicPlayerListener(this);
+            connected = false;
+            stopButton.setEnabled(false);
             playButton.setIcon(TangoIcons.play16x16);
         }
     }

@@ -123,15 +123,15 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="portTextField" min="-2" pref="56" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="resourceTextField" alignment="0" pref="176" max="32767" attributes="1"/>
-                      <Component id="passwordTextField" alignment="0" pref="176" max="32767" attributes="1"/>
-                      <Component id="usernameTextField" alignment="0" pref="176" max="32767" attributes="3"/>
-                      <Component id="connectionComboBox" alignment="0" pref="176" max="32767" attributes="3"/>
+                      <Component id="resourceTextField" alignment="0" pref="195" max="32767" attributes="1"/>
+                      <Component id="passwordTextField" alignment="0" pref="195" max="32767" attributes="1"/>
+                      <Component id="usernameTextField" alignment="0" pref="195" max="32767" attributes="3"/>
+                      <Component id="connectionComboBox" alignment="0" pref="195" max="32767" attributes="3"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="161" max="32767" attributes="0"/>
+                  <EmptySpace pref="215" max="32767" attributes="0"/>
                   <Component id="signInButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="10" pref="10" max="10" attributes="0"/>
               </Group>
@@ -139,12 +139,12 @@
                   <EmptySpace min="10" pref="10" max="10" attributes="0"/>
                   <Component id="nameLabel" min="-2" pref="43" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="nameTextField" pref="187" max="32767" attributes="0"/>
+                  <Component id="nameTextField" pref="216" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="storeConnectionCheckBox" pref="234" max="32767" attributes="0"/>
+                  <Component id="storeConnectionCheckBox" pref="269" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
