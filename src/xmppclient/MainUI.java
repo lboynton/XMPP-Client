@@ -82,7 +82,6 @@ import xmppclient.jingle.JingleSessionRequestListener;
  */
 public class MainUI extends javax.swing.JFrame implements FileTransferListener, JingleSessionRequestListener, RosterListener
 {
-
     /** The XMPP connection to the server */
     public static XMPPConnection connection;
     private TrayIcon trayIcon;
@@ -208,7 +207,6 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
             MenuItem showMenuItem = new MenuItem("Show/hide");
             exitMenuItem.addActionListener(new ActionListener()
             {
-
                 @Override
                 public void actionPerformed(ActionEvent evt)
                 {
@@ -217,7 +215,6 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
             });
             showMenuItem.addActionListener(new ActionListener()
             {
-
                 @Override
                 public void actionPerformed(ActionEvent evt)
                 {
@@ -231,7 +228,6 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
 
             trayIcon.addMouseListener(new MouseAdapter()
             {
-
                 @Override
                 public void mouseClicked(MouseEvent e)
                 {
@@ -252,8 +248,7 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
             try
             {
                 tray.add(trayIcon);
-            }
-            catch (AWTException e)
+            } catch (AWTException e)
             {
                 System.err.println("TrayIcon could not be added.");
             }
@@ -318,8 +313,7 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
             if (connection.getRoster().getPresence(entry.getUser()).getType().equals(Presence.Type.available))
             {
                 online.add(new DefaultMutableTreeNode(entry));
-            }
-            else
+            } else
             {
                 offline.add(new DefaultMutableTreeNode(entry));
             }
@@ -339,8 +333,7 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
         if (MainUI.this.isVisible())
         {
             MainUI.this.setVisible(false);
-        }
-        else
+        } else
         {
             MainUI.this.setVisible(true);
         }
@@ -424,6 +417,8 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
         toolsMenu = new javax.swing.JMenu();
         createChatRoomMenuItem = new javax.swing.JMenuItem();
         joinChatRoomMenuItem = new javax.swing.JMenuItem();
+        aboutMenu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         jButton1.setText("jButton1");
 
@@ -540,9 +535,9 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
         avatarLabel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(160, 160, 160), 1, true));
         setAvatar();
 
+        contactTree.setModel(null);
         ToolTipManager.sharedInstance().registerComponent(contactTree);
         contactTree.setCellRenderer(new ContactTreeRenderer());
-        contactTree.setModel(null);
         contactTree.setRootVisible(false);
         contactTree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -564,12 +559,12 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                    .addComponent(contactTreeScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contentPanelLayout.createSequentialGroup()
                         .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(nicknameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
                             .addComponent(statusComboBox, 0, 140, Short.MAX_VALUE)
-                            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
+                            .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(avatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -676,6 +671,19 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
 
         menuBar.add(toolsMenu);
 
+        aboutMenu.setText("Help");
+
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/help-browser.png"))); // NOI18N
+        jMenuItem1.setText("About XMPP Client");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        aboutMenu.add(jMenuItem1);
+
+        menuBar.add(aboutMenu);
+
         setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -707,8 +715,7 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
             // first try to get stored VCard
             vCard.load(connection);
             System.out.println("Loaded nickname");
-        }
-        catch (XMPPException e)
+        } catch (XMPPException e)
         {
         } // no vcard
 
@@ -723,8 +730,7 @@ public class MainUI extends javax.swing.JFrame implements FileTransferListener, 
             // send the new nickname
             vCard.save(connection);
             System.out.println("Saved nickname");
-        }
-        catch (XMPPException e)
+        } catch (XMPPException e)
         {
             e.printStackTrace();
         }
@@ -787,8 +793,7 @@ private void vCardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     try
     {
         vCard.load(connection);
-    }
-    catch (XMPPException ex)
+    } catch (XMPPException ex)
     {
     }
     new VCardEditor(vCard, true).setVisible(true);
@@ -804,16 +809,18 @@ private void joinChatRoomMenuItemActionPerformed(java.awt.event.ActionEvent evt)
 
 private void createChatRoomMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createChatRoomMenuItemActionPerformed
     String room = JOptionPane.showInputDialog(this, "Enter room name");
-    
-    if(room == null || room.equals("")) return;
-    
+
+    if (room == null || room.equals(""))
+    {
+        return;
+    }
+
     MultiUserChatUI mucui = new MultiUserChatUI(room);
 
     try
     {
         mucui.create(Utils.getNickname());
-    }
-    catch (XMPPException ex)
+    } catch (XMPPException ex)
     {
         JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         return;
@@ -880,12 +887,10 @@ private void viewReceivedFilesButtonActionPerformed(java.awt.event.ActionEvent e
     try
     {
         Utils.openFileBrowser(settingsManager.getRootDir() + File.separator + SettingsManager.RECEIVED_DIR, true);
-    }
-    catch (IOException ex)
+    } catch (IOException ex)
     {
         Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    catch (SecurityException ex)
+    } catch (SecurityException ex)
     {
         Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
     }
@@ -894,26 +899,32 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
     try
     {
         Utils.openFileBrowser(settingsManager.getRootDir() + File.separator + SettingsManager.AUDIO_DIR, true);
-    }
-    catch (Exception ex)
+    } catch (Exception ex)
     {
         Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
     }
 }//GEN-LAST:event_viewAudioFilesButtonActionPerformed
 
+private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
+{//GEN-HEADEREND:event_jMenuItem1ActionPerformed
+    new AboutDialog(this, false);
+}//GEN-LAST:event_jMenuItem1ActionPerformed
+
     private void joinConference()
     {
         String room = JOptionPane.showInputDialog(this, "Enter room name");
-        
-        if (room == null || room.equals("")) return;
-        
+
+        if (room == null || room.equals(""))
+        {
+            return;
+        }
+
         MultiUserChatUI mucui = new MultiUserChatUI(room);
-        
+
         try
         {
             mucui.join(Utils.getNickname());
-        }
-        catch (XMPPException ex)
+        } catch (XMPPException ex)
         {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -940,7 +951,6 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
             JMenuItem blockMenuItem = new JMenuItem("Block group");
             blockMenuItem.addActionListener(new ActionListener()
             {
-
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
@@ -954,8 +964,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                         manager.createPrivacyList("default", items);
                         manager.setActiveListName("default");
                         updateContacts();
-                    }
-                    catch (XMPPException ex)
+                    } catch (XMPPException ex)
                     {
                         Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -973,7 +982,6 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
             menu.add(chat);
             chat.addActionListener(new ActionListener()
             {
-
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
@@ -983,7 +991,6 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
             JMenuItem vcard = new JMenuItem("View VCard", Icons.vcard);
             vcard.addActionListener(new ActionListener()
             {
-
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
@@ -991,8 +998,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                     try
                     {
                         vCard.load(connection, entry.getUser());
-                    }
-                    catch (XMPPException ex)
+                    } catch (XMPPException ex)
                     {
                     }
                     new VCardEditor(vCard, false).setVisible(true);
@@ -1002,7 +1008,6 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
             JMenuItem sendFileMenuItem = new JMenuItem("Send file");
             sendFileMenuItem.addActionListener(new ActionListener()
             {
-
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
@@ -1013,7 +1018,6 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
             JMenuItem groupMenuItem = new JMenuItem("Set groups");
             groupMenuItem.addActionListener(new ActionListener()
             {
-
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
@@ -1026,15 +1030,14 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                     {
                         return;
                     }
-                    
+
                     // remove user from all groups
                     for (RosterGroup r : entry.getGroups())
                     {
                         try
                         {
                             r.removeEntry(entry);
-                        }
-                        catch (XMPPException ex)
+                        } catch (XMPPException ex)
                         {
                             JOptionPane.showMessageDialog(MainUI.this,
                                     "Could not remove user from group" +
@@ -1048,7 +1051,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                     {
                         return;
                     }
-                    
+
                     String groupsArray[] = groups.split(",");
 
                     RosterGroup rosterGroup;
@@ -1057,16 +1060,14 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                         if (connection.getRoster().getGroup(group.trim()) == null)
                         {
                             rosterGroup = connection.getRoster().createGroup(group.trim());
-                        }
-                        else
+                        } else
                         {
                             rosterGroup = connection.getRoster().getGroup(group.trim());
                         }
                         try
                         {
                             rosterGroup.addEntry(entry);
-                        }
-                        catch (XMPPException ex)
+                        } catch (XMPPException ex)
                         {
                             JOptionPane.showMessageDialog(MainUI.this,
                                     "Could not add user to group" +
@@ -1083,18 +1084,17 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
             JMenuItem setNameMenuItem = new JMenuItem("Set name");
             setNameMenuItem.addActionListener(new ActionListener()
             {
-
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
                     String name = JOptionPane.showInputDialog(MainUI.this,
                             "Enter a name for this user, or leave blank to remove");
-                    
+
                     if (name == null || name.equals(""))
                     {
                         return;
                     }
-                    
+
                     entry.setName(name);
                     updateContacts();
                 }
@@ -1103,7 +1103,6 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
             JMenuItem viewLibraryMenuItem = new JMenuItem("View library");
             viewLibraryMenuItem.addActionListener(new ActionListener()
             {
-
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
@@ -1114,7 +1113,6 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
             JMenuItem blockMenuItem = new JMenuItem("Block");
             blockMenuItem.addActionListener(new ActionListener()
             {
-
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
@@ -1128,8 +1126,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                         manager.createPrivacyList("default", items);
                         manager.setActiveListName("default");
                         updateContacts();
-                    }
-                    catch (XMPPException ex)
+                    } catch (XMPPException ex)
                     {
                         Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -1140,7 +1137,6 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
             JMenuItem removeMenuItem = new JMenuItem("Delete", Icons.delete);
             removeMenuItem.addActionListener(new ActionListener()
             {
-
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
@@ -1160,8 +1156,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                     try
                     {
                         connection.getRoster().removeEntry(entry);
-                    }
-                    catch (XMPPException ex)
+                    } catch (XMPPException ex)
                     {
                         JOptionPane.showMessageDialog(MainUI.this,
                                 "Error deleting contact: " + entry.getUser() +
@@ -1205,8 +1200,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                 // the frame
                 setVisible(false);
                 signOut();
-            }
-            else
+            } else
             {
                 return;
             }
@@ -1239,7 +1233,6 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
     {
         SwingUtilities.invokeLater(new Runnable()
         {
-
             @Override
             public void run()
             {
@@ -1248,13 +1241,11 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                     if (sortMethod == SORT_BY_STATUS)
                     {
                         sortContactsByStatus();
-                    }
-                    else
+                    } else
                     {
                         sortContactsByGroup();
                     }
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                 }
             }
@@ -1273,6 +1264,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
         this.dispose();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu aboutMenu;
     private javax.swing.JButton addContactButton;
     private javax.swing.JButton avatarButton;
     private javax.swing.JLabel avatarLabel;
@@ -1285,6 +1277,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JMenu fileMenu;
     private javax.swing.JRadioButtonMenuItem groupRadioButton;
     private javax.swing.JButton jButton1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem joinChatRoomMenuItem;
     private javax.swing.JButton joinConferenceButton;
     private javax.swing.JMenuBar menuBar;
@@ -1301,6 +1294,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JButton viewAudioFilesButton;
     private javax.swing.JButton viewReceivedFilesButton;
     // End of variables declaration//GEN-END:variables
+
     /**
      * Called when a file transfer request is received. A dialog is opened asking the user
      * if they wish to accept the file transfer. If so, the file is stored in the received 
@@ -1314,18 +1308,17 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
         {
             "Accept", "Reject"
         };
-        
+
         String desc = request.getDescription();
-        
+
         if (desc == null)
         {
             desc = "None entered";
         }
-        
+
         int option = JOptionPane.showOptionDialog(this,
-                "File transfer request received from " + request.getRequestor() 
-                + "\nFilename: " + request.getFileName() + 
-                "\nDescription: " + desc + 
+                "File transfer request received from " + request.getRequestor() + "\nFilename: " + request.getFileName() +
+                "\nDescription: " + desc +
                 "\nWould you like to accept or reject it?",
                 "File Transfer Request",
                 JOptionPane.YES_NO_OPTION,
@@ -1343,17 +1336,14 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
             {
                 transfer.recieveFile(new File(dir.getAbsolutePath() + File.separator + request.getFileName()));
                 new FileTransferUI(transfer);
-            }
-            catch (InterruptedException ex)
+            } catch (InterruptedException ex)
+            {
+                ex.printStackTrace();
+            } catch (XMPPException ex)
             {
                 ex.printStackTrace();
             }
-            catch (XMPPException ex)
-            {
-                ex.printStackTrace();
-            }
-        }
-        else
+        } else
         {
             request.reject();
         }
@@ -1361,7 +1351,6 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
 
     private class SubscriptionRequestListener implements PacketListener
     {
-
         @Override
         public void processPacket(Packet packet)
         {
@@ -1390,8 +1379,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
                 {
                     // accept
                     auth = new Presence(Presence.Type.subscribe);
-                }
-                else
+                } else
                 {
                     // reject
                     auth = new Presence(Presence.Type.unsubscribe);
@@ -1429,8 +1417,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
             connection2.connect();
             connection2.login("lee", "password", "home");
             new MainUI(connection2, "Fef");
-        }
-        catch (XMPPException ex)
+        } catch (XMPPException ex)
         {
             Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -105,6 +105,8 @@ public class XMPPClient extends javax.swing.JFrame
         registerMenuItem = new javax.swing.JMenuItem();
         accountManagerMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
+        helpMenu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("XMPPClient");
@@ -150,7 +152,7 @@ public class XMPPClient extends javax.swing.JFrame
             }
         });
 
-        storeConnectionCheckBox.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        storeConnectionCheckBox.setFont(new java.awt.Font("Tahoma", 0, 10));
         storeConnectionCheckBox.setText("Save connection");
         storeConnectionCheckBox.setToolTipText("<html>If this checkbox is selected, upon a successful login<br>\n the connection details (except password) will be stored to<br>\nmake future logins quicker. Stored connections can be <br>\noverwritten by this function by entering the appropriate <br>\naccount name name.</html>");
         storeConnectionCheckBox.setBorder(null);
@@ -219,24 +221,24 @@ public class XMPPClient extends javax.swing.JFrame
                         .addComponent(portLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(portTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(resourceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-                    .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-                    .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-                    .addComponent(connectionComboBox, 0, 176, Short.MAX_VALUE))
+                    .addComponent(resourceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(connectionComboBox, 0, 198, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerPanelLayout.createSequentialGroup()
-                .addContainerGap(161, Short.MAX_VALUE)
+                .addContainerGap(221, Short.MAX_VALUE)
                 .addComponent(signInButton)
                 .addGap(10, 10, 10))
             .addGroup(containerPanelLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(containerPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(storeConnectionCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+                .addComponent(storeConnectionCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -313,6 +315,19 @@ public class XMPPClient extends javax.swing.JFrame
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
+
+        helpMenu.setText("Help");
+
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/help-browser.png"))); // NOI18N
+        jMenuItem1.setText("About XMPP Client");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        helpMenu.add(jMenuItem1);
+
+        menuBar.add(helpMenu);
 
         setJMenuBar(menuBar);
 
@@ -402,6 +417,11 @@ private void registerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
 private void passwordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTextFieldActionPerformed
 // TODO add your handling code here:
 }//GEN-LAST:event_passwordTextFieldActionPerformed
+
+private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
+{//GEN-HEADEREND:event_jMenuItem1ActionPerformed
+    new AboutDialog(this, false).setVisible(true);
+}//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args an argument of debug starts the program in debug mode
@@ -544,8 +564,10 @@ private void passwordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JPanel containerPanel;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenu helpMenu;
     private javax.swing.JLabel hostLabel;
     private javax.swing.JTextField hostTextField;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField nameTextField;
