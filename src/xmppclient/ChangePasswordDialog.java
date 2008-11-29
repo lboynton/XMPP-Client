@@ -176,7 +176,7 @@ private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     // try to login with the old password, and don't send presence information
     try
     {//GEN-LAST:event_okButtonActionPerformed
-        xmppConnection.login(connection.getUsername(), new String(oldPassword.getPassword()), connection.getResource(), false);
+        xmppConnection.login(connection.getUsername(), new String(oldPassword.getPassword()), connection.getResource());
     }
     catch (XMPPException ex)
     {

@@ -13,15 +13,6 @@
         <libraries xmlns="http://www.netbeans.org/ns/ant-project-libraries/1">
             <definitions>.\lib\nblibraries.properties</definitions>
         </libraries>
-        <references xmlns="http://www.netbeans.org/ns/ant-project-references/2">
-            <reference>
-                <foreign-project>Smack</foreign-project>
-                <artifact-type>jar</artifact-type>
-                <script>${project.Smack}/build/build.xml</script>
-                <target>compile</target>
-                <clean-target>clean</clean-target>
-                <id>compile</id>
-            </reference>
-        </references>
+        <references xmlns="http://www.netbeans.org/ns/ant-project-references/2"/>
     </configuration>
 </project>

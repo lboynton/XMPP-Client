@@ -138,7 +138,7 @@ private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     // try to login, without sending presence information
     try
     {                                        
-        xmppConnection.login(connection.getUsername(), new String(passwordTextField.getPassword()), connection.getResource(), false);
+        xmppConnection.login(connection.getUsername(), new String(passwordTextField.getPassword()), connection.getResource());
     }
     catch (XMPPException ex)
     {
