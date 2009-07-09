@@ -11,8 +11,8 @@
 package xmppclient;
 
 /**
- *
- * @author lee
+ * An about dialog window
+ * @author Lee Boynton
  */
 public class AboutDialog extends javax.swing.JDialog
 {
@@ -33,27 +33,47 @@ public class AboutDialog extends javax.swing.JDialog
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
+        btnClose = new javax.swing.JButton();
+        lblAuthor = new javax.swing.JLabel();
+        lblIcon = new javax.swing.JLabel();
+        btnFam = new javax.swing.JButton();
+        btnTango = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("DejaVu Sans", 1, 24));
-        jLabel1.setText("XMPPClient Version 1.0");
+        lblTitle.setFont(new java.awt.Font("DejaVu Sans", 1, 24)); // NOI18N
+        lblTitle.setText("XMPPClient Version 1.0");
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/cross.png"))); // NOI18N
-        jButton1.setText("Close");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/cross.png"))); // NOI18N
+        btnClose.setText("Close");
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnCloseActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Made by Lee Boynton");
+        lblAuthor.setText("Made by Lee Boynton");
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/users-32x32.png"))); // NOI18N
+        lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/xmppclient/images/tango/users-32x32.png"))); // NOI18N
+
+        btnFam.setFont(new java.awt.Font("DejaVu Sans", 0, 10)); // NOI18N
+        btnFam.setText("FamFamFam Icons: http://www.famfamfam.com/lab/icons/silk/");
+        btnFam.setBorderPainted(false);
+        btnFam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFamActionPerformed(evt);
+            }
+        });
+
+        btnTango.setFont(new java.awt.Font("DejaVu Sans", 0, 10)); // NOI18N
+        btnTango.setText("Tango Icons: http://tango.freedesktop.org");
+        btnTango.setBorderPainted(false);
+        btnTango.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTangoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -62,39 +82,77 @@ public class AboutDialog extends javax.swing.JDialog
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(154, 154, 154)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(34, 34, 34)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)))
+                            .addComponent(lblAuthor)
+                            .addComponent(lblTitle)
+                            .addComponent(btnFam)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(183, 183, 183)
-                        .addComponent(jLabel3)))
-                .addContainerGap(49, Short.MAX_VALUE))
+                        .addComponent(lblIcon))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(154, 154, 154)
+                        .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(38, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(95, Short.MAX_VALUE)
+                .addComponent(btnTango)
+                .addGap(83, 83, 83))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(70, 70, 70)
-                .addComponent(jLabel3)
+                .addGap(82, 82, 82)
+                .addComponent(lblIcon)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
+                .addComponent(lblTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(lblAuthor)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(btnTango)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnFam)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnClose)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
-    {//GEN-HEADEREND:event_jButton1ActionPerformed
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnCloseActionPerformed
+    {//GEN-HEADEREND:event_btnCloseActionPerformed
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void btnTangoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTangoActionPerformed
+        try
+        {
+
+            java.net.URI uri = new java.net.URI("http://tango.freedesktop.org");
+            java.awt.Desktop.getDesktop().browse(uri);
+        }
+        catch (Exception e)
+        {
+
+            System.err.println("Could not open link");
+        }
+    }//GEN-LAST:event_btnTangoActionPerformed
+
+    private void btnFamActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnFamActionPerformed
+    {//GEN-HEADEREND:event_btnFamActionPerformed
+        try
+        {
+
+            java.net.URI uri = new java.net.URI("http://www.famfamfam.com/lab/icons/silk/");
+            java.awt.Desktop.getDesktop().browse(uri);
+        }
+        catch (Exception e)
+        {
+
+            System.err.println("Could not open link");
+        }
+    }//GEN-LAST:event_btnFamActionPerformed
 
     /**
      * @param args the command line arguments
@@ -117,11 +175,12 @@ public class AboutDialog extends javax.swing.JDialog
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnFam;
+    private javax.swing.JButton btnTango;
+    private javax.swing.JLabel lblAuthor;
+    private javax.swing.JLabel lblIcon;
+    private javax.swing.JLabel lblTitle;
     // End of variables declaration//GEN-END:variables
 }
