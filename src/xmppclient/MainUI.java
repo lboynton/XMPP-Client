@@ -907,7 +907,7 @@ private void viewAudioFilesButtonActionPerformed(java.awt.event.ActionEvent evt)
 
 private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
 {//GEN-HEADEREND:event_jMenuItem1ActionPerformed
-    new AboutDialog(this, false);
+    new AboutDialog(this, false).setVisible(true);
 }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void joinConference()
