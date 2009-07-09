@@ -1,1 +1,1 @@
-To compile the application just type ant. This should create a dist directory containing the B382.jar file. It should also copy the lib directory to the dist folder as these are required runtime libraries.
+To compile the application just type ant. This should create a dist directory containing the XMPP_Client.jar file. It should also copy the lib directory to the dist folder as these are required runtime libraries.
